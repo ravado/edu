@@ -22,7 +22,7 @@ else
  * @see  http://kohanaframework.org/guide/using.configuration
  * @see  http://php.net/timezones
  */
-date_default_timezone_set('America/Chicago');
+date_default_timezone_set('Europe/Zaporozhye');
 
 /**
  * Set the default locale.
@@ -30,7 +30,7 @@ date_default_timezone_set('America/Chicago');
  * @see  http://kohanaframework.org/guide/using.configuration
  * @see  http://php.net/setlocale
  */
-setlocale(LC_ALL, 'en_US.utf-8');
+setlocale(LC_ALL, 'ru_RU.utf-8');
 
 /**
  * Enable the Kohana auto-loader.
@@ -53,7 +53,7 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
 /**
  * Set the default language
  */
-I18n::lang('en-us');
+I18n::lang('ru-RU');
 
 /**
  * Set Kohana::$environment if a 'KOHANA_ENV' environment variable has been supplied.
@@ -81,6 +81,7 @@ if (isset($_SERVER['KOHANA_ENV']))
  */
 Kohana::init(array(
 	'base_url'   => '/',
+    'index_file' => FALSE,
 ));
 
 /**
@@ -113,6 +114,6 @@ Kohana::modules(array(
  */
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
-		'controller' => 'welcome',
+		'controller' => 'home',
 		'action'     => 'index',
 	));
