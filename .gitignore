@@ -1,0 +1,6 @@
+.idea/
+system/
+application/logs/
+application/cache/
+application/messages/
+index.php
