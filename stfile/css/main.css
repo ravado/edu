@@ -39,3 +39,6 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
     .btnColor:hover{background-color: #1772ac;color: #fff;text-decoration: none;}
 
     .btnColor:active{top: 1px;}
+
+/*Выдавленый текст (заголовки второстепенных страниц, слоган на главной)*/
+.spnTitle{text-shadow: -1px -1px #15689d, 1px 1px #15689d;color: #FFF;font-weight: bold;}

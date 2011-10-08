@@ -6,6 +6,18 @@ body{background: url("../img/bg_blu.png") repeat-x;}
 /*Блок презентации (синяя область)*/
 #dvHomeInfo{height: 540px;margin-bottom: 20px;}
 
+/*Блок в котором размещена наша рекламная компания*/
+#dvHomePromo{text-align: center;}
+
+    /*Главный рекламный заголовок: Настало время...*/
+    .spnTitle.Home{display: inline-block;margin: 50px 0;font-size: 30px;}
+
+    /*Таблица с иконками и промо-описанием*/
+    #dvHomePromo table{width: 990px;}
+    #dvHomePromo table td{width: 330px;}
+    /*Заголовок под каждой промо-иконкой*/
+    .spnTitle.Promo{display: inline-block;margin-top: 20px;font-size: 24px;}
+
 /*Блок-контейнер для блока авторизации и блока создания сайта*/
 #dvHomeUBlocks{padding: 0 10px;}
 
