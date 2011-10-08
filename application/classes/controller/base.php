@@ -12,7 +12,7 @@ class Controller_Base extends Controller_Template {
         if (( stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0') )||
             (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 7.0'))||
             (stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE 8.0'))){
-                $this->template = "home/vHomeOldBrows";
+                $this->template = "home/vHomeOldBrowser";
         }
 
         parent::before();

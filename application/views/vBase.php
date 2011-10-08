@@ -10,12 +10,12 @@
 <body>
     <div id="root">
         <header>
-            <a href="/"><img src="../../stfile/img/logo.png" /></a>
+            <a href="/"><img src="../../stfile/img/logo.png" alt="logo"/></a>
             <nav>
                 <ul>
                     <li><a href="">Новости</a></li>
                     <li><a href="">Тесты</a></li>
-                    <li><a href="#">Вопросы&Ответы</a></li>
+                    <li><a href="#">Вопросы&amp;Ответы</a></li>
                     <li><a href="#">Рефераты</a></li>
                     <li><a href="#">Магазин</a></li>
                 </ul>

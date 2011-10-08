@@ -21,3 +21,12 @@ body{background: url("../img/bg_blu.png") repeat-x;}
 /*Блок создания сайта (загрузки ПО)*/
 #dvHomeSystem{width: 500px;height: 200px;background: url("../img/home/system.png") #e8f4fc;}
 
+/*Кнопка авторизации*/
+.btnColor.Auth{margin-top: 10px;padding: 18px 23px 19px;font-size: 20px;float: right;}
+
+/*Кнопка регистрации*/
+.btnColor.Register{margin-top: 10px;padding: 10px 15px 11px;font-size: 18px;}
+
+/*Ссылка для отображения формы сброса пароля*/
+#lnkResFormShow{display: inline-block;margin-top: 8px;margin-left: 25px;}
+
