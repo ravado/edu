@@ -10,7 +10,7 @@ body{background: url("../img/bg_blu.png") repeat-x;}
 #dvHomePromo{text-align: center;}
 
     /*Главный рекламный заголовок: Настало время...*/
-    .spnTitle.Home{display: inline-block;margin: 50px 0;font-size: 30px;}
+    .spnTitle.Home{display: inline-block;margin: 50px 0;font-size: 32px;}
 
     /*Таблица с иконками и промо-описанием*/
     #dvHomePromo table{width: 990px;}
@@ -31,7 +31,10 @@ body{background: url("../img/bg_blu.png") repeat-x;}
     #dvHomeAuth input{width: 330px;margin-top: 10px;font-size: 15px;}
 
 /*Блок создания сайта (загрузки ПО)*/
-#dvHomeSystem{width: 500px;height: 200px;background: url("../img/home/system.png") #e8f4fc;}
+#dvHomeSystem{width: 500px;height: 200px;background: url("../img/home/system.png") #e8f4fc;text-align: center;}
+
+    /*Кнопка создания сайта*/
+    .btnColor.Create{font-size: 20px;margin: 85px 0 8px 0;}
 
 /*Кнопка авторизации*/
 .btnColor.Auth{margin-top: 10px;padding: 18px 23px 19px;font-size: 20px;float: right;}

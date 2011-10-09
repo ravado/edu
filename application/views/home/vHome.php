@@ -18,7 +18,7 @@
 <div id="dvHomeUBlocks">
     <div id="dvHomeAuth">
         Форма авторизации на сайте:
-        <form name="formAuth" action="" method="POST">
+        <form name="formAuth" action="/" method="POST">
             <input type="text" name="login" class="inpColor" placeholder="Имя пользователя">
             <input type="password" name="password" class="inpColor" placeholder="Ваш пароль">
             <a class="btnColor Auth">Войти</a>
@@ -27,6 +27,7 @@
         <a id="lnkResFormShow" href="">Забыл пароль</a>
     </div>
     <div id="dvHomeSystem">
-        Загрузить
+        <a class="btnColor Create">Начать работу</a><br/>
+        <a href="">Узнать подробнее</a>
     </div>
 </div>
