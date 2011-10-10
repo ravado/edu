@@ -15,7 +15,16 @@ class Controller_Home extends Controller_Base {
         $this->template->styles = array("stfile/css/home.css" => "screen");
         $this->template->scripts = array('stfile/js/home.js');
 
-        $this->template->content = View::factory('home/vHome');
+        /*Проверяем статус пользователя (Авторизирован или нет)*/
+        $auth = Auth::instance();
+        if($auth->logged_in()){
+            $data['userAuth'] = TRUE;
+            $data['userName'] = $auth->get_user()->username;
+        }else{
+            $data['userAuth'] = FALSE;
+        }
+
+        $this->template->content = View::factory('home/vHome',$data);
 	}
 
 }

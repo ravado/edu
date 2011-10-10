@@ -17,14 +17,18 @@
 </div>
 <div id="dvHomeUBlocks">
     <div id="dvHomeAuth">
+        <?php if($userAuth) { ?>
+            Добро пожаловать <b><?=$userName;?></b> <a href="/user/auth/logout">Выйти</a> </b>
+        <?php }else { ?>
         Форма авторизации на сайте:
-        <form name="formAuth" action="/" method="POST">
+        <form name="formAuth" action="/user/auth" method="POST">
             <input type="text" name="login" class="inpColor" placeholder="Имя пользователя">
             <input type="password" name="password" class="inpColor" placeholder="Ваш пароль">
             <a class="btnColor Auth" onclick="auth()">Войти</a>
         </form>
         <a href="/user/register" class="btnColor Register">Регистрация</a><br/>
         <a id="lnkResFormShow" href="">Забыл пароль</a>
+        <?php } ?>
     </div>
     <div id="dvHomeSystem">
         <a class="btnColor Create">Начать работу</a><br/>
