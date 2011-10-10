@@ -1,6 +1,6 @@
 <div id="dvHomeInfo">
     <div id="dvHomePromo">
-        <span class="spnTitle Home">Настало время учиться по новому!</span>
+        <span class="spnTitle Home">Настало время учиться по-новому!</span>
         <table>
             <tr>
                 <td><img src="../../../stfile/img/home/promo1.png" alt="Узнавай"></td>
@@ -23,7 +23,7 @@
             <input type="password" name="password" class="inpColor" placeholder="Ваш пароль">
             <a class="btnColor Auth">Войти</a>
         </form>
-        <a class="btnColor Register">Регистрация</a><br/>
+        <a href="/user/register" class="btnColor Register">Регистрация</a><br/>
         <a id="lnkResFormShow" href="">Забыл пароль</a>
     </div>
     <div id="dvHomeSystem">

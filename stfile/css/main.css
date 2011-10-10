@@ -42,3 +42,8 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
 
 /*Выдавленый текст (заголовки второстепенных страниц, слоган на главной)*/
 .spnTitle{text-shadow: -1px -1px #15689d, 1px 1px #15689d;color: #FFF;font-weight: bold;}
+    /*Тот же выдавленный но, в качестве заголовка второстепенных страниц*/
+    .spnTitle.Page{margin-bottom: 10px;padding: 10px;font-size: 24px;background: url("../img/bg_blu_small.png");border-radius: 5px;}
+
+/*Контейнер контента для второстепенных страниц*/
+#dvContent{}

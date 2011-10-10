@@ -112,6 +112,16 @@ Kohana::modules(array(
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
+
+/*роут пользователя, принимает все котроллеры папки User */
+Route::set('user', 'user(/<controller>(/<action>(/<id>)))')
+	->defaults(array(
+		'directory'  => 'user',
+		'controller' => 'main',
+		'action'     => 'index',
+	));
+
+/*Дефолтный роут, пытается принять все, показывает главную страницу*/
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
 		'controller' => 'home',
