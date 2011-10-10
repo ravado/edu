@@ -32,5 +32,9 @@
             <br/><br/>Copyright © 2011 EduName Corporation. All rights reserved.
         </div>
     </footer>
+        <div class="hint error"></div>
+        <div class="hint info"></div>
+        <div class="hint warning"></div>
+        <div class="hint success"></div>
 </body>
 </html>

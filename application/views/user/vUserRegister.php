@@ -4,7 +4,7 @@
         <b>Что дает регистрация на сайте:</b>
     </div>
     <div id="dvLeftForm">
-        <form name="registerForm" action="/" method="POST">
+        <form name="registerForm" action="/user/register/setuser" method="POST">
         <table id="tblRegisterForm">
             <tr>
                 <td class="RegFormCaption">Имя пользователя:</td>
@@ -76,7 +76,7 @@
                 <td class="RegFormFlag">img</td>
             </tr>
         </table>
-        <a class="btnColor Register">Зарегестрироваться</a>
+        <a class="btnColor Register" onclick="testReg()">Зарегестрироваться</a>
         </form>
     </div>
     <div id="popup_name" class="popup_block">

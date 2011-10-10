@@ -21,7 +21,7 @@
         <form name="formAuth" action="/" method="POST">
             <input type="text" name="login" class="inpColor" placeholder="Имя пользователя">
             <input type="password" name="password" class="inpColor" placeholder="Ваш пароль">
-            <a class="btnColor Auth">Войти</a>
+            <a class="btnColor Auth" onclick="auth()">Войти</a>
         </form>
         <a href="/user/register" class="btnColor Register">Регистрация</a><br/>
         <a id="lnkResFormShow" href="">Забыл пароль</a>
