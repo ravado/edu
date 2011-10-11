@@ -48,6 +48,12 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
 /*Контейнер контента для второстепенных страниц*/
 #dvContent{}
 
+/*Подсказка, почему неправильно заполнено поле*/
+.spnNotCorrect{visibility: hidden; position: absolute; font-size: 11px; color: #991111;}
+
+/*Ячейка с флагом правильности заполнения поля*/
+/*.success-failure img{position: relative;width: 22px;height: 22px;margin-top: 0px;margin-left: 5px;} */
+
 /*Верхние хинты*/
         .hint
         {

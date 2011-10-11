@@ -27,7 +27,7 @@
             <a class="btnColor Auth" onclick="auth()">Войти</a>
         </form>
         <a href="/user/register" class="btnColor Register">Регистрация</a><br/>
-        <a id="lnkResFormShow" href="">Забыл пароль</a>
+        <a id="lnkResFormShow" onclick="showResetForm()">Забыл пароль</a>
         <?php } ?>
     </div>
     <div id="dvHomeSystem">

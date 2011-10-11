@@ -35,4 +35,32 @@ class Model_Muser extends Model_Database{
             return FALSE;
         }
     }
+
+    /*Проверка наличия пользователя в БД по адресу почты*/
+    public function getUserThEmail($currentEmail){
+        $query = DB::select('email')->from('users')->where('email','=',$currentEmail);
+        $res = $query->execute()->as_array();
+
+        if(!empty($res)){
+           $result['isRegistered'] = true;
+        }else{
+            $result['isRegistered'] = false;
+        }
+
+        return $result;
+    }
+
+    /*Проверка наличия пользователя по логину*/
+    public function getUserThLogin($currentName){
+        $query = DB::select('username')->from('users')->where('username','=',$currentName);
+        $res = $query->execute()->as_array();
+
+        if(!empty($res)){
+           $result['isRegistered'] = true;
+        }else{
+            $result['isRegistered'] = false;
+        }
+
+        return $result;
+    }
 }
