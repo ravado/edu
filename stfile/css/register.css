@@ -23,7 +23,7 @@
     /*Ячекйка с полев ввода*/
     .RegFormField{width: 350px;}
     /*Ячейка с флагом правильности заполнения поля*/
-    .RegFormFlag{border:0px dashed black; width: 29px; height: 22px;}
+    .RegFormFlag{border:0 dashed black; width: 29px; height: 22px;}
 
 .success-failure img{position: absolute; margin-top: -14px; margin-left: -5px;}
 
@@ -34,7 +34,8 @@ input[type=text],[type=password]{width: 300px;}
 td img{float: left;}
 /*Поле ввода проверочного кода*/
 #inpCapcha{width: 180px;font-size: 20px;}
-
+/*спаны с текстом ошибки заполенения поля*/
+.spnNotCorrect{margin-top: 5px;}
 
 /*Кнопка регистрации*/
 .btnColor.Register{margin: 10px 0 20px 0;font-size: 18px; float: right;}
@@ -49,7 +50,7 @@ td img{float: left;}
             position: fixed;top: 50%; left: 50%;z-index: 99998;box-shadow: 0 0 20px #000;border-radius: 10px;height: 400px; overflow-y: visible; overflow-x: hidden;}
 
 /*Иконка закрытия модального окна*/
-img.btn_close {float: left; position:fixed; margin: -35px 0px 0px 485px;}
+img.btn_close {float: left; position:fixed; margin: -35px 0 0 485px;}
 
 /*-----КОНЕЦ модального окна-----*/
 
@@ -62,4 +63,5 @@ img.btn_close {float: left; position:fixed; margin: -35px 0px 0px 485px;}
     color: #337a9b;
     line-height: 2.3;
 }
+#dvRegInfo a{text-decoration: underline;}
 #dvRegInfo img{display: inline-block; margin-right: 25px; float: left;}

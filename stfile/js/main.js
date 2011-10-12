@@ -11,11 +11,11 @@ function isValueExist(id,type){
     isExist = false;//существует ли такая запись
     //если проверить нужно логин
     if (type == "login"){
-        neededAction = "/hiddens/getuserthlogin" //екшн который будет выполнятся если проверяем логин
+        neededAction = "/user/uhid/getuserthlogin" //екшн который будет выполнятся если проверяем логин
     }
     //если проверить нужно емейл
     if (type == "email"){
-        neededAction = "/hiddens/getuserthemail" //екшн который будет выполнятся если проверяем емейл
+        neededAction = "/user/uhid/getuserthemail" //екшн который будет выполнятся если проверяем емейл
     }
     //аякс запрос с синхронной передачей даных
     $.ajax({type:"POST", async:false, data: globalArray+inputedValue, url: neededAction, dataType:"json",

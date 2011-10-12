@@ -19,6 +19,7 @@ class Controller_User_Register extends Controller_Base {
 
     /*Получаем данные из формы регистрации и отправляем их в базу*/
     public function action_setuser(){
+        $this->template->styles = array("stfile/css/register.css" => "screen");
         if(!empty($_POST)){
             $userData['login'] = Arr::get($_POST,'login','');
             $userData['password'] = Arr::get($_POST,'password','');
@@ -27,7 +28,10 @@ class Controller_User_Register extends Controller_Base {
             $userData['first_name'] = Arr::get($_POST,'firstName','');
             $userData['last_name'] = Arr::get($_POST,'lastName','');
 
-            $modUser = Model::factory('Muser')->register($userData);
+            $userData['activKey'] = Model::factory('Muser')->register($userData);
+
+            $modUserMail = Model::factory('Mmail')->sendActivationMail($userData);
+
             $this->template->content = View::factory('user/vUserRegInfo');
         }
     }

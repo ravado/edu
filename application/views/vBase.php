@@ -10,7 +10,7 @@
 <body>
     <div id="root">
         <header>
-            <a href="/"><img src="../../stfile/img/logo.png" alt="logo"/></a>
+            <a href="/"><img src="../../../stfile/img/logo.png" alt="logo"/></a>
             <nav>
                 <ul>
                     <li><a href="">Новости</a></li>

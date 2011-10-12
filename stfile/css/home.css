@@ -45,3 +45,12 @@ body{background: url("../img/bg_blu.png") repeat-x;}
 /*Ссылка для отображения формы сброса пароля*/
 #lnkResFormShow{display: inline-block;margin-top: 8px;margin-left: 25px;}
 
+/*-----Форма сброса пароля-----*/
+/*поле для ввода пачты*/
+#inpMailForReset{margin-bottom: 10px;}
+/*Кнопка сборса*/
+.btnColor.Reset{margin-top: 15px;font-size: 18px;float: right;}
+
+/**/
+#lnkBackReaset{display:inline-block; margin-top: 70px;text-decoration: underline;}
+

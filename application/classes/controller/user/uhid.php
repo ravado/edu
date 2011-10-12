@@ -2,7 +2,7 @@
 /*
  * Контроллер отвечает за невидимые операции
  */
-class Controller_Hiddens extends Controller{
+class Controller_User_Uhid extends Controller{
 
     public function action_index(){
  

@@ -18,9 +18,9 @@ function auth(){
 /*Показ формы для восстановления пароля*/
 function showResetForm(){
     $("#dvHomeAuth").html('Сброс пароля пользователя:' +
-        '<form name="frmReset" action="/user/register/reset" method="POST"><table id="tblRegisterForm"><tr><td><input type="text"  onblur="checkEmail()" name="inpMailForReset" id="inpMailForReset" class="inpColor" placeholder="Адрес электронной почты"></td></tr>' +
-        '<tr><td><span id="spnHintResEmail" class="spnNotCorrect">sdfds</span></td><tr><td>На указаный адрес будет выслана инструкция</td></tr>' +
-        '<tr><td align="center"><br /><a onclick="resetPassword()" class="btnColor Register">Сбросить пароль</a></td></tr></table></form>');
+        '<form name="frmReset" action="/user/register/reset" method="POST"><input type="text"  onblur="checkEmail()" name="inpMailForReset" id="inpMailForReset" class="inpColor" placeholder="Адрес электронной почты"></td></tr>' +
+        '<span id="spnHintResEmail" class="spnNotCorrect">sdfds</span>На указаный адрес будет выслана инструкция' +
+        '<br /><a onclick="resetPassword()" class="btnColor Reset">Сбросить пароль</a></form><br/><a id="lnkBackReaset" href="/"><< Вернутся назад</a> ');
 }
 
 /*При нажатии СБРОСИТЬ ПАРОЛЬ*/
@@ -55,7 +55,7 @@ function resetPassword(){
     else {
         email.removeClass("Red");
         $("#spnHintResEmail").css('visibility','hidden');
-        hints('info','Ведите eMail на который мы отправим письмо для восстановления!')
+        hints('info','Ведите E-mail адрес, на который мы отправим письмо для восстановления!')
     }
 }
 
