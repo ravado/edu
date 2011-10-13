@@ -46,19 +46,17 @@ class Model_Muser extends Model_Database{
     public function activation($userKey){
         $realKey = substr($userKey,5);
 
-        $query = DB::select()->from('roles_users')->where('user_id','=',$realKey);
-        $result = $query->execute()->as_array();
-        if(empty($result)){return FALSE;}
-        if($result[0]['role_id'] == 1){
-            return FALSE;
-        }else{
+       /* $query = DB::select()->from('roles_users')->where('user_id','=',$realKey);
+        $result = $query->execute()->as_array();*/
+
+
             $query = DB::select('username')->from('users')->where('id','=',$realKey);
             if($query->execute()->as_array()){
                 $query = DB::insert('roles_users',array('user_id','role_id'))->values(array($realKey,1));
                 $query->execute();
                 return TRUE;
             }
-        }
+
     }
 
 
@@ -88,6 +86,39 @@ class Model_Muser extends Model_Database{
         }
 
         return $result;
+    }
+
+    /*Получаем email адрес и высылаем ссылку для сброса пароля*/
+    public function resAndSend($email){
+        $userData['email'] = $email;
+        $query = DB::select('id')->from('users')->where('email','=',$userData['email']);
+            $result = $query->execute();
+        $userData['key'] = $result[0]['id'];
+        
+        $trash = $this->generateData(6);
+        $userData['key'] = $trash.$userData['key'];
+
+        $sandMail = Model::factory('Mmail')->sendResetMail($userData);
+    }
+
+    /*Меняем пароль*/
+    public function resAndSave($id){
+        $realId = substr($id,6);
+        $userData['newPass'] = $this->generateData(7);
+
+        $auth = Auth::instance();
+        $hNewPassword = $auth->hash_password($userData['newPass']);
+
+        $query = DB::update('users')->set(array(
+                                               'password' => $hNewPassword,
+                                               ))->where('id','=',$realId);
+        $result = $query->execute();
+
+        $query = DB::select('email')->from('users')->where('id','=',$realId);
+        $result= $query->execute();
+        $userData['email'] = $result[0]['email'];
+
+        $mUser = Model::factory('Mmail')->sendNewPassword($userData);
     }
 
 

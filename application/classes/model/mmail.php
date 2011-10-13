@@ -10,9 +10,27 @@ class Model_Mmail extends Model_Database{
 
         $to = $userData['email'];
         $subject = "Регистрация на сайте EduName";
-        $message = 'test'.$userData['activKey'];
+        $message = 'Переходим по ссылке \user\activation\i\\'.$userData['activKey'];
 
         mail($to,$subject,$message);
 
+    }
+
+    /*Отправляем письмо со спец.ссылкой для сброса пароля*/
+    public function sendResetMail($userData){
+        $to = $userData['email'];
+        $subject = "Сброс пароля";
+        $message = 'Переходим по ссылке \user\reset\\'.$userData['key'];
+
+        mail($to,$subject,$message);
+    }
+
+    /*Отправляем новый пароль пользователю*/
+    public function sendNewPassword($userData){
+        $to = $userData['email'];
+        $subject = "новый пароль";
+        $message = 'Переходим по ссылке \user\reset\get\\'.$userData['newPass'];
+
+        mail($to,$subject,$message);
     }
 }

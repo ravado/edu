@@ -18,7 +18,7 @@ function auth(){
 /*Показ формы для восстановления пароля*/
 function showResetForm(){
     $("#dvHomeAuth").html('Сброс пароля пользователя:' +
-        '<form name="frmReset" action="/user/register/reset" method="POST"><input type="text"  onblur="checkEmail()" name="inpMailForReset" id="inpMailForReset" class="inpColor" placeholder="Адрес электронной почты"></td></tr>' +
+        '<form name="frmReset" action="/user/reset" method="POST"><input type="text"  onblur="checkEmail()" name="inpMailForReset" id="inpMailForReset" class="inpColor" placeholder="Адрес электронной почты"></td></tr>' +
         '<span id="spnHintResEmail" class="spnNotCorrect">sdfds</span>На указаный адрес будет выслана инструкция' +
         '<br /><a onclick="resetPassword()" class="btnColor Reset">Сбросить пароль</a></form><br/><a id="lnkBackReaset" href="/"><< Вернутся назад</a> ');
 }
@@ -34,7 +34,7 @@ function resetPassword(){
         //Если в базе уже есть такой емейл
         if(isValueExist('inpMailForReset','email')){
             hints('success','Мы выслали к Вам на почту письмо для сброса пароля');
-
+            $("[name = frmReset]").submit();
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!СЮДА ВСТАВИТЬ ОТПРАВКУ ПИСЬМА НА УКАЗАННЫЙ ЯЩИК!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 
         }
