@@ -13,7 +13,9 @@ class Controller_User_Reset extends Controller_Base {
         if(!empty($_POST)){
              $email = Arr::get($_POST,'inpMailForReset','');
              $mUser = Model::factory('Muser')->resAndSend($email);
-            $this->template->content = 'Новый пароль отправлен на почту';
+            
+             $this->template->styles = array("stfile/css/register.css" => "screen");
+             $this->template->content = View::factory('user/vUserReset');
          }
 	}
 
@@ -21,7 +23,9 @@ class Controller_User_Reset extends Controller_Base {
     public function action_gen(){
         $id = $this->request->param('id');
         $mUser = Model::factory('Muser')->resAndSave($id);
-       $this->template->content = 'Новый пароль отправлен на почту';
+
+        $this->template->styles = array("stfile/css/register.css" => "screen");
+        $this->template->content = View::factory('user/vUserResetGen');
     }
 
 

@@ -113,6 +113,14 @@ Kohana::modules(array(
  * defaults for the URI.
  */
 
+/*роут админки*/
+Route::set('adm', 'adm(/<controller>(/<action>(/<id>)))')
+	->defaults(array(
+		'directory'  => 'adm',
+		'controller' => 'panel',
+		'action'     => 'index',
+	));
+
 /*роут пользователя, принимает все котроллеры папки User */
 Route::set('user', 'user(/<controller>(/<action>(/<id>)))')
 	->defaults(array(
