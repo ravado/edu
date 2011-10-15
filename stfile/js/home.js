@@ -21,6 +21,7 @@ function showResetForm(){
         '<form name="frmReset" action="/user/reset" method="POST"><input type="text"  onblur="checkEmail()" name="inpMailForReset" id="inpMailForReset" class="inpColor" placeholder="Адрес электронной почты"></td></tr>' +
         '<span id="spnHintResEmail" class="spnNotCorrect">sdfds</span>На указаный адрес будет выслана инструкция' +
         '<br /><a onclick="resetPassword()" class="btnColor Reset">Сбросить пароль</a></form><br/><a id="lnkBackReaset" href="/"><< Вернутся назад</a> ');
+    $("#dvHomeAuth input").placeholder();
 }
 
 /*При нажатии СБРОСИТЬ ПАРОЛЬ*/

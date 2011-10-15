@@ -22,7 +22,7 @@
         <?php }else { ?>
         Форма авторизации на сайте:
         <form name="formAuth" action="/user/auth" method="POST">
-            <input type="text" name="login" class="inpColor" placeholder="Имя пользователя">
+            <input type="text" id="inpLogin" name="login" class="inpColor" placeholder="Имя пользователя">
             <input type="password" name="password" class="inpColor" placeholder="Ваш пароль">
             <a class="btnColor Auth" onclick="auth()">Войти</a>
         </form>
