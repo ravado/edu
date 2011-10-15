@@ -59,28 +59,25 @@ $(document).ready(function(){
     //При нажатии на ссылку с класом poplight и первым символом в ссылке(#)
     $("[class=poplight]").click(function() {
         var popID = $(this).attr('rel'); //Получаем имя popup`a
-
-        var popURL = $(this).attr('href'); //Получаем href popup`a для определения размера
-
+        //var popURL = $(this).attr('href'); //Получаем href popup`a для определения размера
         //Pull Query & Variables from href URL
-       var query= popURL.split('?');
-        var dim= query[1].split('&');
-        var popWidth = 500; //Gets the first query string value
-
-        //Fade in the Popup and add close button
+        //var query= popURL.split('?');
+        //var dim= query[1].split('&');
+        var popWidth = 500; //Ширина модального окна
+        //Показ модального окна и добавление кнопки закрытия
         $('#' + popID).fadeIn().css({ 'width': Number( popWidth ) }).prepend('<a href="#" class="close"><img src="../../stfile/img/user/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
 
-        //Define margin for center alignment (vertical   horizontal) - we add 80px to the height/width to accomodate for the padding  and border width defined in the css
-       var popMargTop = ($('#' + popID).height() + 80) / 2;
+        //Определяем положение модального окна
+        var popMargTop = ($('#' + popID).height() + 80) / 2;
         var popMargLeft = ($('#' + popID).width() + 80) / 2;
 
-        //Apply Margin to Popup
+        //Применяем выравнивание для модального окна
         $('#' + popID).css({
             'margin-top' : -popMargTop,
             'margin-left' : -popMargLeft
         });
-        //Fade in Background
-        $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
+        //Затемнение заднего фона
+        $('body').append('<div id="fade"></div>'); //Добавление затемненого слоя
         $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer - .css({'filter' : 'alpha(opacity=80)'}) is used to fix the IE Bug on fading transparencies
 
         return false;

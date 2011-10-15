@@ -62,7 +62,7 @@
             <tr>
                 <td class="RegFormCaption">Условия использования:</td>
                 <td class="RegFormField">
-                    <input name="license" type="checkbox">Согласен с <a href="#?w=700" rel="popup_name" class="poplight">условиями использования</a><br/>
+                    <input name="license" type="checkbox">Согласен с <a href="" rel="popup_name" class="poplight">условиями использования</a><br/>
                     <span class="spnNotCorrect" id="spnLicense">Вы не приняли условий соглашения!</span>
                 </td>
                 <td class="RegFormFlag"><span class="success-failure" id="spnSFLicense"></td>
