@@ -52,6 +52,11 @@ td img{float: left;}
 /*Иконка закрытия модального окна*/
 img.btn_close {float: left; position:fixed; margin: -35px 0 0 485px;}
 
+/*Текст модального окна*/
+#popup_name{
+    font-size: 13px;
+    line-height: 1.5;
+}
 /*-----КОНЕЦ модального окна-----*/
 
 
