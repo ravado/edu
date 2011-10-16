@@ -40,11 +40,15 @@ $(document).ready(function(){
                 break;
             }
             case 'firstName':{
-                $('#dvRightInfo').html("<b>Что дает регистрация на сайте:</b>");
+                $('#dvRightInfo').html("<b>Что дает регистрация на сайте:</b><ul><li>Возможность задавать вопросы, получать ответы, а также отслеживать активность в интересующих направлениях.</li>"+
+                    "<li>Хранить историю пройденых тестов, отслеживать успешность прохождения новых тестов.</li>"+
+                    "<li>Иметь полноценный доступ ко всем существующим разделам сайта, и тем, которые будут внедрены в будущем.</li></ul>");
                 break;
             }
             case 'lastName':{
-                $('#dvRightInfo').html("<b>Что дает регистрация на сайте:</b>");
+                $('#dvRightInfo').html("<b>Что дает регистрация на сайте:</b><ul><li>Возможность задавать вопросы, получать ответы, а также отслеживать активность в интересующих направлениях.</li>"+
+                    "<li>Хранить историю пройденых тестов, отслеживать успешность прохождения новых тестов.</li>"+
+                    "<li>Иметь полноценный доступ ко всем существующим разделам сайта, и тем, которые будут внедрены в будущем.</li></ul>");
                 break;
             }
             default:{
@@ -372,7 +376,7 @@ $(document).ready(function(){
     $("#btnRegSubmit").click(function(){
         ISCLICKEDREGBUTTON = true;
         if(ISVALID['keyLogin']&&ISVALID['keyEmail']&&ISVALID['keyPass']&&ISVALID['keyPassConfirm']&&ISVALID['keyCapcha']&&ISVALID['keyLicense']&&ISVALID['keyFirstName']&&ISVALID['keyLastName']){
-            hints('success','Теперь вы зарегистрированы в нашей системе :)');
+            hints('success','Теперь вы зарегистрированы в нашей системе.');
             $(this).attr('href','javascript:document.registerForm.submit();');
         }
         else{
