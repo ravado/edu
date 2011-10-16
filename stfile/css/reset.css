@@ -34,5 +34,3 @@ blockquote, q {
 }
 a{color: #197cbb;text-decoration: none;}
 a:hover{color: #1772ac;text-decoration: underline;cursor: pointer;}
-
-table {border-collapse: collapse;border-spacing: 0;}
