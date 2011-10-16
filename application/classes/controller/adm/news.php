@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /*
- * Контроллер отвечает за главную странцу админки
+ * Контроллер отвечает за главную администрирование новостей
  * 
  */
 class Controller_Adm_News extends Controller_Base{
