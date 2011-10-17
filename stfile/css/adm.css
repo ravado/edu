@@ -17,6 +17,12 @@
 /*----------РАБОТАЕМ С ПОЛЬЗОВАТЕЛЕМ----------*/
 
 /*---Добавление пользователя---*/
-/*Логин пользователя*/
+/*Стандартный размер инпутов*/
 #dvAdmPanel .inpColor{width: 250px;margin: 10px 20px;}
-#dvAdmPanel span{display: inline-block;margin-left: 20px;}
+
+#dvAdmPanel #sex{display: inline-block;margin-left: 20px;}
+
+/*Кнопка сохранения пользователя*/
+.SaveUser{
+    margin-left: 45px;
+}
