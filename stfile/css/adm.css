@@ -13,3 +13,10 @@
     width: 700px;
     float: right;
 }
+
+/*----------РАБОТАЕМ С ПОЛЬЗОВАТЕЛЕМ----------*/
+
+/*---Добавление пользователя---*/
+/*Логин пользователя*/
+#dvAdmPanel .inpColor{width: 250px;margin: 10px 20px;}
+#dvAdmPanel span{display: inline-block;margin-left: 20px;}

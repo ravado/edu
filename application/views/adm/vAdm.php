@@ -5,7 +5,7 @@
     };
 ?>
 <div id="dvContent">
-    <div class="spnTitle Page">Панель администрирования</div>
+    <div class="spnTitle Page">Панель администрирования <?php if(isset($pageFlag)){echo$pageFlag;}?></div>
     <div id="dvAdmPanel"><?=$page;?></div>
     <div id="dvAdmMenu">Тут меню админки</div>
 </div>
