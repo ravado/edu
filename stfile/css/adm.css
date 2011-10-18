@@ -18,6 +18,7 @@
 .ulLeftSidebar ul{
     width: 120%;
     margin-left: 10px;
+    display: none;
 }
 
 .ulLeftSidebar ul li{
