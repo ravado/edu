@@ -40,6 +40,7 @@ class Controller_Base extends Controller_Template {
             $scripts = array(
                 "stfile/js/placeholder.js",
                 "stfile/js/main.js",
+                "stfile/js/simple-modal.js",
                 "http://yandex.st/jquery/1.6.4/jquery.min.js"
             );
 
