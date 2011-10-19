@@ -82,7 +82,7 @@
                 <td class="RegFormFlag"><span class="success-failure" id="spnSFCapcha"></span></td>
             </tr>
         </table>
-        <a class="btnColor Register" id="btnRegSubmit">Зарегестрироваться</a>
+        <a class="btnColor Save" id="btnRegSubmit">Зарегестрироваться</a>
         </form>
     </div>
     <div id="popup_name" class="popup_block">

@@ -37,8 +37,8 @@ td img{float: left;}
 /*спаны с текстом ошибки заполенения поля*/
 .spnNotCorrect{margin-top: 5px;}
 
-/*Кнопка регистрации*/
-.btnColor.Register{margin: 10px 0 20px 0;font-size: 18px; float: right;}
+/*Кнопка регистрации и сохранения данных профиля пользователя*/
+.btnColor.Save{margin: 10px 60px 20px 0;font-size: 18px; float: right;}
 
 
 /*-----------Модальное окно с условиями----------*/

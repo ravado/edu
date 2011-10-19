@@ -9,7 +9,7 @@
     <div id="dvAdmPanel"><?=$page;?></div>
     <div id="dvAdmMenu">
         <ul class="ulLeftSidebar" id="ulAdmMenu">
-            <li><a class="btnSilver btnLeftMenu">Пользователь</a>
+            <li><a class="btnSilver">Пользователь</a>
                 <ul>
                     <li><a href="/adm/user/add">Добавить нового</a></li>
                     <li><a href="/adm/user/add">Удалить</a></li>

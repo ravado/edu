@@ -8,38 +8,42 @@ class Model_Muser extends Model_Database{
     /*Запись полученый данных с рег.формы в БД*/
     public function register($userData){
 
-        $auth = Auth::instance();
-        $userData['hash_password'] = $auth->hash_password($userData['password']);
+        if((!empty($userData['login'])) && (!empty($userData['password'])) && (!empty($userData['email']))){
+            $auth = Auth::instance();
+            $userData['hash_password'] = $auth->hash_password($userData['password']);
 
-        $userData['date_register'] = time();
+            $userData['date_register'] = time();
 
-        $query = DB::insert('users',array(
-                                          'username',
-                                          'password',
-                                          'email',
-                                          'sex',
-                                          'first_name',
-                                          'last_name',
-                                          'date_register',
-                                       ))->values(array(
-                                                        $userData['login'],
-                                                        $userData['hash_password'],
-                                                        $userData['email'],
-                                                        $userData['sex'],
-                                                        $userData['first_name'],
-                                                        $userData['last_name'],
-                                                        $userData['date_register']));
-        if($query->execute()){
-            /*Узнаем ID который получил наш пользователь*/
-            $query = DB::select('id')->from('users')->where('username','=',$userData['login']);
-            $result = $query->execute();
-                $idKey = $result[0]['id'];
-                $trash = $this->generateData(5);
-                $activKey = $trash.$idKey;
-            return $activKey;
-        }else{
-            return FALSE;
+            $query = DB::insert('users',array(
+                                              'username',
+                                              'password',
+                                              'email',
+                                              'sex',
+                                              'first_name',
+                                              'last_name',
+                                              'date_register',
+                                           ))->values(array(
+                                                            $userData['login'],
+                                                            $userData['hash_password'],
+                                                            $userData['email'],
+                                                            $userData['sex'],
+                                                            $userData['first_name'],
+                                                            $userData['last_name'],
+                                                            $userData['date_register']));
+            if($query->execute()){
+                /*Узнаем ID который получил наш пользователь*/
+                $query = DB::select('id')->from('users')->where('username','=',$userData['login']);
+                $result = $query->execute();
+                    $idKey = $result[0]['id'];
+                    $trash = $this->generateData(5);
+                    $activKey = $trash.$idKey;
+                return $activKey;
+            }else{
+                return FALSE;
+            }
         }
+
+
     }
 
     /*Активация пользователя по ссылке из письма*/
@@ -143,5 +147,38 @@ class Model_Muser extends Model_Database{
             $gData .= $arr[$index];
         }
         return $gData;
+    }
+
+    /*Редактироване профиля пользователя(выдаем данные в форму редактирования)*/
+    public function getUserProfile($userID){
+        $query = DB::select()->from('users')->where('id','=',$userID);
+        $result = $query->execute()->as_array();
+
+        return $result;
+    }
+
+    /*Обновления данных пользователя в БД*/
+    public function updateUserProfile($userData){
+        if(!empty($userData['password'])){
+            $auth = Auth::instance();
+            $hPassword = $auth->hash_password($userData['password']);
+            $queru = DB::update('users')->set(array(
+                                               'password' => $hPassword,
+                                               'email' => $userData['email'],
+                                               'first_name' => $userData['first_name'],
+                                               'last_name' => $userData['last_name']
+                                               ))->where('id','=',$userData['id']);
+            $result = $queru->execute();
+            return TRUE;
+        }else{
+            $queru = DB::update('users')->set(array(
+                                               'email' => $userData['email'],
+                                               'first_name' => $userData['first_name'],
+                                               'last_name' => $userData['last_name']
+                                               ))->where('id','=',$userData['id']);
+            $result = $queru->execute();
+            return TRUE;
+        }
+
     }
 }
