@@ -18,7 +18,7 @@
 <div id="dvHomeUBlocks">
     <div id="dvHomeAuth">
         <?php if($userAuth) { ?>
-            Добро пожаловать <b><?=$userName;?></b> <a href="/user/auth/logout">Выйти</a> </b><br/><br/>
+            Добро пожаловать <b><?=$userName;?></b> <a href="/user/edit/">Профиль</a> <a href="/user/auth/logout">Выйти</a> <br/><br/>
         <?php }else { ?>
         Форма авторизации на сайте:
         <form name="formAuth" action="/user/auth" method="POST">

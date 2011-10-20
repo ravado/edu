@@ -15,15 +15,15 @@
 }
 
 /*Таблица с формой регистрации*/
-#tblRegisterForm{width: 650px;}
+#tblUserProfile{width: 650px;}
     /*Делаем расстояние между строк и выравнивание caption по-высоте*/
     td{padding: 15px 0;vertical-align: middle;}
     /*Ячейка с заголовком поля формы*/
-    .RegFormCaption{width: 280px;text-align: right;padding-right: 20px;}
+    .profFormCaption{width: 280px;text-align: right;padding-right: 20px;}
     /*Ячекйка с полев ввода*/
-    .RegFormField{width: 350px;}
+    .profFormField{width: 350px;}
     /*Ячейка с флагом правильности заполнения поля*/
-    .RegFormFlag{border:0 dashed black; width: 29px; height: 22px;}
+    .profFormFlag{border:0 dashed black; width: 29px; height: 22px;}
 
 .success-failure img{position: absolute; margin-top: -14px; margin-left: -5px;}
 

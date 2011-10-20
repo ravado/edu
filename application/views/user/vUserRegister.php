@@ -10,76 +10,76 @@
     </div>
     <div id="dvLeftForm">
         <form name="registerForm" action="/user/register/setuser" method="POST">
-        <table id="tblRegisterForm">
+        <table id="tblUserProfile">
             <tr>
-                <td class="RegFormCaption">Имя пользователя:</td>
+                <td class="profFormCaption">Имя пользователя:</td>
                 <td class="RegFormField">
                     <input type="text" name="login" class="inpColor" id="inpLogin"><br/>
                     <span class="spnNotCorrect" id="spnLogin">Вы ввели запрещенные символы!</span>
                     </td>
-                <td class="RegFormFlag"><span class="success-failure" id="spnSFLogin"></span></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFLogin"></span></td>
             </tr>
             <tr>
-                <td class="RegFormCaption">Желаемый пароль:</td>
-                <td class="RegFormField">
+                <td class="profFormCaption">Желаемый пароль:</td>
+                <td class="profFormField">
                     <input type="password" name="password" class="inpColor" id="inpPassword"><br/>
                     <span class="spnNotCorrect" id="spnPassword">Вы ввели запрещенные символы!</span>
                 </td>
-                <td class="RegFormFlag"><span class="success-failure" id="spnSFPassword"></span></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFPassword"></span></td>
             </tr>
             <tr>
-                <td class="RegFormCaption">Подтверждение пароля:</td>
-                <td class="RegFormField">
+                <td class="profFormCaption">Подтверждение пароля:</td>
+                <td class="profFormField">
                     <input type="password" name="passwordConf" class="inpColor" id="inpPasswordConf"><br/>
                     <span class="spnNotCorrect" id="spnPasswordConf">Вы ввели запрещенные символы!</span>
                 </td>
-                <td class="RegFormFlag"><span class="success-failure" id="spnSFPasswordConfirm"></span></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFPasswordConfirm"></span></td>
             </tr>
             <tr>
-                <td class="RegFormCaption">Электронная почта:</td>
-                <td class="RegFormField">
+                <td class="profFormCaption">Электронная почта:</td>
+                <td class="profFormField">
                     <input type="text" name="email" class="inpColor" id="inpEmail"><br/>
                     <span class="spnNotCorrect" id="spnEmail">Вы ввели запрещенные символы!</span>
                 </td>
-                <td class="RegFormFlag"><span class="success-failure" id="spnSFEmail"></span></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFEmail"></span></td>
             </tr>
             <tr>
-                <td class="RegFormCaption">Ваш пол:</td>
-                <td class="RegFormField"><input type="radio" name="sex" value="1">Мужской <input type="radio" name="sex" value="0">Женский</td>
-                <td class="RegFormFlag"></td>
+                <td class="profFormCaption">Ваш пол:</td>
+                <td class="profFormField"><input type="radio" name="sex" value="1">Мужской <input type="radio" name="sex" value="0">Женский</td>
+                <td class="profFormFlag"></td>
             </tr>
             <tr>
-                <td class="RegFormCaption">Ваше имя:</td>
-                <td class="RegFormField">
+                <td class="profFormCaption">Ваше имя:</td>
+                <td class="profFormField">
                     <input type="text" name="firstName" class="inpColor" id="inpFirstName"><br/>
                     <span class="spnNotCorrect" id="spnFirstName">Вы ввели запрещенные символы!</span>
                 </td>
-                <td class="RegFormFlag"><span class="success-failure" id="spnSFFirstName"></span></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFFirstName"></span></td>
             </tr>
             <tr>
-                <td class="RegFormCaption">Ваша фамилия:</td>
-                <td class="RegFormField">
+                <td class="profFormCaption">Ваша фамилия:</td>
+                <td class="profFormField">
                     <input type="text" name="lastName" class="inpColor" id="inpLastName"><br/>
                     <span class="spnNotCorrect" id="spnLastName">Вы ввели запрещенные символы!</span>
                 </td>
-                <td class="RegFormFlag"><span class="success-failure" id="spnSFLastName"></span></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFLastName"></span></td>
             </tr>
             <tr>
-                <td class="RegFormCaption">Условия использования:</td>
-                <td class="RegFormField">
+                <td class="profFormCaption">Условия использования:</td>
+                <td class="profFormField">
                     <input name="license" type="checkbox">Согласен с <a href="" rel="popup_name" class="poplight">условиями использования</a><br/>
                     <span class="spnNotCorrect" id="spnLicense">Вы не приняли условий соглашения!</span>
                 </td>
-                <td class="RegFormFlag"><span class="success-failure" id="spnSFLicense"></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFLicense"></td>
             </tr>
             <tr>
-                <td class="RegFormCaption">Проверочный код:</td>
-                <td class="RegFormField">
+                <td class="profFormCaption">Проверочный код:</td>
+                <td class="profFormField">
                     <img src="../../../stfile/img/capcha.png" alt="capcha">
                     <input type="text" class="inpColor" id="inpCapcha"><br/>
                     <span class="spnNotCorrect" id="spnCapcha">Вы ввели запрещенные символы!</span>
                 </td>
-                <td class="RegFormFlag"><span class="success-failure" id="spnSFCapcha"></span></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFCapcha"></span></td>
             </tr>
         </table>
         <a class="btnColor Save" id="btnRegSubmit">Зарегестрироваться</a>

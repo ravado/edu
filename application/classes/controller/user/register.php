@@ -10,11 +10,16 @@ class Controller_User_Register extends Controller_Base {
 
     /*Показываем страницу регистрации*/
 	public function action_index(){
-		$this->template->title = "Регистрация пользователя";
-        $this->template->styles = array("stfile/css/register.css" => "screen");
-        $this->template->scripts = array('stfile/js/register.js');
+        $auth = Auth::instance();
+        if($auth->logged_in()){
+            $this->request->redirect('');
+        }else{
+            $this->template->title = "Регистрация пользователя";
+            $this->template->styles = array("stfile/css/register.css" => "screen");
+            $this->template->scripts = array('stfile/js/register.js');
 
-        $this->template->content = View::factory('user/vUserRegister');
+            $this->template->content = View::factory('user/vUserRegister');
+        }
 	}
 
     /*Получаем данные из формы регистрации и отправляем их в базу*/
