@@ -11,9 +11,9 @@ var ISVALID = {keyLogin:false,keyEmail:false,keyPass:false,keyPassConfirm:false,
 $(document).ready(function(){
 
 //=====================================Отображение различных подсказок по заполнению полей формы======================//
-    var allTextInputs = $("table.#tblRegisterForm input"); //Выбираем все текстовые инпуты из формы
+    var allTextInputs = $("table.#tblUserProfile input"); //Выбираем все текстовые инпуты из формы
     allTextInputs.focusin(function(){
-        var current = $("table.#tblRegisterForm input:focus"); //Выбираем элемент который получил фокус
+        var current = $("table.#tblUserProfile input:focus"); //Выбираем элемент который получил фокус
         switch (current.attr('name')){ //Сравниваем атрибуты name, если находим совпадение записываем в <P> подсказку, и прерываем выполнение
             case "login":{
                 $('#dvRightInfo').html("<b>Имя пользователя</b> - это виртаульное имя которое отображается на сайте вместо ваших настоящих имени и фамилии. " +

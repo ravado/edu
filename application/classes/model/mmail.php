@@ -10,7 +10,7 @@ class Model_Mmail extends Model_Database{
 
         $to = $userData['email'];
         $subject = "Регистрация на сайте EduName";
-        $message = 'Переходим по ссылке http://weblol.net/user/activation/i/'.$userData['activKey'];
+        $message = 'Переходим по ссылке http://weblols.net/user/activation/i/'.$userData['activKey'];
 
         mail($to,$subject,$message);
 
@@ -20,7 +20,7 @@ class Model_Mmail extends Model_Database{
     public function sendResetMail($userData){
         $to = $userData['email'];
         $subject = "Сброс пароля";
-        $message = 'Переходим по ссылке http://weblol.net/user/reset/'.$userData['key'];
+        $message = 'Переходим по ссылке http://weblols.net/user/reset/'.$userData['key'];
 
         mail($to,$subject,$message);
     }
@@ -29,7 +29,7 @@ class Model_Mmail extends Model_Database{
     public function sendNewPassword($userData){
         $to = $userData['email'];
         $subject = "новый пароль";
-        $message = 'Переходим по ссылке http://weblol.net/user/reset/get/'.$userData['newPass'];
+        $message = 'Переходим по ссылке http://weblols.net/user/reset/get/'.$userData['newPass'];
 
         mail($to,$subject,$message);
     }

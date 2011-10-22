@@ -45,7 +45,7 @@
             </tr>
             <tr>
                 <td class="profFormCaption">Ваш пол:</td>
-                <td class="profFormField"><input type="radio" name="sex" value="1" checked="<?php if($userInfo[0]['sex']==1)TRUE;?>">Мужской <input type="radio" name="sex" value="0" checked="<?php if($userInfo[0]['sex']==1)TRUE;?>">Женский</td>
+                <td class="profFormField"><input type="radio" name="sex" value="1" <?php if($userInfo[0]['sex']==1){echo 'checked="checked"';};?>>Мужской <input type="radio" name="sex" value="0" <?php if($userInfo[0]['sex']==0){echo 'checked="checked"';};?>>Женский</td>
                 <td class="profFormFlag"></td>
             </tr>
             <tr>

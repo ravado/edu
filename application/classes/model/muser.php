@@ -162,21 +162,23 @@ class Model_Muser extends Model_Database{
         if(!empty($userData['password'])){
             $auth = Auth::instance();
             $hPassword = $auth->hash_password($userData['password']);
-            $queru = DB::update('users')->set(array(
+            $query = DB::update('users')->set(array(
                                                'password' => $hPassword,
                                                'email' => $userData['email'],
+                                               'sex' => $userData['sex'],
                                                'first_name' => $userData['first_name'],
                                                'last_name' => $userData['last_name']
                                                ))->where('id','=',$userData['id']);
-            $result = $queru->execute();
+            $result = $query->execute();
             return TRUE;
         }else{
-            $queru = DB::update('users')->set(array(
+            $query = DB::update('users')->set(array(
                                                'email' => $userData['email'],
+                                               'sex' => $userData['sex'],
                                                'first_name' => $userData['first_name'],
                                                'last_name' => $userData['last_name']
                                                ))->where('id','=',$userData['id']);
-            $result = $queru->execute();
+            $result = $query->execute();
             return TRUE;
         }
 
