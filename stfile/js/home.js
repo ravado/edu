@@ -7,7 +7,7 @@ function auth(){
    var login = $("[name = login]"),
        password = $("[name = password]");
 
-   if (getRegex('login').test(login.val()) && getRegex('password').test(login.val())) {
+   if (getRegex(login, 'login') && getRegex(password,'password')) {
        $("[name = formAuth]").submit();
    }
    else{
@@ -29,7 +29,7 @@ function resetPassword(){
     var email = $("#inpMailForReset");
     //если введенные символы допустимы
     if (email.val().length > 0) {
-    if(getRegex('email').test(email.val())){
+    if(getRegex(email,'email')){
         $("#spnHintResEmail").css('visibility','hidden');
         email.removeClass("Red");//удаляем класс с красной подсветкой
         //Если в базе уже есть такой емейл

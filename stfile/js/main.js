@@ -15,16 +15,16 @@ function isValueExist(id,type){
     }
     //если проверить нужно емейл
     if (type == "email"){
-        neededAction = "/user/uhid/getuserthemail" //екшн который будет выполнятся если проверяем емейл
+        neededAction = '/user/uhid/getuserthemail' //екшн который будет выполнятся если проверяем емейл
     }
     //аякс запрос с синхронной передачей даных
     $.ajax({type:"POST", async:false, data: globalArray+inputedValue, url: neededAction, dataType:"json",
         success:function(data){
-            if(data.isRegistered == true){//что нужно делать если найдена запись в базе
+            if(data.isRegistered){//что нужно делать если найдена запись в базе
                 //alert("This login already exist! Try another!");
                 isExist = true;
             }
-            if(data.isRegistered == false){//что нужно делать если запись в базе не найдена
+            if(!data.isRegistered){//что нужно делать если запись в базе не найдена
                 //alert("You can use this login!");
                 isExist = false;
             }
@@ -32,29 +32,130 @@ function isValueExist(id,type){
         error:function(){
             alert('error in ajax query, when check login :(');
         }
-    })
+    });
     return isExist;
 }
+
+//====================================== Валидация введенных данных ==================================================//
+
+//jQueryObj (jQuery) это передаваемый обьект джиквери с которого необходимо взять даные и проверить их корректность
+//validateKind (строковый) это тип проверяемых данных (login, email, password, firstname, lastname, capcha)
+//ajaxCheck (булевый)необязательный параметр, который указывает необходимость проверки даных с БД
+function validCheck(jQueryObj,validateKind,ajaxCheck) {
+    var result;
+    // Проверяем количество переданых параметров
+    if (arguments.length >= 2) {
+        //Если есть что проверять :)
+        if (jQueryObj.val().length > 0) {
+            //Если с 3-мя параметрами
+            if (arguments.length == 3) {
+                //Если с ajax запросом
+                if (ajaxCheck) {
+                    //В зависимости от того какой тип валидации проводить
+                    switch (validateKind){
+                        case 'login':{
+                            break;
+                        }
+                        case 'email':{
+                            break;
+                        }
+                        default: {
+                            return 'not correct parametr';
+                        }
+                    }
+                    //Проверяем проходит ли по регулярному выражению
+                    if (getRegex(jQueryObj,validateKind)){
+                        if(isValueExist(jQueryObj.attr('id'),validateKind)) {
+                            return 'exist';
+                        }
+                        else {
+                            return 'empty';
+                        }
+                    }
+                    else {
+                        return 'not correct';
+                    }
+                }
+                // Без ajax запроса
+                else {
+                    if (getRegex(jQueryObj,validateKind)){
+                        result = 'correct';
+                    }
+                    else {
+                        result = 'not correct';
+                    }
+                }
+            }
+            //Если без 3-го параметра
+            else {
+                if (getRegex(jQueryObj,validateKind)){
+                        result = 'correct';
+                }
+                else {
+                    result = 'not correct';
+                }
+            }
+        }
+        //Если не введено символов
+        else{
+            result = 'not enough symbols';
+        }
+    }
+    else {
+        result = 'not enough parameter';
+    }
+    
+    return result;
+}
+//--------------------------------------------------------------------------------------------------------------------//
 
 //==============================Регулярные выражения==================================================================//
 //функция возвращает регулярное выражение необходимое для валидации полей
 //type это тип проверяемого выражения (может быть: email, login, password, name)
-function getRegex (type){
+function getRegex (jQueryObj,type){
+    var currRagex;
+
+    //Максимальные значения для полей
+    const maxLogin = 32,
+          maxPassword = 64,
+          maxEmail = 254,
+          maxName = 20;
     switch (type){
         case ('login'):{
-            return new RegExp(/^\w+([\.-]?\w+){2,}$/);
+            if (jQueryObj.val().length > maxLogin) {
+                return false;
+            }
+            else {
+                currRagex = new RegExp(/^\w+([\.-]?\w+){2,}$/);
+                return currRagex.test(jQueryObj.val());
+            }
         }
         case ('password'):{
-            current = new RegExp(/^[^а-яА-Я]{5,}$/);
-            return current;
+            if (jQueryObj.val().length > maxPassword) {
+                return false;
+            }
+            else {
+                currRagex = new RegExp(/^[^а-яА-Я]{5,}$/);
+                return currRagex.test(jQueryObj.val());
+            }
         }
         case ('email'):{
-            current = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/);
-            return  current;
+            if (jQueryObj.val().length > maxEmail) {
+                return false;
+            }
+            else {
+                currRagex = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/);
+                return currRagex.test(jQueryObj.val());
+            }
         }
         case ('name'):{
-            current = new RegExp(/^[a-zA-Zа-яА-Я]{3,}$/);
-            return current;
+            if (jQueryObj.val().length > maxName) {
+                return false;
+            }
+            else {
+                currRagex = new RegExp(/^[a-zA-Zа-яА-Я]{3,}$/);
+                return currRagex.test(jQueryObj.val());
+            }                        
         }
         default:{
             return false;

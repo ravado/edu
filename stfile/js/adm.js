@@ -31,7 +31,7 @@ $('#ulAdmMenu ul').each(function(index) {
 
     login.blur(function(){
        //если введенные символы допустимы
-        if (getRegex('login').test(login.val())) {
+        if (getRegex(login,'login')) {
             $(this).next('img').attr('src','../../stfile/img/loading.gif').css('visibility','visible');
             if(isValueExist('inpLogin','login')){
                 login.addClass("Red");//добавляем класс с красной подсветкой
@@ -62,7 +62,7 @@ $('#ulAdmMenu ul').each(function(index) {
 
     email.blur(function(){
        //если введенные символы допустимы
-        if (getRegex('email').test(email.val())) {
+        if (getRegex(email,'email')) {
             $(this).next('img').attr('src','../../stfile/img/loading.gif').css('visibility','visible');
             if(isValueExist('inpEmail','email')){
                 email.addClass("Red");//добавляем класс с красной подсветкой

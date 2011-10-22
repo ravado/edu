@@ -22,15 +22,15 @@
             <tr>
                 <td class="profFormCaption">Новый пароль:</td>
                 <td class="profFormField">
-                    <input type="password" name="passwordConf" class="inpColor" id="inpPasswordConf"><br/>
-                    <span class="spnNotCorrect" id="spnPasswordConf">Вы ввели запрещенные символы!</span>
+                    <input type="password" name="password" class="inpColor correct" id="inpPassword"><br/>
+                    <span class="spnNotCorrect" id="spnPassword">Вы ввели запрещенные символы!</span>
                 </td>
-                <td class="profFormFlag"><span class="success-failure" id="spnSFPasswordConfirm"></span></td>
+                <td class="profFormFlag"><span class="success-failure" id="spnSFPassword"></span></td>
             </tr>
             <tr>
                 <td class="profFormCaption">Подтверждение нового пароля:</td>
                 <td class="profFormField">
-                    <input type="password" name="passwordConf" class="inpColor" id="inpPasswordConf"><br/>
+                    <input type="password" name="passwordConf" class="inpColor correct" id="inpPasswordConf"><br/>
                     <span class="spnNotCorrect" id="spnPasswordConf">Вы ввели запрещенные символы!</span>
                 </td>
                 <td class="profFormFlag"><span class="success-failure" id="spnSFPasswordConfirm"></span></td>
@@ -38,7 +38,7 @@
             <tr>
                 <td class="profFormCaption">Электронная почта:</td>
                 <td class="profFormField">
-                    <input type="text" name="email" class="inpColor" id="inpEmail" value="<?=$userInfo[0]['email']?>"><br/>
+                    <input type="text" name="email" class="inpColor correct" id="inpEmail" value="<?=$userInfo[0]['email']?>"><br/>
                     <span class="spnNotCorrect" id="spnEmail">Вы ввели запрещенные символы!</span>
                 </td>
                 <td class="profFormFlag"><span class="success-failure" id="spnSFEmail"></span></td>
@@ -51,7 +51,7 @@
             <tr>
                 <td class="profFormCaption">Ваше имя:</td>
                 <td class="profFormField">
-                    <input type="text" name="firstName" class="inpColor" id="inpFirstName" value="<?=$userInfo[0]['first_name']?>"><br/>
+                    <input type="text" name="firstName" class="inpColor correct" id="inpFirstName" value="<?=$userInfo[0]['first_name']?>"><br/>
                     <span class="spnNotCorrect" id="spnFirstName">Вы ввели запрещенные символы!</span>
                 </td>
                 <td class="profFormFlag"><span class="success-failure" id="spnSFFirstName"></span></td>
@@ -59,7 +59,7 @@
             <tr>
                 <td class="profFormCaption">Ваша фамилия:</td>
                 <td class="profFormField">
-                    <input type="text" name="lastName" class="inpColor" id="inpLastName" value="<?=$userInfo[0]['last_name']?>"><br/>
+                    <input type="text" name="lastName" class="inpColor correct" id="inpLastName" value="<?=$userInfo[0]['last_name']?>"><br/>
                     <span class="spnNotCorrect" id="spnLastName">Вы ввели запрещенные символы!</span>
                 </td>
                 <td class="profFormFlag"><span class="success-failure" id="spnSFLastName"></span></td>

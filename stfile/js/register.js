@@ -11,9 +11,9 @@ var ISVALID = {keyLogin:false,keyEmail:false,keyPass:false,keyPassConfirm:false,
 $(document).ready(function(){
 
 //=====================================Отображение различных подсказок по заполнению полей формы======================//
-    var allTextInputs = $("table.#tblRegisterForm input"); //Выбираем все текстовые инпуты из формы
+    var allTextInputs = $("table.#tblUserProfile input"); //Выбираем все текстовые инпуты из формы
     allTextInputs.focusin(function(){
-        var current = $("table.#tblRegisterForm input:focus"); //Выбираем элемент который получил фокус
+        var current = $("table.#tblUserProfile input:focus"); //Выбираем элемент который получил фокус
         switch (current.attr('name')){ //Сравниваем атрибуты name, если находим совпадение записываем в <P> подсказку, и прерываем выполнение
             case "login":{
                 $('#dvRightInfo').html("<b>Имя пользователя</b> - это виртаульное имя которое отображается на сайте вместо ваших настоящих имени и фамилии. " +
@@ -109,7 +109,7 @@ $(document).ready(function(){
     //Потеря фокуса полем "Имя пользователя"
     login.blur(function() {
         //если введенные символы допустимы
-        if (getRegex('login').test(login.val())) {
+        if (getRegex(login,'login')) {
             $("#spnSFLogin").html('<img src="../../stfile/img/loading.gif">');
             if(isValueExist('inpLogin','login')){
                 login.addClass("Red");//добавляем класс с красной подсветкой
@@ -117,6 +117,8 @@ $(document).ready(function(){
                 $("#spnLogin").text('Такой логин уже существует, выберите другой');
                 $("#spnLogin").css('visibility','visible');
                 ISVALID['keyLogin']=false;
+                var some = $(this).prev('div').prev('div').prev('div').attr('class');
+                alert(some);
             }
             else{
                 //показываем иконку о том что все хорошо
@@ -148,7 +150,7 @@ $(document).ready(function(){
     //Потеря фокуса полем "Password"
     password.blur(function(){
         //если введенные символы допустимы
-        if(getRegex('password').test(password.val())){
+        if(getRegex(password,'password')){
             //показываем иконку о том что все хорошо
             password.removeClass("Red");//удаляем класс inpRed с инпута, что бы не было красной подсветки
             $("#spnSFPassword").html('<img src="../../stfile/img/success.png">');
@@ -177,7 +179,7 @@ $(document).ready(function(){
     //Потеря фокуса полем "PasswordConfirm"
     passwordConfirm.blur(function() {
         //если введенные символы допустимы
-        if(getRegex('password').test(passwordConfirm.val())){
+        if(getRegex(passwordConfirm,'password')){
             $("#spnPasswordConf").text('');
             if(passwordConfirm.val() == password.val()){
                 //показываем иконку о том что все хорошо
@@ -237,7 +239,7 @@ $(document).ready(function(){
     //потеря фокуса у поля 'eMail'
     eMail.blur(function(){
         //если введенные символы допустимы
-        if(getRegex('email').test(eMail.val())){
+        if(getRegex(eMail,'email')){
             $("#spnSFEmail").html('<img src="../../stfile/img/loading.gif">');
             //Если в базе уже есть такой емейл
             if(isValueExist('inpEmail','email')){
@@ -276,7 +278,7 @@ $(document).ready(function(){
     //Потеря фокуса полем "Имя"
     firstName.blur(function(){
         //если введенные символы допустимы
-        if(getRegex('name').test(firstName.val())){
+        if(getRegex(firstName,'name')){
             //показываем иконку о том что все хорошо
             firstName.removeClass("Red");//удаляем класс inpRed с инпута, что бы не было красной подсветки
             $("#spnSFFirstName").html('<img src="../../stfile/img/success.png">');
@@ -305,7 +307,7 @@ $(document).ready(function(){
     //Потеря фокуса полем "Фамилия"
     lastName.blur(function() {
         //если введенные символы допустимы
-        if(getRegex('name').test(lastName.val())) {
+        if(getRegex(lastName,'name')) {
             //показываем иконку о том что все хорошо
             lastName.removeClass("Red");//удаляем класс inpRed с инпута, что бы не было красной подсветки
             $("#spnSFLastName").html('<img src="../../stfile/img/success.png">');
