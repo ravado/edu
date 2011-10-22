@@ -224,8 +224,22 @@ $(document).ready(function(){
             passwordConfirm.blur();
             firstName.blur();
             lastName.blur();
-            hints('success','Ваши даные изменены.');
-        //    $("[name = editForm]").submit();
+            $("#spnSaveLoading").css('visibility','visible');
+            //аякс запрос с синхронной передачей даных
+            $.ajax({type:"POST", async:false, data: $("#editForm").serialize(), url: "/user/uhid/setinfo", dataType:"json",
+                success:function(data){
+                    if(data.correct){
+                        hints('success','Ваши даные изменены.');
+                        $("#spnSaveLoading").css('visibility','hidden');
+                    }
+                    if(!data.correct) {
+                        hints('error','Возникла ошибка в аякс запросе, нам очень жаль');
+                    }
+                },
+                error:function(){
+                    alert('error in ajax query :(');
+                }
+            });
 
         }
         else{

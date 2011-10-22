@@ -9,7 +9,7 @@
         </ul>
     </div>
     <div id="dvLeftForm">
-        <form name="editForm" action="/user/uhid/setuser" method="POST">
+        <form name="editForm" id="editForm" action="/user/uhid/setuser" method="POST">
         <table id="tblUserProfile">
             <tr>
                 <td class="profFormCaption">Имя пользователя:</td>
@@ -66,7 +66,8 @@
             </tr>
         </table>
             <input type="hidden" name="id" value="<?=$userInfo[0]['id']?>">
-        <a class="btnColor Save" id="btnRegSubmit" onclick="setUserInfo()">Сохранить изменения</a>
+        <a class="btnColor Save" id="btnRegSubmit">Сохранить изменения</a>
+            <span id="spnSaveLoading" style="visibility: hidden; position: absolute; margin-left: 320px; margin-top: 15px;" id="spnSFSave"><img src="../../../stfile/img/loading.gif"></span>
         </form>
     </div>
 </div>

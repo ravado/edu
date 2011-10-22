@@ -179,7 +179,8 @@ class Model_Muser extends Model_Database{
                                                'last_name' => $userData['last_name']
                                                ))->where('id','=',$userData['id']);
             $result = $query->execute();
-            return TRUE;
+            $MY['correct'] = true;
+            return $MY;
         }
 
     }
