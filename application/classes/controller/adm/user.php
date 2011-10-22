@@ -42,4 +42,16 @@ class Controller_Adm_User extends Controller_Base{
                 $this->template->content = View::factory('user/vUserRegInfo');
             }
         }
+
+   /*Показываем  страницу удаления пользователя*/
+   public function action_del(){
+       $this->template->title = "Удалить пользователя";
+       $this->template->styles = array("stfile/css/adm.css" => "screen");
+       $this->template->scripts = array('stfile/js/adm.js');
+
+       $data['page'] = View::factory('adm/vAdmUserDel');
+       $data['pageFlag'] = ': Удалить пользователя';
+
+       $this->template->content = View::factory('adm/vAdm',$data);
+   }
 }

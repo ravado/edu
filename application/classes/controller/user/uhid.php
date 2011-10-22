@@ -27,6 +27,7 @@ class Controller_User_Uhid extends Controller{
         if(!empty($_POST)){
             $userData['password'] = Arr::get($_POST,'password','');
             $userData['email'] = Arr::get($_POST,'email','');
+            $userData['sex'] = Arr::get($_POST,'sex','');
             $userData['first_name'] = Arr::get($_POST,'firstName','');
             $userData['last_name'] = Arr::get($_POST,'lastName','');
             $userData['id'] = Arr::get($_POST,'id','');

@@ -11,8 +11,8 @@
         <ul class="ulLeftSidebar" id="ulAdmMenu">
             <li><a class="btnSilver">Пользователь</a>
                 <ul>
-                    <li><a href="/adm/user/add">Добавить нового</a></li>
-                    <li><a href="/adm/user/add">Удалить</a></li>
+                    <li><a href="/adm/user/add">Добавить</a></li>
+                    <li><a href="/adm/user/del">Удалить</a></li>
                     <li><a href="/adm/user/add">Править</a></li>
                 </ul>
             </li>

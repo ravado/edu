@@ -20,10 +20,24 @@
     margin-left: 10px;
     display: none;
 }
+.ulLeftSidebar ul li{
+    width: 230px;
+}
 
 .ulLeftSidebar ul li{
     padding: 5px;
 }
+
+.ulLeftSidebar ul li a{
+    padding: 5px 10px;
+    font-size: 16px;
+}
+.ulLeftSidebar ul li a{text-decoration: none}
+.ulLeftSidebar ul li:hover{
+
+    background: #e8f4fc;
+}
+
 /* Это кнопка меню фиксированого размера*/
 .ulLeftSidebar .btnSilver{
     width: 200px;
