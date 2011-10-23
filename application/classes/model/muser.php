@@ -92,6 +92,30 @@ class Model_Muser extends Model_Database{
         return $result;
     }
 
+     /*Возвращаем данные профиля пользователя по его имени*/
+    public function getUserInfo($userName){
+        $query = DB::select('email,first_name,last_name,sex')->from('users')->where('username','=',$userName);
+        $result['userInfo'] = $query->execute()->as_array();
+        if($result['userInfo']){
+            return $result['userInfo'];
+        }else{
+            return FALSE;
+        }
+
+    }
+
+    /*Удаляем пользователя по имени*/
+    public function delUser($userName){
+        $query = DB::delete('users')->where('username','=',$userName);
+        $result = $query->execute();
+        if($result){
+            return $result['delete'] = TRUE;
+        }else{
+            return $result['delete'] = FALSE;
+        }
+        
+    }
+
     /*Получаем email адрес и высылаем ссылку для сброса пароля*/
     public function resAndSend($email){
         $userData['email'] = $email;
