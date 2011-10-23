@@ -94,13 +94,18 @@ class Model_Muser extends Model_Database{
 
      /*Возвращаем данные профиля пользователя по его имени*/
     public function getUserInfo($userName){
-        $query = DB::select('email,first_name,last_name,sex')->from('users')->where('username','=',$userName);
-        $result['userInfo'] = $query->execute()->as_array();
-        if($result['userInfo']){
-            return $result['userInfo'];
+        $query = DB::select('email','first_name','last_name','sex')->from('users')->where('username','=',$userName);
+        $res['userInfo'] = $query->execute()->as_array();
+        if($res['userInfo']){
+            $res['userInfo']['email'] = $res['userInfo'][0]['email'];
+            $res['userInfo']['firstName'] = $res['userInfo'][0]['first_name'];
+            $res['userInfo']['lastName'] = $res['userInfo'][0]['last_name'];
+            $res['userInfo']['sex'] = $res['userInfo'][0]['sex'];
+            //$res['userInfo']['role'] = $res['userInfo'][0]['role'];
         }else{
-            return FALSE;
+            $res['userInfo']['email'] = 'null';
         }
+        return $res;
 
     }
 
@@ -108,12 +113,12 @@ class Model_Muser extends Model_Database{
     public function delUser($userName){
         $query = DB::delete('users')->where('username','=',$userName);
         $result = $query->execute();
-        if($result){
-            return $result['delete'] = TRUE;
+        if(!empty($result)){
+            $myres['deleted'] = true;
         }else{
-            return $result['delete'] = FALSE;
+            $myres['deleted'] = false;
         }
-        
+        return $myres;
     }
 
     /*Получаем email адрес и высылаем ссылку для сброса пароля*/

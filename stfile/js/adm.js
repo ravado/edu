@@ -97,23 +97,34 @@ $('#ulAdmMenu ul').each(function(index) {
         switch(validCheck($("input[name=username]"),'login',true)){
             case 'exist':{
                 //тут аякс запрос
-                $.ajax({type:"POST",data:"userToDelete"+$("input[name=username]").val(),url:"",dataType:"json",
+                $.ajax({type:"POST",data:"userToDelete="+$("input[name=username]").val(),url:'/adm/ahid/getuserinfo',dataType:"json",
                     success:function(data) {
-                        $("input[name=email]").val(data.email);
-                        $("input[name=firstName]").val(data.firstName);
-                        $("input[name=lastName]").val(data.lastName);
-                        $("input[name=sex]").attr('value') = data.sex;
-                        if (data.role == 1) {
-                            $("#optUser").attr('selected');
-                            $("#optAdmin").removeAttr('selected');
+
+                        $("input[name=email]").val(data.userInfo.email);
+
+                        $("input[name=firstName]").val(data.userInfo.firstName);
+                        $("input[name=lastName]").val(data.userInfo.lastName);
+
+                        if (data.userInfo.sex == 0) {
+                            $("input[name=sex][value=0]").attr('checked','checked');
                         }
-                        if (data.role == 2) {
-                            $("#optAdmin").attr('selected');
-                            $("#optUser").removeAttr('selected');
+                        if (data.userInfo.sex == 1) {
+                            $("input[name=sex][value=1]").attr('checked','checked');
+                        }
+
+                        if (data.userInfo.role == 1) {
+                            alert('role 1');
+                            $("#optUser").attr('selected','selected');
+                            //$("#optAdmin").removeAttr('selected',);
+                        }
+                        if (data.userInfo.role == 2) {
+                            alert('role 2');
+                            $("#optAdmin").attr('selected','selected');
+                            //$("#optUser").removeAttr('selected');
                         }
                     },
                     error:function() {
-
+                        alert('asd asd');
                     }
                 });
                 
@@ -148,12 +159,14 @@ $('#ulAdmMenu ul').each(function(index) {
         switch(validCheck($("input[name=username]"),'login',true)){
             case 'exist': {
                 //Посылаем запрос на удаление
-                $.ajax({type:"POST",data:"userToDelete"+$("input[name=username]").val(),url:"",dataType:"json",
+                $.ajax({type:"POST",data:"userToDelete="+$("input[name=username]").val(),url:"/adm/ahid/deluser",dataType:"json",
                     success: function(data) {
                         if (data.deleted) {
+                            alert('deleted');
                             hints('success','Пользователь <b>$("input[name=username]").val()</b> успешно удален');
                         }
-                        if (!data.deleted) {
+                        else {
+                            alert('not deleted');
                             hints('error','Не удалось удалить пользователя, почему? если б мы знали...');
                         }
                     },
