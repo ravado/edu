@@ -91,6 +91,93 @@ $('#ulAdmMenu ul').each(function(index) {
         }
     });
 //--------------------------------------------------------------------------------------------------------------------//
+
+//================================ Подгружаем данные пользователя для удаления =======================================//
+    $("#btnUsrMore").click(function(){
+        switch(validCheck($("input[name=username]"),'login',true)){
+            case 'exist':{
+                //тут аякс запрос
+                $.ajax({type:"POST",data:"userToDelete"+$("input[name=username]").val(),url:"",dataType:"json",
+                    success:function(data) {
+                        $("input[name=email]").val(data.email);
+                        $("input[name=firstName]").val(data.firstName);
+                        $("input[name=lastName]").val(data.lastName);
+                        $("input[name=sex]").attr('value') = data.sex;
+                        if (data.role == 1) {
+                            $("#optUser").attr('selected');
+                            $("#optAdmin").removeAttr('selected');
+                        }
+                        if (data.role == 2) {
+                            $("#optAdmin").attr('selected');
+                            $("#optUser").removeAttr('selected');
+                        }
+                    },
+                    error:function() {
+
+                    }
+                });
+                
+                $("form[name=delUser]").slideToggle('normal');
+                break;
+            }
+            case 'empty':{
+                hints('warning','Увы пользователя с таким Логином нет, то бишь и удалять некого :)');
+                break;
+            }
+            case 'not correct':{
+                hints('error','Имя пользователя не может состоять из введенных вами символов, и должно быть не меньше 3-х и не больше 32-х');
+                break;
+            }
+            case 'not enough symbols':{
+                hints('info','Введите хоть что нибудь в поле "Имя пользователя"');
+                break;
+            }
+        }
+    });
+//--------------------------------------------------------------------------------------------------------------------//
+//=============================== Отслеживаем нажатие Enter при удалении пользователя ================================//
+    $("input[name=username]").keypress(function(EnterKey){
+       if (EnterKey.keyCode == 13) {
+           $("#btnUsrMore").click();
+       }
+    });
+//--------------------------------------------------------------------------------------------------------------------//
+
+//========================================== Удаляем пользователя ====================================================//
+    $("#btnUsrDel").click(function(){
+        switch(validCheck($("input[name=username]"),'login',true)){
+            case 'exist': {
+                //Посылаем запрос на удаление
+                $.ajax({type:"POST",data:"userToDelete"+$("input[name=username]").val(),url:"",dataType:"json",
+                    success: function(data) {
+                        if (data.deleted) {
+                            hints('success','Пользователь <b>$("input[name=username]").val()</b> успешно удален');
+                        }
+                        if (!data.deleted) {
+                            hints('error','Не удалось удалить пользователя, почему? если б мы знали...');
+                        }
+                    },
+                    error: function(){
+                        alert('error in ajax query when try to delete user');
+                    }
+                });
+                break;
+            }
+            case 'empty': {
+                hints('warning','Увы пользователя с таким Логином нет, то бишь и удалять некого :)');
+                break;
+            }
+            case 'not correct':{
+                hints('error','Имя пользователя не может состоять из введенных вами символов, и должно быть не меньше 3-х и не больше 32-х');
+                break;
+            }
+            case 'not enough symbols': {
+                hints('info','Введите хоть что нибудь в поле "Имя пользователя"');
+                break;
+            }
+        }
+    });
+//--------------------------------------------------------------------------------------------------------------------//
 });
 
 
