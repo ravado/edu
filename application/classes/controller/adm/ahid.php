@@ -14,9 +14,6 @@ class Controller_Adm_Ahid extends Controller{
         //if(!empty($userName)){
            $mUser = Model::factory('Muser')->getUserInfo($userName);
            echo json_encode($mUser);
-//        }else{
-  //          return FALSE;
-//        }
     }
 
      /*Удаеляем пользователя по имени*/
@@ -29,5 +26,20 @@ class Controller_Adm_Ahid extends Controller{
             return FALSE;
         }
     }
-   
+
+    /*Изменяем профиль пользователя*/
+   public function action_fixUser(){
+       if(!empty($_POST)){
+            $userData['password'] = Arr::get($_POST,'password','');
+            $userData['email'] = Arr::get($_POST,'email','');
+            $userData['sex'] = Arr::get($_POST,'sex','');
+            $userData['first_name'] = Arr::get($_POST,'firstName','');
+            $userData['last_name'] = Arr::get($_POST,'lastName','');
+            $userData['id'] = Arr::get($_POST,'id','');
+            $userData['role'] = Arr::get($_POST,'id','');
+
+            $result = Model::factory('Muser')->admEditUser($userData);
+            echo json_encode($result);
+        }
+   }
 }
