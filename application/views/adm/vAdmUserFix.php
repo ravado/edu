@@ -23,8 +23,8 @@
         <tr>
             <td class="RegFormField">
                 <select name="slUsrRole" class="inpColor" disabled="disabled">
-                    <option id="optUser">Обычный пользователь</option>
-                    <option id="optAdmin">Администратор сайта</option>
+                    <option value="user" id="optUser">Обычный пользователь</option>
+                    <option value="admin" id="optAdmin">Администратор сайта</option>
                 </select>
             </td>
             <td class="RegFormField">

@@ -5,7 +5,7 @@
  */
 class Model_Muser extends Model_Database{
 
-    /*Запись полученый данных с рег.формы в БД*/
+    /*Регистрация: Запись полученый данных с рег.формы в БД*/
     public function register($userData){
 
         if((!empty($userData['login'])) && (!empty($userData['password'])) && (!empty($userData['email']))){
@@ -49,11 +49,6 @@ class Model_Muser extends Model_Database{
     /*Активация пользователя по ссылке из письма*/
     public function activation($userKey){
         $realKey = substr($userKey,5);
-
-       /* $query = DB::select()->from('roles_users')->where('user_id','=',$realKey);
-        $result = $query->execute()->as_array();*/
-
-
             $query = DB::select('username')->from('users')->where('id','=',$realKey);
             if($query->execute()->as_array()){
                 $query = DB::insert('roles_users',array('user_id','role_id'))->values(array($realKey,1));
@@ -94,7 +89,7 @@ class Model_Muser extends Model_Database{
 
      /*Возвращаем данные профиля пользователя по его имени*/
     public function getUserInfo($userName){
-        $query = DB::select('email','first_name','last_name','sex')->from('users')->where('username','=',$userName);
+        $query = DB::select()->from('users')->where('username','=',$userName);
         $res['userInfo'] = $query->execute()->as_array();
         if($res['userInfo']){
             $res['userInfo']['email'] = $res['userInfo'][0]['email'];
@@ -102,6 +97,14 @@ class Model_Muser extends Model_Database{
             $res['userInfo']['lastName'] = $res['userInfo'][0]['last_name'];
             $res['userInfo']['sex'] = $res['userInfo'][0]['sex'];
             //$res['userInfo']['role'] = $res['userInfo'][0]['role'];
+            /*Узнаем права пользователя*/
+            $query = DB::select()->from('roles_users')->where('user_id','=',$res['userInfo'][0]['id']);
+            $result = $query->execute()->as_array();
+            if(count($result) == 1){
+                $res['userInfo']['role'] = 1;
+            }elseif(count($result) == 2){
+                $res['userInfo']['role'] = 2;
+            }
         }else{
             $res['userInfo']['email'] = 'null';
         }
@@ -199,7 +202,8 @@ class Model_Muser extends Model_Database{
                                                'last_name' => $userData['last_name']
                                                ))->where('id','=',$userData['id']);
             $result = $query->execute();
-            return TRUE;
+            $MY['correct'] = true;
+            return $MY;
         }else{
             $query = DB::update('users')->set(array(
                                                'email' => $userData['email'],
@@ -212,5 +216,48 @@ class Model_Muser extends Model_Database{
             return $MY;
         }
 
+    }
+
+    /*-----Добавление нового пользователя через админку-----*/
+    public function admNewUser($userData){
+        if((!empty($userData['login'])) && (!empty($userData['password'])) && (!empty($userData['email']))){
+            $auth = Auth::instance();
+            $userData['hash_password'] = $auth->hash_password($userData['password']);
+
+            $userData['date_register'] = time();
+
+            $query = DB::insert('users',array(
+                                              'username',
+                                              'password',
+                                              'email',
+                                              'sex',
+                                              'first_name',
+                                              'last_name',
+                                              'date_register',
+                                           ))->values(array(
+                                                            $userData['login'],
+                                                            $userData['hash_password'],
+                                                            $userData['email'],
+                                                            $userData['sex'],
+                                                            $userData['first_name'],
+                                                            $userData['last_name'],
+                                                            $userData['date_register']));
+            if($query->execute()){
+                /*Узнаем ID который получил наш пользователь*/
+                $query = DB::select('id')->from('users')->where('username','=',$userData['login']);
+                $result = $query->execute();
+                $idKey = $result[0]['id'];
+
+                $query = DB::select('username')->from('users')->where('id','=',$idKey);
+                if($query->execute()->as_array()){
+                    $query = DB::insert('roles_users',array('user_id','role_id'))->values(array($idKey,1));
+                    $query->execute();
+                }
+                if($userData['role'] == 'admin'){
+                    $query = DB::insert('roles_users',array('user_id','role_id'))->values(array($idKey,2));
+                    $query->execute();
+                }
+            }
+        }
     }
 }

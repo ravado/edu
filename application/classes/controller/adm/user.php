@@ -33,13 +33,12 @@ class Controller_Adm_User extends Controller_Base{
                 $userData['sex'] = Arr::get($_POST,'sex','');
                 $userData['first_name'] = Arr::get($_POST,'firstName','');
                 $userData['last_name'] = Arr::get($_POST,'lastName','');
+                $userData['role'] = Arr::get($_POST,'role','user');
 
-                $userData['activKey'] = Model::factory('Muser')->register($userData);
-
-                $modUserMail = Model::factory('Mmail')->sendActivationMail($userData);
+                $userData['activKey'] = Model::factory('Muser')->admNewUser($userData);
                 
                 $this->template->styles = array("stfile/css/register.css" => "screen");
-                $this->template->content = View::factory('user/vUserRegInfo');
+                $this->template->content = "Пользователь успешно добавлен";
             }
         }
 

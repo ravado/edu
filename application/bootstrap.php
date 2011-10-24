@@ -108,6 +108,9 @@ Kohana::modules(array(
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));
 
+/*Запомни меня*/
+Cookie::$salt = 'a234aflk234jbdf';
+
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.

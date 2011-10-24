@@ -5,9 +5,9 @@
     <span id="sex">Пол: <input type="radio" name="sex" value="1">Мужской <input type="radio" name="sex" value="0">Женский</span>
     <input type="text" name="firstName" class="inpColor" placeholder="Настоящее имя">
     <input type="text" name="lastName" class="inpColor" placeholder="Настоящая фамилия">
-    <select class="inpColor">
-        <option>Обычный пользователь</option>
-        <option>Администратор сайта</option>
+    <select name="role" class="inpColor">
+        <option value="user">Обычный пользователь</option>
+        <option value="admin">Администратор сайта</option>
     </select>
     <a class="btnSilver SaveUser" onclick="addNewUser()">Сохранить пользователя</a>
 </form>

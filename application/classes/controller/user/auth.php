@@ -12,7 +12,7 @@ class Controller_User_Auth extends Controller{
        if(!empty($_POST)){
            $login = Arr::get($_POST,'login','');
            $password = Arr::get($_POST,'password','');
-           if ($auth->login($login, $password)){
+           if ($auth->login($login, $password, TRUE)){
                 $this->request->redirect('');
             }else{
                 $this->request->redirect('');
