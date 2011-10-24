@@ -260,4 +260,32 @@ class Model_Muser extends Model_Database{
             }
         }
     }
+
+    /*Изменение профиля пользователя через админку*/
+    public function admEditUser($userData){
+        if(!empty($userData['password'])){
+            $auth = Auth::instance();
+            $hPassword = $auth->hash_password($userData['password']);
+            $query = DB::update('users')->set(array(
+                                               'password' => $hPassword,
+                                               'email' => $userData['email'],
+                                               'sex' => $userData['sex'],
+                                               'first_name' => $userData['first_name'],
+                                               'last_name' => $userData['last_name']
+                                               ))->where('id','=',$userData['id']);
+            $result = $query->execute();
+            $res['fixed'] = true;
+            return $res;
+        }else{
+            $query = DB::update('users')->set(array(
+                                               'email' => $userData['email'],
+                                               'sex' => $userData['sex'],
+                                               'first_name' => $userData['first_name'],
+                                               'last_name' => $userData['last_name']
+                                               ))->where('id','=',$userData['id']);
+            $result = $query->execute();
+            $res['fixed'] = true;
+            return $res;
+        }
+    }
 }
