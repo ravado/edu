@@ -93,13 +93,12 @@ $('#ulAdmMenu ul').each(function(index) {
 //--------------------------------------------------------------------------------------------------------------------//
 
 //================================ Подгружаем данные пользователя для удаления =======================================//
-    $("#btnUsrMore").click(function(){
+    $("#btnUsrLoad").click(function(){
         switch(validCheck($("input[name=username]"),'login',true)){
             case 'exist':{
                 //тут аякс запрос
                 $.ajax({type:"POST",data:"userToDelete="+$("input[name=username]").val(),url:'/adm/ahid/getuserinfo',dataType:"json",
                     success:function(data) {
-
                         $("input[name=email]").val(data.userInfo.email);
 
                         $("input[name=firstName]").val(data.userInfo.firstName);
@@ -122,9 +121,13 @@ $('#ulAdmMenu ul').each(function(index) {
                             $("#optAdmin").attr('selected','selected');
                             //$("#optUser").removeAttr('selected');
                         }
+                        //Если правим пользователя а не удаляем
+                        if ($("#frmUsrFix").length > 0) {
+                            $("form input").removeAttr('disabled');
+                        }
                     },
                     error:function() {
-                        alert('asd asd');
+                        alert('error in ajax query when loading user data');
                     }
                 });
                 
@@ -132,7 +135,15 @@ $('#ulAdmMenu ul').each(function(index) {
                 break;
             }
             case 'empty':{
-                hints('warning','Увы пользователя с таким Логином нет, то бишь и удалять некого :)');
+                //Если правим пользователя а не удаляем
+                if ($("#frmUsrFix").length > 0) {
+                    $("form input").attr('disabled','disabled');
+                    $("form input").val('');
+                    hints('warning','Увы пользователя с таким Логином нет :(');
+                }
+                else {
+                    hints('warning','Увы пользователя с таким Логином нет, то бишь и удалять некого :)');
+                }
                 break;
             }
             case 'not correct':{
@@ -149,7 +160,7 @@ $('#ulAdmMenu ul').each(function(index) {
 //=============================== Отслеживаем нажатие Enter при удалении пользователя ================================//
     $("input[name=username]").keypress(function(EnterKey){
        if (EnterKey.keyCode == 13) {
-           $("#btnUsrMore").click();
+           $("#btnUsrLoad").click();
        }
     });
 //--------------------------------------------------------------------------------------------------------------------//
@@ -185,6 +196,43 @@ $('#ulAdmMenu ul').each(function(index) {
                 break;
             }
             case 'not enough symbols': {
+                hints('info','Введите хоть что нибудь в поле "Имя пользователя"');
+                break;
+            }
+        }
+    });
+//--------------------------------------------------------------------------------------------------------------------//
+//=================================================== Изменяем пользователя ==========================================//
+    $("#btnUsrFix").click(function(){
+        switch(validCheck($("input[name=username]"),'login',true)) {
+            case 'exist' :{
+                //Посылаем запрос на изменение
+                $.ajax({type:"POST",data: $("form[name=fixUser]").serialize(),url:"/adm/ahid/fixuser",dataType:"json",
+                    success: function(data) {
+                        if (data.fixed) {
+                            alert('fixed');
+                            hints('success','Информация о пользователе успешно изменена');
+                        }
+                        else {
+                            alert('not fixed');
+                            hints('error','Не удалось изменить пользователя, почему? если б мы знали...');
+                        }
+                    },
+                    error: function(){
+                        alert('error in ajax query when try to fix user');
+                    }
+                });
+                break;
+            }
+            case 'empty' :{
+                hints('warning','Увы пользователя с таким Логином нет :(');
+                break;
+            }
+            case 'not correct' :{
+                hints('error','Имя пользователя не может состоять из введенных вами символов, и должно быть не меньше 3-х и не больше 32-х');
+                break;
+            }
+            case 'not enough symbols' :{
                 hints('info','Введите хоть что нибудь в поле "Имя пользователя"');
                 break;
             }

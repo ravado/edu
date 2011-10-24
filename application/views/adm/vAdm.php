@@ -13,7 +13,7 @@
                 <ul>
                     <li><a href="/adm/user/add">Добавить</a></li>
                     <li><a href="/adm/user/del">Удалить</a></li>
-                    <li><a href="/adm/user/add">Править</a></li>
+                    <li><a href="/adm/user/fix">Править</a></li>
                 </ul>
             </li>
             <li><a class="btnSilver btnLeftMenu">Что то еще</a>

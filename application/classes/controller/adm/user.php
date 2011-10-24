@@ -54,4 +54,16 @@ class Controller_Adm_User extends Controller_Base{
 
        $this->template->content = View::factory('adm/vAdm',$data);
    }
+
+   /*Показываем  страницу изменения пользователя*/
+   public function action_fix(){
+       $this->template->title = "Изменить пользователя";
+       $this->template->styles = array("stfile/css/adm.css" => "screen");
+       $this->template->scripts = array('stfile/js/adm.js');
+
+       $data['page'] = View::factory('adm/vAdmUserFix');
+       $data['pageFlag'] = ': Изменить пользователя';
+
+       $this->template->content = View::factory('adm/vAdm',$data);
+   }
 }

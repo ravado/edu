@@ -59,3 +59,17 @@
 .SaveUser{
     margin-left: 45px;
 }
+
+/*Кнопка Изменения пользователя*/
+.FixUser{
+    padding: 0;
+    margin-left: 20px;
+    width: 260px;
+    text-align: center;
+}
+
+.icon-load{
+    vertical-align: middle;
+    display: none;
+
+}
