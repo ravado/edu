@@ -1,7 +1,7 @@
 /*
  * Скрипты админки
  */
-
+var currUsername = null;
 
 $(document).ready(function(){
 
@@ -96,28 +96,31 @@ $('#ulAdmMenu ul').each(function(index) {
     $("#btnUsrLoad").click(function(){
         switch(validCheck($("input[name=username]"),'login',true)){
             case 'exist':{
+                if(currUsername == null){
+                    currUsername = $("input[name=username]").val();
+                }
                 //тут аякс запрос
                 $.ajax({type:"POST",data:"userToDelete="+$("input[name=username]").val(),url:'/adm/ahid/getuserinfo',dataType:"json",
                     success:function(data) {
-                        $("input[name=email]").val(data.userInfo.email);
+                        $("input[name=email]").val(data['userInfo'][0]['email']);
 
-                        $("input[name=firstName]").val(data.userInfo.firstName);
-                        $("input[name=lastName]").val(data.userInfo.lastName);
+                        $("input[name=firstName]").val(data['userInfo'][0]['first_name']);
+                        $("input[name=lastName]").val(data['userInfo'][0]['last_name']);
 
-                        if (data.userInfo.sex == 0) {
+                        if (data['userInfo'][0]['sex'] == 0) {
                             $("input[name=sex][value=0]").attr('checked','checked');
                         }
-                        if (data.userInfo.sex == 1) {
+                        if (data['userInfo'][0]['sex'] == 1) {
                             $("input[name=sex][value=1]").attr('checked','checked');
                         }
 
-                        if (data.userInfo.role == 1) {
-                            alert('role 1');
+                        if (data['userInfo'][0]['role'] == 1) {
+                            //alert('role 1');
                             $("#optUser").attr('selected','selected');
                             //$("#optAdmin").removeAttr('selected',);
                         }
-                        if (data.userInfo.role == 2) {
-                            alert('role 2');
+                        if (data['userInfo'][0]['role'] == 2) {
+                            //alert('role 2');
                             $("#optAdmin").attr('selected','selected');
                             //$("#optUser").removeAttr('selected');
                         }
@@ -130,8 +133,25 @@ $('#ulAdmMenu ul').each(function(index) {
                         alert('error in ajax query when loading user data');
                     }
                 });
-                
-                $("form[name=delUser]").slideToggle('normal');
+         //       alert(currUsername);
+       //         alert($("input[name=username]").val());
+
+                if(currUsername == $("input[name=username]").val()){
+                    if ($("form[name=delUser]").hasClass("expanded")) {
+                        $("form[name=delUser]").removeClass('expanded').addClass('collapsed');
+                        $("form[name=delUser]").slideUp();
+                    }
+                    else if ($("form[name=delUser]").hasClass("collapsed")) {
+                        $("form[name=delUser]").removeClass('collapsed').addClass('expanded');
+                        $("form[name=delUser]").slideDown();
+                    }
+                }
+                else {
+                    if ($("form[name=delUser]").hasClass("collapsed")) {
+                        $("form[name=delUser]").removeClass('collapsed').addClass('expanded');
+                        $("form[name=delUser]").slideDown();
+                    }
+                }
                 break;
             }
             case 'empty':{
@@ -155,12 +175,19 @@ $('#ulAdmMenu ul').each(function(index) {
                 break;
             }
         }
+        //alert('asdas');
+        currUsername = $("input[name=username]").val();
+        //alert(currUsername);
     });
 //--------------------------------------------------------------------------------------------------------------------//
 //=============================== Отслеживаем нажатие Enter при удалении пользователя ================================//
     $("input[name=username]").keypress(function(EnterKey){
+
+       //alert(currUsername);
        if (EnterKey.keyCode == 13) {
-           $("#btnUsrLoad").click();
+       //currUsername = $("input[name=username]").val();
+         //  alert(currUsername);
+            $("#btnUsrLoad").click();
        }
     });
 //--------------------------------------------------------------------------------------------------------------------//

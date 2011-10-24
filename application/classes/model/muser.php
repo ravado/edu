@@ -92,21 +92,22 @@ class Model_Muser extends Model_Database{
         $query = DB::select()->from('users')->where('username','=',$userName);
         $res['userInfo'] = $query->execute()->as_array();
         if($res['userInfo']){
-            $res['userInfo']['email'] = $res['userInfo'][0]['email'];
-            $res['userInfo']['firstName'] = $res['userInfo'][0]['first_name'];
-            $res['userInfo']['lastName'] = $res['userInfo'][0]['last_name'];
-            $res['userInfo']['sex'] = $res['userInfo'][0]['sex'];
+            //$res['userInfo']['email'] = $res['userInfo'][0]['email'];
+            //$res['userInfo']
+            //$res['userInfo']['firstName'] = $res['userInfo'][0]['first_name'];
+            //$res['userInfo']['lastName'] = $res['userInfo'][0]['last_name'];
+            //$res['userInfo']['sex'] = $res['userInfo'][0]['sex'];
             //$res['userInfo']['role'] = $res['userInfo'][0]['role'];
             /*Узнаем права пользователя*/
             $query = DB::select()->from('roles_users')->where('user_id','=',$res['userInfo'][0]['id']);
             $result = $query->execute()->as_array();
             if(count($result) == 1){
-                $res['userInfo']['role'] = 1;
+                $res['userInfo'][0]['role'] = 1;
             }elseif(count($result) == 2){
-                $res['userInfo']['role'] = 2;
+                $res['userInfo'][0]['role'] = 2;
             }
         }else{
-            $res['userInfo']['email'] = 'null';
+            $res['userInfo'] = null;
         }
         return $res;
 

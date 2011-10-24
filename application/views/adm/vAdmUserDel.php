@@ -1,7 +1,7 @@
 <input type="text" name="username" id="sad" class="inpColor" placeholder="Имя пользователя">
     <a class="btnSilver" id="btnUsrLoad" >Подробнее</a>
     <a class="btnSilver SaveUser" id="btnUsrDel">Удалить</a>
-<form name="delUser" action="/adm/user/deluser" method="POST" style="display: none">
+<form name="delUser" class="collapsed" action="/adm/user/deluser" method="POST" style="display: none">
     <table id="tblUserDel">
             <tr>
                 <td class="RegFormField">

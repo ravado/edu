@@ -4,15 +4,19 @@
 
 /*Функция вызывающаяся при нажатии кнопки ВОЙТИ*/
 function auth(){
-   var login = $("[name = login]"),
-       password = $("[name = password]");
-
-   if (getRegex(login, 'login') && getRegex(password,'password')) {
-       $("[name = formAuth]").submit();
+   var login = $("#inpLogin"),
+       password = $("#inpPass");
+alert('1');
+   if (validCheck(login, 'login', false) && validCheck(password,'password')) {
+       $("form[name=formAuth]").submit();
+    alert('2');
    }
+
    else{
        hints('error','Вы неправильно заполнили форму авторизации');
+       alert('2.1');
    }
+    alert('3');
 }
 
 /*Показ формы для восстановления пароля*/
@@ -69,8 +73,13 @@ function checkEmail(){
 }
 
 $(document).ready(function(){
-   $("body").keypress(function(e){
-       if(e.keyCode == 13){
+
+    //Плейсхолдеры для бл#@&*!го IE!!!
+    $("form[name=formAuth] input").placeholder();
+
+    //Отслеживаем нажатие Enter для входа
+   $("form[name=formAuth]").keypress(function(e){
+       if(e.keyCode == 13){           
            auth();
        }
    })

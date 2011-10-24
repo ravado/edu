@@ -9,6 +9,7 @@ var ISVALID = {keyLogin:false,keyEmail:false,keyPass:false,keyPassConfirm:false,
 
 
 $(document).ready(function(){
+        
 
 //=====================================Отображение различных подсказок по заполнению полей формы======================//
     var allTextInputs = $("table.#tblUserProfile input"); //Выбираем все текстовые инпуты из формы
