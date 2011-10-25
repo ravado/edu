@@ -79,30 +79,30 @@ function validCheck(jQueryObj,validateKind,ajaxCheck) {
                 // Без ajax запроса
                 else {
                     if (getRegex(jQueryObj,validateKind)){
-                        result = 'correct';
+                        return 'correct';
                     }
                     else {
-                        result = 'not correct';
+                        return 'not correct';
                     }
                 }
             }
             //Если без 3-го параметра
             else {
                 if (getRegex(jQueryObj,validateKind)){
-                        result = 'correct';
+                        return 'correct';
                 }
                 else {
-                    result = 'not correct';
+                    return 'not correct';
                 }
             }
         }
         //Если не введено символов
         else{
-            result = 'not enough symbols';
+            return 'not enough symbols';
         }
     }
     else {
-        result = 'not enough parameter';
+        return 'not enough parameter';
     }
     
     return result;
