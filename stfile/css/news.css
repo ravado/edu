@@ -1,0 +1,83 @@
+/*
+ * Стили новостного раздела
+ */
+
+/*Боковая колонка с различными виджетами*/
+#dvWidgets{
+    width: 280px;
+    height: 600px;
+    background: #0066cc;
+}
+
+/*Лента новостей*/
+#dvNews{
+    float: right;
+    width: 710px;
+}
+
+/*-----Блок с одной новостью-----*/
+/*Сам каркас блочка новости*/
+.dvOneNews{
+    padding: 5px;
+    margin-bottom: 15px;
+    background: #FFF;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+/*Шапка новости*/
+.dvHeaderNews{
+    margin-bottom: 5px;
+}
+
+/*Заголовок новости*/
+.dvHTitleNews{
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+/*Иформация о новости*/
+.dvTInfoNews{
+    font-size: 11px;
+    color: #808080;
+}
+
+/*Текст новости*/
+.dvBodyNews{
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.dvBodyNews p{
+    text-indent: 25px;
+    margin-bottom: 5px;
+}
+
+/*Подвал новости*/
+.dvFooterNews{
+    height: 35px;
+}
+
+/*Блок социальных кнопок*/
+.dvSocialButtons{
+    padding-top: 10px;
+}
+
+/*Блок с кнопкой читать далее*/
+.dvReadMore{
+    float: right;
+}
+
+.dvReadMore a{
+    display: inline-block;
+    margin-top: 4px;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 12px;
+    background: #1b86ca;
+}
+
+.dvReadMore a:hover{
+    text-decoration: none;
+    background: #2599e2;
+}
