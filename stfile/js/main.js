@@ -112,11 +112,12 @@ function validCheck(jQueryObj,validateKind,ajaxCheck) {
 //==============================Регулярные выражения==================================================================//
 //функция возвращает регулярное выражение необходимое для валидации полей
 //type это тип проверяемого выражения (может быть: email, login, password, name)
+
 function getRegex (jQueryObj,type){
     var currRagex;
 
     //Максимальные значения для полей
-    const maxLogin = 32,
+    var maxLogin = 32,
           maxPassword = 64,
           maxEmail = 254,
           maxName = 20;
@@ -273,7 +274,7 @@ $(document).ready(function(){
     $('.hint').click(function(){hideAllHints()});
 //--------------------------------------------------------------------//
 
-    //Placeholder для отображения текста подсказки в полях ввода
+    //Плейсхолдеры для бл#@&*!го IE!!!
     $('[placeholder]').placeholder();
 
 })
