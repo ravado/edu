@@ -51,7 +51,7 @@
 
 /*---Добавление пользователя---*/
 /*Стандартный размер инпутов*/
-#dvAdmPanel .inpColor{width: 250px;margin: 10px 20px;}
+#dvAdmPanel .inpColor.Fx{width: 250px;margin: 10px 20px;}
 
 #dvAdmPanel #sex{display: inline-block;margin-left: 20px;}
 
@@ -72,4 +72,16 @@
     vertical-align: middle;
     display: none;
 
+}
+
+/*---------НОВОСТИ----------*/
+/*Поле заголовка новости*/
+.inpColor.NewsTitle{
+    margin: 10px;
+    width: 650px;
+}
+/**/
+#txtNewsPre,#txtNewsFull{
+    width: 700px;
+    height: 350px;
 }
