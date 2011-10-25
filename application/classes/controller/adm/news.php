@@ -15,8 +15,13 @@ class Controller_Adm_News extends Controller_Base{
    /*Показываем страницу добавления новости*/
    public function action_add(){
        $this->template->title = "Добавить новость";
-       $this->template->styles = array("stfile/css/adm.css" => "screen");
-       $this->template->scripts = array('stfile/js/adm.js');
+       $this->template->styles = array(
+                                        "stfile/css/adm.css" => "screen",
+                                        "stfile/js/redactor/css/redactor.css" => "screen");
+
+       $this->template->scripts = array(
+                                        'stfile/js/adm.js',
+                                        'stfile/js/redactor/redactor.js');
 
        $data['page'] = View::factory('adm/vAdmNewsAdd');
        $data['pageFlag'] = ': Добавление новости';

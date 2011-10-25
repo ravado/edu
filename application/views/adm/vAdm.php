@@ -11,16 +11,16 @@
         <ul class="ulLeftSidebar" id="ulAdmMenu">
             <li><a class="btnSilver">Пользователь</a>
                 <ul>
-                    <li><a href="/adm/user/add">Добавить</a></li>
-                    <li><a href="/adm/user/del">Удалить</a></li>
-                    <li><a href="/adm/user/fix">Править</a></li>
+                    <li><a href="/adm/user/add">Добавить пользователя</a></li>
+                    <li><a href="/adm/user/del">Удалить пользователя</a></li>
+                    <li><a href="/adm/user/fix">Править пользователя</a></li>
                 </ul>
             </li>
-            <li><a class="btnSilver btnLeftMenu">Что то еще</a>
+            <li><a class="btnSilver btnLeftMenu">Новости</a>
                 <ul>
-                    <li><a href="#0">История</a></li>
-                    <li><a href="#0">Настоящее</a></li>
-                    <li><a href="#0">Будущее</a></li>
+                    <li><a href="/adm/news/add">Добавить новость</a></li>
+                    <li><a href="#0">Удалить новость</a></li>
+                    <li><a href="#0">Править новость</a></li>
                 </ul>
             </li>
             <li><a class="btnSilver btnLeftMenu">Что то еще</a>
