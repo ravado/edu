@@ -2,7 +2,7 @@
 /*
  * Контроллер новостного раздела
  */
-class Controller_News extends Controller_Base {
+class Controller_News_News extends Controller_Base {
 
     public $template = "vBase";
     public $data = array();

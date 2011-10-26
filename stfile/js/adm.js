@@ -277,3 +277,9 @@ $('#ulAdmMenu ul').each(function(index) {
 function addNewUser(){
     $("[name = newUser]").submit();
 }
+
+
+/*Добавление новости*/
+function addNewNews(){
+    $("[name = formNews]").submit();
+}

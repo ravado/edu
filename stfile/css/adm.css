@@ -78,10 +78,22 @@
 /*Поле заголовка новости*/
 .inpColor.NewsTitle{
     margin: 10px;
-    width: 650px;
+    width: 660px;
 }
-/**/
+/*Поля ввода новостей*/
 #txtNewsPre,#txtNewsFull{
     width: 700px;
     height: 350px;
+}
+
+/*Имя источника*/
+.inpColor.ReferName,.ReferLink{
+    margin-top: 15px;
+    width: 335px;
+}
+
+/*Кнопка добавления новости*/
+.btnSilver.News{
+    margin-top: 20px;
+    margin-left: 500px;
 }

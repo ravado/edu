@@ -29,5 +29,25 @@ class Controller_Adm_News extends Controller_Base{
        $this->template->content = View::factory('adm/vAdm',$data);
    }
 
+    /*Добавляем новость в БД*/
+   public function action_submit(){
+       $this->template->title = "Добавить новость";
+       $this->template->styles = array(
+                                        "stfile/css/adm.css" => "screen",
+                                        "stfile/js/redactor/css/redactor.css" => "screen");
 
+       $this->template->scripts = array(
+                                        'stfile/js/adm.js',
+                                        'stfile/js/redactor/redactor.js');
+      if(!empty($_POST)){
+                $news['title'] = Arr::get($_POST,'title','');
+                $news['text_pre'] = Arr::get($_POST,'text_pre','');
+                $news['text_full'] = Arr::get($_POST,'text_full','');
+                $news['refer_name'] = Arr::get($_POST,'refer_name','');
+                $news['refer_link'] = Arr::get($_POST,'refer_link','');
+          $addNews = Model::factory('Mnews')->addNewsToDB($news);
+      }
+      $this->template->content = 'Новость добавлена';
+
+   }
 }
