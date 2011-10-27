@@ -116,6 +116,14 @@ Cookie::$salt = 'a234aflk234jbdf';
  * defaults for the URI.
  */
 
+/*Одна новость*/
+Route::set('one_news', 'news/public(/<id>)')
+	->defaults(array(
+		'directory'  => 'news',
+		'controller' => 'news',
+		'action'     => 'public',
+	));
+
 /*роут новоестей*/
 Route::set('news', 'news(/<controller>(/<action>(/<id>)))')
 	->defaults(array(
@@ -123,6 +131,7 @@ Route::set('news', 'news(/<controller>(/<action>(/<id>)))')
 		'controller' => 'news',
 		'action'     => 'index',
 	));
+
 
 /*роут админки*/
 Route::set('adm', 'adm(/<controller>(/<action>(/<id>)))')

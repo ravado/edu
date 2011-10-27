@@ -15,7 +15,4 @@ class Controller_News_Nhid extends Controller{
         echo json_encode($ress_numb);
     }
 
-
-
-
 }

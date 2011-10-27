@@ -29,10 +29,17 @@ class Model_Mnews extends Model_Database{
     }
 
     /*Отдает одну запись*/
-    public function  getOneNews($news){
-        $query = DB::select('username')->from('users')->limit(1);
-        $ress_arr = $query->execute()->as_array();
-        return $ress_arr;
+    public function  getOneNews($newsID){
+        $query = DB::select()->from('news')->where('id','=',$newsID);
+        $result = $query->execute()->as_array();
+        return $result;
+    }
+
+    /*Возвращает ленту новостей*/
+    public function getLastNews($ind){
+        $query = DB::select()->from('news')->offset($ind)->limit(3);
+        $result = $query->execute()->as_array();
+        return $result;
     }
 }
 
