@@ -201,11 +201,11 @@ $('#ulAdmMenu ul').each(function(index) {
                 $.ajax({type:"POST",data:"userToDelete="+$("input[name=username]").val(),url:"/adm/ahid/deluser",dataType:"json",
                     success: function(data) {
                         if (data.deleted) {
-                            alert('deleted');
-                            hints('success','Пользователь <b>$("input[name=username]").val()</b> успешно удален');
+                            var usrDel = 'Пользователь <b>'+$("input[name=username]").val()+'</b> успешно удален';
+                            hints('success',usrDel);
                         }
                         else {
-                            alert('not deleted');
+
                             hints('error','Не удалось удалить пользователя, почему? если б мы знали...');
                         }
                     },
@@ -238,11 +238,11 @@ $('#ulAdmMenu ul').each(function(index) {
                 $.ajax({type:"POST",data: $("form[name=fixUser]").serialize(),url:"/adm/ahid/fixuser",dataType:"json",
                     success: function(data) {
                         if (data.fixed) {
-                            alert('fixed');
+
                             hints('success','Информация о пользователе успешно изменена');
                         }
                         else {
-                            alert('not fixed');
+
                             hints('error','Не удалось изменить пользователя, почему? если б мы знали...');
                         }
                     },

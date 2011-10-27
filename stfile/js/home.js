@@ -8,13 +8,13 @@ function auth(){
        password = $("#inpPass");
    if (validCheck(login, 'login') && validCheck(password,'password')) {
        $("form[name=formAuth]").submit();
-       alert('yes');
+
    }
    else{
-       alert('no');
+
        hints('error','Вы неправильно заполнили форму авторизации');
    }
-    alert('i dont know');
+
 }
 
 /*Показ формы для восстановления пароля*/
