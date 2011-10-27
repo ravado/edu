@@ -37,7 +37,13 @@ class Model_Mnews extends Model_Database{
 
     /*Возвращает ленту новостей*/
     public function getLastNews($ind){
-        $query = DB::select()->from('news')->offset($ind)->limit(3);
+        if($ind == 0){
+            $buff = 0;
+        }else{
+            $buff = $ind*5-5;
+        }
+
+        $query = DB::select()->from('news')->offset($buff)->limit(5)->order_by('date_public','DESC');
         $result = $query->execute()->as_array();
         return $result;
     }
