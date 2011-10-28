@@ -119,7 +119,6 @@ $(document).ready(function(){
                 $("#spnLogin").css('visibility','visible');
                 ISVALID['keyLogin']=false;
                 var some = $(this).prev('div').prev('div').prev('div').attr('class');
-                alert(some);
             }
             else{
                 //показываем иконку о том что все хорошо

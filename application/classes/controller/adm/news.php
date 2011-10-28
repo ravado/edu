@@ -50,4 +50,22 @@ class Controller_Adm_News extends Controller_Base{
       $this->template->content = 'Новость добавлена';
 
    }
+
+   /*Показываем страницу удаления новости*/
+   public function action_del(){
+       $this->template->title = "Удалить новость";
+       $this->template->styles = array(
+                                        "stfile/css/adm.css" => "screen",
+                                        "stfile/js/redactor/css/redactor.css" => "screen");
+
+       $this->template->scripts = array(
+                                        'stfile/js/adm.js',
+                                        'stfile/js/redactor/redactor.js');
+
+       $data['page'] = View::factory('adm/vAdmNewsDel');
+       $data['pageFlag'] = ': Удаление новости';
+
+       $this->template->content = View::factory('adm/vAdm',$data);
+   }
+        
 }

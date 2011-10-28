@@ -35,6 +35,32 @@ class Model_Mnews extends Model_Database{
         return $result;
     }
 
+    public function  getNewsID($newsID){
+        $query = DB::select()->from('news')->where('id','=',$newsID);
+        $result = $query->execute()->as_array();
+        if (!empty($result)) {
+            return $result;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /*Удаляем новость по ID*/
+    public function delNews($idNews){
+        $queryCheckID = DB::select()->from('news')->where('id','=',$idNews);
+        $resultID = $queryCheckID->execute();
+        if (!empty($resultID)) {
+            $query = DB::delete('news')->where('id','=',$idNews);
+            $result = $query->execute();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
     /*Возвращает ленту новостей*/
     public function getLastNews($ind){
         if($ind == 0){

@@ -15,4 +15,20 @@ class Controller_News_Nhid extends Controller{
         echo json_encode($ress_numb);
     }
 
+    public function action_getNewsID(){
+        $currentID = $_POST['checkNewsID'];
+        $newsID = Model::factory('Mnews')->getNewsID($currentID);
+        echo json_encode($newsID);
+    }
+
+    /*Удаеляем новость по ID*/
+    public function action_delNews(){
+        $idNews = $_POST['newsToDelete'];
+        if(!empty($idNews)){
+            $mUser = Model::factory('Mnews')->delNews($idNews);
+            echo json_encode($mUser);
+        }else{
+            return false;
+        }
+    }
 }

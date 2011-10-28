@@ -19,7 +19,7 @@
             <li><a class="btnSilver btnLeftMenu">Новости</a>
                 <ul>
                     <li><a href="/adm/news/add">Добавить новость</a></li>
-                    <li><a href="#0">Удалить новость</a></li>
+                    <li><a href="/adm/news/del">Удалить новость</a></li>
                     <li><a href="#0">Править новость</a></li>
                 </ul>
             </li>

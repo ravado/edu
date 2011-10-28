@@ -1,6 +1,22 @@
 /*
  * Скрипты админки
  */
+// Проверка наличия новости по ID в качестве параметра передаем jQuery обьект в который будет вводиться айдишник
+function checkNewsbyID (jQueryObj) {
+    var exist;
+    //Посылаем запрос на изменение
+    $.ajax({type:"POST",async:false, data: "checkNewsID="+jQueryObj.val(),url:"/news/nhid/getnewsid",dataType:"json",
+        success: function(data) {
+            alert(data);
+                return data;
+        },
+        error: function(){
+                alert('error in ajax query when try to delete news');
+        }
+    });
+    return exist;
+}
+
 var currUsername = null;
 
 $(document).ready(function(){
@@ -267,6 +283,44 @@ $('#ulAdmMenu ul').each(function(index) {
         }
     });
 //--------------------------------------------------------------------------------------------------------------------//
+//====================================== Вывод титла новости =========================================================//
+    $("a[name=btnNewsTitle]").click(function() {
+        $.ajax({type:"POST",async:false, data: "checkNewsID="+$("#inpNewsDel").val(),url:"/news/nhid/getnewsid",dataType:"json",
+            success: function(data) {
+                if (!data) {
+                    $("#inpNewsTitle").val("");
+                    hints('error','Нет такой новости в базе данных');
+                }
+                else {
+                    $("#inpNewsTitle").val(data[0]['title']);
+                }
+            },
+            error: function(){
+                alert('error in ajax query when try to delete news');
+            }
+        });
+    });
+//--------------------------------------------------------------------------------------------------------------------//
+//========================================= Удаление новости =========================================================//
+    $("a[name=btnNewsDel]").click(function() {
+        $.ajax({type:"POST", data: "newsToDelete="+$("#inpNewsDel").val(),url:"/news/nhid/delnews",dataType:"json",
+            success: function(data) {
+                if (!data) {
+                    hints('error','Нет такой новости в базе данных');
+                }
+                else {
+                    hints('success','Новость удалена');
+                    $("#inpNewsTitle").val("");
+                    $("#inpNewsDel").val("");
+                }
+            },
+            error: function(){
+                alert('error in ajax query when try to delete news');
+            }
+        });
+    });
+//--------------------------------------------------------------------------------------------------------------------//
+
     /*Инициализация редактора новостей*/
     $('#txtNewsPre').redactor();
     $('#txtNewsFull').redactor();
