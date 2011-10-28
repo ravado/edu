@@ -5,6 +5,14 @@
  */
 class Model_Mnews extends Model_Database{
 
+    /*Общее количество новостей*/
+    public function getCountNews(){
+        $query = DB::select()->from('news');
+        $result = $query->execute()->as_array();
+        $count = count($result);
+        return $count;
+    }
+
     /*Добавление новости в БД*/
     public function  addNewsToDB($news){
         if((!empty($news['title']))&&(!empty($news['text_pre']))){

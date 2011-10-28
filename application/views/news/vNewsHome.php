@@ -23,7 +23,10 @@
             </div>
         </div>
 <?php } ?>
-
+       <div id="dvNavigation">
+           <?php if($prev_flag){?> <a href="/news?page=<?=$prev_page;?>">Назад</a> <?php } ?>
+           <?php if($next_flag){?> <a href="/news?page=<?=$next_page;?>">Вперед</a> <?php } ?>
+       </div>
     </div>
     <div id="dvWidgets"></div>
 </div>

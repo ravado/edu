@@ -14,13 +14,41 @@ class Controller_News_News extends Controller_Base {
         $this->template->styles = array("stfile/css/news.css" => "screen");
         $this->template->scripts = array('stfile/js/news.js');
 
+        $count_news = Model::factory('Mnews')->getCountNews();
+
         if(!empty($_GET['page'])){
             $ind = $_GET['page'];
-        }else{
-            $ind = 0;
-        }
+            if($ind > $count_news){
+                $this->request->redirect('news');
+            }else{
+                if($ind == 1){
+                    $data['prev_flag'] = FALSE;
+
+                    $data['next_flag'] = TRUE;
+                    $data['next_page'] = $ind+1;
+                }else{
+                    $data['prev_flag'] = TRUE;
+                    $data['prev_page'] = $ind-1;
+
+                    $data['next_flag'] = TRUE;
+                    $data['next_page'] = $ind+1;
+                }
+            }
+            }else{
+                $ind = 0;
+                $data['prev_flag'] = FALSE;
+                $data['next_flag'] = TRUE;
+                $data['next_page'] = $ind+2;
+            }
+            if($ind == round($count_news/5)+1){
+                $data['next_flag'] = FALSE;
+            }
+
+
 
          $data['news'] = Model::factory('Mnews')->getLastNews($ind);
+
+        
 
         $this->template->content = View::factory('news/vNewsHome',$data);
 	}
