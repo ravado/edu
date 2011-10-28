@@ -1,6 +1,8 @@
 /*
  * Скрипты админки
  */
+
+var redactorPre, redactorFull;
 // Проверка наличия новости по ID в качестве параметра передаем jQuery обьект в который будет вводиться айдишник
 function checkNewsbyID (jQueryObj) {
     var exist;
@@ -283,16 +285,38 @@ $('#ulAdmMenu ul').each(function(index) {
         }
     });
 //--------------------------------------------------------------------------------------------------------------------//
-//====================================== Вывод титла новости =========================================================//
+//======================== Функция 2 в 1 - Вывод титла новости, или всего сразу ======================================//
     $("a[name=btnNewsTitle]").click(function() {
         $.ajax({type:"POST",async:false, data: "checkNewsID="+$("#inpNewsDel").val(),url:"/news/nhid/getnewsid",dataType:"json",
             success: function(data) {
+                //Если пришел фалс (или что то пошло не так в кохане или новости с введенным ID не нашлось)
                 if (!data) {
-                    $("#inpNewsTitle").val("");
-                    hints('error','Нет такой новости в базе данных');
+                    //Если мы не удалять собрались новость а править
+                    if ($("form[name=frmNewsFix]").length > 0) {
+                        hints('error','Нет такой новости в базе данных');
+                        $("form[name=frmNewsFix]").slideUp('fast');
+                    }
+                    //А если все же удалять
+                    else {
+                        $("#inpNewsTitle").val("");
+                        hints('error','Нет такой новости в базе данных');
+                    }
                 }
+                //Если новость нашлась
                 else {
-                    $("#inpNewsTitle").val(data[0]['title']);
+                    //Если мы не удалять собрались новость а править
+                    if ($("form[name=frmNewsFix]").length > 0) {
+                        $("#inpNewsTitle").val(data[0]['title']);
+                        redactorPre.setHtml(data[0]['text_pre']);
+                        redactorFull.setHtml(data[0]['text_full']);
+                        $("#inpReferName").val(data[0]['refer_name']);
+                        $("#inpReferLink").val(data[0]['refer_link']);
+                        $("form[name=frmNewsFix]").slideDown('fast');
+                    }
+                    //А если все же удалять
+                    else {
+                        $("#inpNewsTitle").val(data[0]['title']);
+                    }
                 }
             },
             error: function(){
@@ -320,10 +344,16 @@ $('#ulAdmMenu ul').each(function(index) {
         });
     });
 //--------------------------------------------------------------------------------------------------------------------//
+//======================================= Сабмит новости =============================================================//
+    $("#btnNewsSubm").click(function(){
+        $("input[name=id]").val($("#inpNewsDel").val());
+       $("form[name=frmNewsFix]").submit();
+    });
+//--------------------------------------------------------------------------------------------------------------------//
 
     /*Инициализация редактора новостей*/
-    $('#txtNewsPre').redactor();
-    $('#txtNewsFull').redactor();
+    redactorPre = $('#txtNewsPre').redactor();
+    redactorFull = $('#txtNewsFull').redactor();
 });
 
 

@@ -28,6 +28,22 @@ class Model_Mnews extends Model_Database{
         }
     }
 
+    /*Изменение новости в БД*/
+    public function  fixNewsToDB($news){
+        if((!empty($news['title']))&&(!empty($news['text_pre']))){
+            $news['date_public'] = time();
+
+            $query = DB::update('news')->set(array(
+                                              'title'=>$news['title'],
+                                              'text_pre'=>$news['text_pre'],
+                                              'text_full'=>$news['text_full'],
+                                              'refer_name'=>$news['refer_name'],
+                                              'refer_link'=>$news['refer_link']
+                                             ))->where('id','=',$news['id']);
+            $query->execute();
+        }
+    }
+
     /*Отдает одну запись*/
     public function  getOneNews($newsID){
         $query = DB::select()->from('news')->where('id','=',$newsID);

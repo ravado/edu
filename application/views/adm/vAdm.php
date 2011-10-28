@@ -20,7 +20,7 @@
                 <ul>
                     <li><a href="/adm/news/add">Добавить новость</a></li>
                     <li><a href="/adm/news/del">Удалить новость</a></li>
-                    <li><a href="#0">Править новость</a></li>
+                    <li><a href="/adm/news/fix">Править новость</a></li>
                 </ul>
             </li>
             <li><a class="btnSilver btnLeftMenu">Что то еще</a>
