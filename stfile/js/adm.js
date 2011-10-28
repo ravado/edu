@@ -142,6 +142,7 @@ $('#ulAdmMenu ul').each(function(index) {
                             $("#optAdmin").attr('selected','selected');
                             //$("#optUser").removeAttr('selected');
                         }
+                        $("[name=slUsrRole]").removeAttr('disabled');
                         //Если правим пользователя а не удаляем
                         if ($("#frmUsrFix").length > 0) {
                             $("form input").removeAttr('disabled');
@@ -177,6 +178,7 @@ $('#ulAdmMenu ul').each(function(index) {
                 if ($("#frmUsrFix").length > 0) {
                     $("form input").attr('disabled','disabled');
                     $("form input").val('');
+                    $("[name=slUsrRole]").attr('disabled','disabled');
                     hints('warning','Увы пользователя с таким Логином нет :(');
                 }
                 else {
