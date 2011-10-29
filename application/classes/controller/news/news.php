@@ -11,8 +11,11 @@ class Controller_News_News extends Controller_Base {
 	public function action_index(){
 
 		$this->template->title = "Новости образования";
-        $this->template->styles = array("stfile/css/news.css" => "screen");
-        $this->template->scripts = array('stfile/js/news.js');
+        $this->template->styles = array("stfile/css/news.css" => "screen",
+                                        "stfile/js/jQuery UI/css/redmond/jqueryui.css" => "screen");
+        $this->template->scripts = array('stfile/js/news.js',
+                                         'stfile/js/jQuery UI/js/jqueryui.js',
+                                         'stfile/js/jQuery UI/js/jquery.ui.datepicker-ru.js');
 
         $count_news = Model::factory('Mnews')->getCountNews();
 
@@ -65,6 +68,7 @@ class Controller_News_News extends Controller_Base {
 
         $this->template->title = "Новости образования";
         $this->template->styles = array("stfile/css/news.css" => "screen");
+
         $this->template->scripts = array('stfile/js/news.js');
 
         $this->template->content = View::factory('news/vNewsHome',$data);

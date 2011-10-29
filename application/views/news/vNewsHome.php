@@ -28,5 +28,9 @@
            <?php if($next_flag){?> <a href="/news?page=<?=$next_page;?>">Вперед</a> <?php } ?>
        </div>
     </div>
-    <div id="dvWidgets"></div>
+    <div id="dvWidgets">
+        <div id="datepicker">
+                        
+        </div>
+    </div>
 </div>

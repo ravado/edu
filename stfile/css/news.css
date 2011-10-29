@@ -97,3 +97,10 @@
     background: #FFF;
     border: 1px solid #eee;
 }
+
+/*Календрь*/
+div.ui-datepicker{
+    font-size:12px;
+    margin: 2px auto;
+    width: 95%;
+}
