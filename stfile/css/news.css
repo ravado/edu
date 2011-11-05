@@ -8,7 +8,7 @@
     height: 600px;
     background: #FFF;
     border-radius: 5px;
-    border: 1px solid #eee;
+    border: 1px solid #ddd;
 }
 
 /*Лента новостей*/
@@ -24,7 +24,7 @@
     margin-bottom: 15px;
     background: #FFF;
     border-radius: 5px;
-    border: 1px solid #eee;
+    border: 1px solid #ddd;
     text-align: justify;
 }
 
@@ -83,20 +83,32 @@
 }
 
 .dvReadMore a:hover{
-    background: #f7fbfe;
-   /* text-decoration: none;*/
+    text-decoration: none;
+    box-shadow: 0 0 3px rgba(7,34,52,0.2);
 }
 
 /*Навигация по страницам новостей*/
 #dvNavigation{
-    margin-left: 100px;
-    width: 500px;
-    margin-bottom: 15px;
-    height: 20px;
-    border-radius: 5px;
-    background: #FFF;
-    border: 1px solid #eee;
+    height: 25px;
+    margin-bottom: 25px;
 }
+
+#dvNavigation{padding: 0 50px;}
+#dvNavigation a{padding: 1px 34px;}
+#dvNavigation a:hover{text-decoration: none;}
+
+/*Блоки с кнопками вперед и назад*/
+#prev,#next{
+    border: 1px solid #bbdff6;
+    padding: 6px 0 8px 0;
+    text-align: center;
+    width: 145px;
+    background: #FFF;
+    border-radius: 5px;
+}
+#next{float: right;}
+
+#prev:hover,#next:hover{box-shadow: 0 0 6px rgba(7,34,52,0.2);}
 
 /*Календрь*/
 div.ui-datepicker{

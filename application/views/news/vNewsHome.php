@@ -10,12 +10,12 @@
             <div class="dvBodyNews">
                 <?php
                     echo $one_news['text_pre'];
-                    if(!empty($flag_full)){echo $one_news['text_full'];}
+                    if(!empty($one)){echo $one_news['text_full'];}
                 ?>
             </div>
             <div class="dvFooterNews">
                 <div class="dvReadMore">
-                    <?php if(empty($flag_full)){ ?>
+                    <?php if(empty($one)){ ?>
                     <a href="/news/public/<?=$one_news['id'];?>">Читать далее</a>
                     <?php } ?>
                 </div>
@@ -23,14 +23,14 @@
             </div>
         </div>
 <?php } ?>
+       <?php if(!isset($one)){?>
        <div id="dvNavigation">
-           <?php if($prev_flag){?> <a href="/news?page=<?=$prev_page;?>">Назад</a> <?php } ?>
-           <?php if($next_flag){?> <a href="/news?page=<?=$next_page;?>">Вперед</a> <?php } ?>
+           <?php if($next_flag){?><div id="next"><a href="/news/page/<?=$next_page?>">Вперед &rarr;</a></div><? } ?>
+           <?php if($prev_flag){?><div id="prev"><a href="/news/page/<?=$prev_page?>">&larr; Назад</a></div><? } ?>
        </div>
+       <?php } ?>
     </div>
     <div id="dvWidgets">
-        <div id="datepicker">
-                        
-        </div>
+        <div id="datepicker"></div>
     </div>
 </div>

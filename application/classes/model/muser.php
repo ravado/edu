@@ -264,6 +264,7 @@ class Model_Muser extends Model_Database{
 
     /*Изменение профиля пользователя через админку*/
     public function admEditUser($userData){
+        $this->admEitUserRole($userData);
         if(!empty($userData['password'])){
             $auth = Auth::instance();
             $hPassword = $auth->hash_password($userData['password']);
@@ -287,6 +288,18 @@ class Model_Muser extends Model_Database{
             $result = $query->execute();
             $res['fixed'] = true;
             return $res;
+        }
+    }
+
+    /*изменение роли пользователя*/
+    public function admEitUserRole($userData){
+        if($userData['role'] == 'user'){
+            $query = DB::select()->from('roles_users')->where('user_id','=',$userData['id']);
+            $result = $query->execute()->as_array();
+            if(count($result) == 2){
+                $query = DB::delete('roles_users')->where('user_id','=',$userData['id'])->and_where('role_id','=',2);
+                $query->execute();
+            }
         }
     }
 }

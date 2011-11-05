@@ -354,8 +354,8 @@ $('#ulAdmMenu ul').each(function(index) {
 //--------------------------------------------------------------------------------------------------------------------//
 
     /*Инициализация редактора новостей*/
-    redactorPre = $('#txtNewsPre').redactor();
-    redactorFull = $('#txtNewsFull').redactor();
+    redactorPre = $('#txtNewsPre').redactor({ image_upload: '/news/nhid/loadimages' });
+    redactorFull = $('#txtNewsFull').redactor({ image_upload: '/news/nhid/loadimages' });
 });
 
 

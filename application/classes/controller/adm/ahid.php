@@ -36,7 +36,7 @@ class Controller_Adm_Ahid extends Controller{
             $userData['first_name'] = Arr::get($_POST,'firstName','');
             $userData['last_name'] = Arr::get($_POST,'lastName','');
             $userData['id'] = Arr::get($_POST,'id','');
-            $userData['role'] = Arr::get($_POST,'id','');
+            $userData['role'] = Arr::get($_POST,'slUsrRole','');
 
             $result = Model::factory('Muser')->admEditUser($userData);
             echo json_encode($result);

@@ -16,7 +16,7 @@
                     <li><a href="/news">Новости</a></li>
                     <li><a href="">Тесты</a></li>
                     <li><a href="#">Вопросы&amp;Ответы</a></li>
-                    <li><a href="#">Рефераты</a></li>
+                    <li><a href="#">Библиотека</a></li>
                     <li><a href="#">Магазин</a></li>
                 </ul>
             </nav>

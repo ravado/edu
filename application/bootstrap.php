@@ -124,6 +124,14 @@ Route::set('one_news', 'news/public(/<id>)')
 		'action'     => 'public',
 	));
 
+/*Роут страц главной страницы*/
+Route::set('newsPage', 'news/page(/<id>)')
+	->defaults(array(
+        'directory'  => 'news',
+		'controller' => 'news',
+		'action'     => 'page',
+	));
+
 /*роут новоестей*/
 Route::set('news', 'news(/<controller>(/<action>(/<id>)))')
 	->defaults(array(
@@ -131,6 +139,7 @@ Route::set('news', 'news(/<controller>(/<action>(/<id>)))')
 		'controller' => 'news',
 		'action'     => 'index',
 	));
+
 
 
 /*роут админки*/
