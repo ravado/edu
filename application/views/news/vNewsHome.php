@@ -17,6 +17,8 @@
                 <div class="dvReadMore">
                     <?php if(empty($one)){ ?>
                     <a href="/news/public/<?=$one_news['id'];?>">Читать далее</a>
+                    <?php }else{ ?>
+                     <a onclick="history.back()">&larr; Вернутся назад</a>
                     <?php } ?>
                 </div>
                 <div class="dvSocialButtons"><img src="../../../stfile/img/soc.PNG" alt=""></div>

@@ -38,6 +38,7 @@
     font-size: 16px;
     margin-bottom: 4px;
 }
+.dvHTitleNews a:hover{text-decoration: none; color: #135e8e;}
 
 /*Иформация о новости*/
 .dvTInfoNews{
