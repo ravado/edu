@@ -1,3 +1,7 @@
 $(document).ready(function(){
-    $("#datepicker").datepicker();
+    $("#datepicker").datepicker({
+            onSelect:function(){
+                alert($(this).datepicker('getDate'));
+            }
+    });
 });
