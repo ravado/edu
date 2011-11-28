@@ -46,11 +46,16 @@
 
         <!--    Блок с поиском    -->
         <div class="dvSearch">
-            <form id="searchbox" action="">
+            <form class="form-wrapper">
+                <input type="text" id="search" placeholder="Введите свой вопрос" required>
+                <input type="submit" value="Найти" class="submit">
+                <input type="submit" value="Спросить" class="submit">
+            </form>
+            <!--<form id="searchbox" action="">
                 <input id="search" type="text" placeholder="Введите свой вопрос">
                 <input id="submit" class="btnAsk Submit" type="submit" value="Спросить">
                 <input id="submit2" class="btnSearch Submit" type="submit" value="Найти">
-            </form>
+            </form>-->
         </div>
 
         <!--   Блок с топом вопросов     -->
