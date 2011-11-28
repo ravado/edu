@@ -21,7 +21,7 @@ return array
 			'hostname'   => 'localhost',
 			'database'   => 'edu',
 			'username'   => 'root',
-			'password'   => '',
+			'password'   => 'pass',
 			'persistent' => FALSE,
 		),
 		'table_prefix' => '',
