@@ -40,7 +40,7 @@ class Controller_Base extends Controller_Template {
             $scripts = array(
                 "stfile/js/placeholder.js",
                 "stfile/js/main.js",
-                "http://yandex.st/jquery/1.6.4/jquery.min.js"
+                "stfile/js/jquery"
             );
 
             $this->template->styles = array_reverse(array_merge($this->template->styles, $styles));

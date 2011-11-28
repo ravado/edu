@@ -1,3 +1,333 @@
 ﻿/*
  * Стили главной страницы вопросов и ответов
   ** /
+
+/*Меню слева*/
+.dvMenu{
+    width: 190px;
+    /*border: 1px red dashed;*/
+    min-height: 200px;
+    padding: 5px;
+    float: left;
+
+}
+
+.dvUser{
+    text-align: center;
+    min-height: 95px;
+}
+
+
+.dvUser img{
+    padding: 10px;
+}
+
+.btnColor{
+    width: auto;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.dvQuestions{
+    float: left;
+    padding-top: 10px;
+    padding-left: 10px;
+    /*border: 1px red dashed;*/
+    width: 790px;
+}
+
+.dvLastQuestions{
+    margin-bottom: 10px;
+}
+
+/*ТОП вопросов*/
+.dvTop{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    /*border: 1px red dashed;*/
+}
+.dvCategory a, .dvTop a, .dvLastQuestions a{
+    display:inline-block;
+    padding: 5px;
+}
+
+
+
+
+
+/*Переопределение заголовков для блоков*/
+
+
+
+/*=====Поиск=====*/
+#searchbox
+{
+        background: #eaf8fc;
+        background-image: -moz-linear-gradient(#fff, #d4e8ec);
+        background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #d4e8ec),color-stop(1, #fff));
+
+        -moz-border-radius: 35px;
+        border-radius: 35px;
+
+        border-width: 1px;
+        border-style: solid;
+        border-color: #c4d9df #a4c3ca #83afb7;
+        width: auto;
+        height: 25px;
+        padding: 10px;
+        margin: -5px auto 5px;
+        overflow: hidden; /* Clear floats */
+}
+
+#search, .btnSubmit, .btnSearch
+{
+        float: left;
+}
+
+#search
+{
+        padding: 5px 9px;
+        height: 14px;
+        width: 520px;
+        border: 1px solid #a4c3ca;
+        font: normal 13px 'trebuchet MS', arial, helvetica;
+        background: #f1f1f1;
+
+        -moz-border-radius: 50px 3px 3px 50px;
+         border-radius: 50px 3px 3px 50px;
+         -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 1);
+         -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 1);
+         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* ----------------------- */
+
+
+/*====Кнопка сабмита====*/
+.btnSearch{
+    background: #6cbb6b;
+        background-image: -moz-linear-gradient(#95d788, #6cbb6b);
+        background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #6cbb6b),color-stop(1, #95d788));
+
+
+
+        border-width: 1px;
+        border-style: solid;
+        border-color: #7eba7c #578e57 #447d43;
+
+         -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+         -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+         box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+
+        height: 26px;
+        margin: 0 0 0 10px;
+        padding: 0;
+        width: 100px;
+        cursor: pointer;
+        font: bold 14px Arial, Helvetica;
+        color: #23441e;
+
+        text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+}
+.btnAsk
+{
+        background: #6cbb6b;
+        background-image: -moz-linear-gradient(#95d788, #6cbb6b);
+        background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #6cbb6b),color-stop(1, #95d788));
+
+        -moz-border-radius: 3px 50px 50px 3px;
+        border-radius: 3px 50px 50px 3px;
+
+        border-width: 1px;
+        border-style: solid;
+        border-color: #7eba7c #578e57 #447d43;
+
+         -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+         -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+         box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+
+        height: 26px;
+        margin: 0 0 0 10px;
+        padding: 0;
+        width: 100px;
+        cursor: pointer;
+        font: bold 14px Arial, Helvetica;
+        color: #23441e;
+
+        text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.Submit:hover
+{
+        background: #95d788;
+        background-image: -moz-linear-gradient(#6cbb6b, #95d788);
+        background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #95d788),color-stop(1, #6cbb6b));
+}
+
+.Submit:active
+{
+        background: #95d788;
+        outline: none;
+
+         -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;
+         -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;
+         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;
+}
+
+.Submit::-moz-focus-inner
+{
+       border: 0;  /* Small centering fix for Firefox */
+}
+
+#search.placeholder {
+   color: #9c9c9c !important;
+   font-style: italic;
+}
+
+#search::-webkit-input-placeholder {
+   color: #9c9c9c;
+   font-style: italic;
+}
+
+#search:-moz-placeholder {
+   color: #9c9c9c;
+   font-style: italic;
+}
+
+#search:-ms-placeholder {
+   color: #9c9c9c;
+   font-style: italic;
+}
+
+.icons{
+    text-align: center;
+    width: 24px;
+    vertical-align: middle;
+}
+
+.topinfo {
+    font-size: smaller;
+    text-align: center;
+}
+
+td {
+    padding-top: 5px;
+    padding-left: 5px;
+    border-bottom: 1px solid #e2e1e1;
+    vertical-align: middle;
+}
+
+th {
+    border-spacing: 0px;
+    border: 0px;
+    vertical-align: middle;
+}
+
+.border{
+    vertical-align: middle;
+}
+
+.test {
+    background-color: #70bcec;
+
+    font-size: 23px;
+    text-align: center;
+}
+
+.spnTags {
+    font-size: smaller;
+    font-weight: bolder;
+    color: green;
+    white-space: nowrap;
+    padding: 5px;
+}
+
+
+
+.spnTags a:link{
+    color: green;
+    font-size: 10px;
+    margin-left: -2px;
+    margin-right: -2px;
+}
+
+.spnTags a:visited{
+    color: green;
+}
+
+h4 {
+    font-size: 14px;
+}
+
+/* Лента для заголовков блоков */
+.lenta {
+    text-align: left;
+    position: relative;
+    color: #000000;
+    padding: 10px;
+    background: #d0e4f7;
+    /*background: #99ccff;*/
+    background-image: -moz-linear-gradient(rgba(255,255,255,.3), rgba(255,255,255,0));
+    background-image: -webkit-linear-gradient(rgba(255,255,255,.3), rgba(255,255,255,0.3));
+    background-image: -o-linear-gradient(rgba(255,255,255,.3), rgba(255,255,255,0));
+    background-image: -ms-linear-gradient(rgba(255,255,255,.3), rgba(255,255,255,0));
+}
+
+.tblTitle {
+    padding-left: 10px;
+    width: 85%;
+}
+
+/*Тень для блока*/
+.shadowBlock{
+	margin-bottom: 10px;
+	width: auto;
+	position:relative;
+	background: #fff;
+	background: -webkit-gradient(linear, 0% 20%, 0% 92%, from(#fff), to(#f3f3f3), color-stop(.1,#fff));
+	background: -moz-linear-gradient(0 0 270deg, #fff, #fff 10%, #f3f3f3);
+    border-radius: 3px;
+    border-bottom: 1px solid #e4e3e3;
+	border-right: 1px solid #e4e3e3;
+	-webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+/*Ссылки категорий в разделе категорий*/
+.catTitle > a{
+    color: #36C;
+    text-decoration: none;
+    font-weight: bolder;
+    font-size: 12px;
+}
+
+/*Ссылки на подкатегории в разделе категорий*/
+.catTitle > div > a {
+    color: green;
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: -1px;
+}
+
+/*====== Блок с вопросами =======*/
+
+    /*Размер шрифта для дополнительной информации по вопросам*/
+    .username, .answers, .time{
+        font-size: 10px;
+    }
+    /* Имена пользователей задавших вопросы */
+    .username a:hover {
+        text-decoration: none;
+        color: #0f4a70;
+    }
+
+    /* Количество ответов на вопросы */
+    .answers {
+
+    }
+
+    /* Дата заданых вопросов */
+    .time {
+        color: #808080;
+    }
