@@ -277,6 +277,44 @@ $(document).ready(function(){
     //Плейсхолдеры для бл#@&*!го IE!!!
     $('[placeholder]').placeholder();
 
+
+
+//======================== Кнопка "еще" в хедере =====================//
+        var mouse_inside = false;
+
+    $('.more').hover(
+        function(){mouse_inside=true;},
+        function(){mouse_inside=false;}
+    );
+
+    $(".btnMore").click(function(){
+        if ($(".more").hasClass("hide")){
+            $(".more").css("display","inline");
+            $(".more").addClass("expand");
+            $(".more").removeClass("hide");
+            return;
+        }
+        if ($(".more").hasClass("expand"))
+        {
+            $(".more").addClass("hide");
+            $(".more").removeClass("expand");
+            $(".more").css("display","none");
+            return;
+        }
+    });
+
+    $("html").mouseup(function(event){
+        if(! mouse_inside && event.target.className !== "btnMore") {
+            if ($(".more").hasClass("expand"))
+            {
+                $(".more").addClass("hide");
+                $(".more").removeClass("expand");
+                $(".more").css("display","none");
+             }
+        }
+    });
+//-------------------------------------------------------------------//
+
 })
 
 

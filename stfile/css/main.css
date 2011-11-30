@@ -214,3 +214,57 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
         border-radius: .15em 0 0 .15em;
         pointer-events: none;
 }
+
+
+/*================ Кнопка "еще" в хедере ======================*/
+.flowing
+{
+  position: relative;
+
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  color: #222;
+  outline: none;
+
+}
+
+.more
+{
+  display: none;
+  position: absolute;
+  margin-top: 10px;
+  z-index: 999;
+  width: 110px;
+    height: 210px;
+  margin-left: -50px;
+  padding: 10px;
+  opacity: 1;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+}
+
+.more:before,
+.more:after
+{
+  content: "";
+  position: absolute;
+  z-index: 1000;
+  top: -8px;
+  left: 50%;
+  margin-left: -8px;
+  border-bottom: 8px solid #eee;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 0;
+
+}
+
+.more:before
+{
+  border-bottom-color: #ccc;
+  top: -9px;
+}
+/*======================================================*/

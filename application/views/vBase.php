@@ -15,9 +15,22 @@
                 <ul>
                     <li><a href="/news">Новости</a></li>
                     <li><a href="">Тесты</a></li>
-                    <li><a href="#">Вопросы&amp;Ответы</a></li>
+                    <li><a href="/questions">Вопросы и Ответы</a></li>
                     <li><a href="#">Библиотека</a></li>
                     <li><a href="#">Магазин</a></li>
+                    <li>
+                        <div class="flowing">
+            <a class="btnMore">еще</a>
+            <div class="more hide">
+                <a>Punkt1</a><br>
+                <a>Punkt2</a><br>
+                <a>Punkt1</a><br>
+                <a>Punkt2</a><br>
+                <a>Punkt1</a><br>
+                <a>Punkt2</a><br>
+            </div>
+        </div>
+                    </li>
                 </ul>
             </nav>
         </header>

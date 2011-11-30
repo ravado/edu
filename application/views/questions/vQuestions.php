@@ -17,7 +17,7 @@
                     <a href="" class="">физика</a>
                     <a href="" class="">математика</a>
                     <a href="" class="">информатика</a>
-                    <a href="" class=""><img height="10px;" style="vertical-align: middle;" src="../../../stfile/img/questions/right-icon.png"></a>
+                    <a href="" class="catMore"><img alt="" src="../../../stfile/img/questions/right-icon.png"></a>
                 </div>
             </div>
             <div class="catTitle">
@@ -26,7 +26,7 @@
                     <a href="" class="">дизайн</a>
                     <a href="" class="">кино</a>
                     <a href="" class="">хобби</a>
-                    <a href="" class=""><img height="10px;" style="vertical-align: middle;" src="../../../stfile/img/questions/right-icon.png"></a>
+                    <a href="" class="catMore"><img alt="" src="../../../stfile/img/questions/right-icon.png"></a>
                 </div>
             </div>
             <div class="catTitle">
@@ -35,7 +35,7 @@
                     <a href="" class="">игры</a>
                     <a href="" class="">windows</a>
                     <a href="" class="">железо</a>
-                    <a href="" class=""><img height="10px;" style="vertical-align: middle;" src="../../../stfile/img/questions/right-icon.png"></a>
+                    <a href="" class="catMore"><img alt="" src="../../../stfile/img/questions/right-icon.png"></a>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
 
         <!--    Блок с поиском    -->
         <div class="dvSearch">
-            <form class="form-wrapper">
+            <form action="" class="form-wrapper">
                 <input type="text" id="search" placeholder="Введите свой вопрос" required>
                 <input type="submit" value="Найти" class="submit">
                 <input type="submit" value="Спросить" class="submit">
@@ -60,8 +60,8 @@
 
         <!--   Блок с топом вопросов     -->
         <div class="dvTop shadowBlock">
-            <table cellspacing="0px" width="100%">
-                <tr class="lenta" style="height: 35px;">
+            <table cellspacing="0" width="100%">
+                <tr class="lenta">
                     <th class="tblTitle">Самые популярные</th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/user-icon.png"></th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/comment-icon.png"></th>
@@ -130,7 +130,7 @@
         <div class="dvLastQuestions shadowBlock">
             <table cellspacing="0px" width="100%">
 
-                <tr class="lenta" style="height: 35px;">
+                <tr class="lenta">
                     <th class="tblTitle">Новые</th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/user-icon.png"></th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/comment-icon.png"></th>
