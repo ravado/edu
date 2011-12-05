@@ -1,7 +1,7 @@
 <div id="dvContent">
     <div class="spnTitle Page">Вопросы и ответы</div>
 
-    <!-- Блок меню справа   -->
+    <!-- Блок меню слева   -->
     <div class="dvMenu">
         <div class="dvUser shadowBlock">
             <h4 class="lenta">Профиль</h4>
@@ -41,21 +41,16 @@
         </div>
     </div>
 
-    <!--  Блок сопросов  -->
+    <!--  Блок вопросов  -->
     <div class="dvQuestions">
 
         <!--    Блок с поиском    -->
         <div class="dvSearch">
-            <form action="" class="form-wrapper">
-                <input type="text" id="search" placeholder="Введите свой вопрос" required>
-                <input type="submit" value="Найти" class="submit">
-                <input type="submit" value="Спросить" class="submit">
+            <form action="/questions/ask" class="frmQuestion" name="frmQuestion" method="POST">
+                <input type="text" name="question" id="search" placeholder="Введите свой вопрос" required>
+                <input type="submit" name="btnSearch" value="Найти" class="submit">
+                <input type="submit" name="btnAsk" value="Спросить" class="submit">
             </form>
-            <!--<form id="searchbox" action="">
-                <input id="search" type="text" placeholder="Введите свой вопрос">
-                <input id="submit" class="btnAsk Submit" type="submit" value="Спросить">
-                <input id="submit2" class="btnSearch Submit" type="submit" value="Найти">
-            </form>-->
         </div>
 
         <!--   Блок с топом вопросов     -->

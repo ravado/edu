@@ -117,7 +117,7 @@ Cookie::$salt = 'a234aflk234jbdf';
  */
 
 /*роут вопросов и ответов*/
-Route::set('questions', 'questions(/<controller>(/<action>(/<id>)))')
+Route::set('questions', 'questions(/<action>(/<id>))')
 	->defaults(array(
 		'directory'  => 'questions',
 		'controller' => 'questions',
