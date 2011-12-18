@@ -43,15 +43,15 @@ class Controller_Questions_Questions extends Controller_Base {
         // Проверяем было ли что то передано формой //
         if (!empty($_POST)) {
             $data["question"] = $_POST["question"];
-
+            $questionData = true;
 //            // передаем в модель введенный вопрос и результат записываем в переменную
-//            $result = Model::factory('Mquestions')->askQuestion($questionData);
-//
-//            if ($result) {
-//                $data["result"] = 'its OK :)';
-//            } else {
-//                $data["result"] = 'is`nt OK :(';
-//            }
+            $result = Model::factory('Mquestions')->askQuestion($questionData);
+
+            if ($result) {
+                $data["result"] = 'its OK :)';
+            } else {
+                $data["result"] = 'is`nt OK :(';
+            }
 
         }
 
