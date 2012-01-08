@@ -1,14 +1,14 @@
 $(document).ready(function(){
 
     // Нажатие кнопки "Поиск" или "Спросить" в зависимости от нажатого вызываем разные екшены
-    $(".frmQuestion").children(".submit").click(function() {
-        if ($(this).attr("name") == "btnSearch") {
-            $(".frmQuestion").attr('action','/questions/search');
-        }
-        else {
-            $(".frmQuestion").attr('action','/questions/ask');
-        }
-    });
+//    $(".frmQuestion").children(".submit").click(function() {
+//        if ($(this).attr("name") == "btnSearch") {
+//
+//
+//
+//            $(".frmQuestion").attr('action','/questions/ask');
+//        }
+//    });
 
     // Нажатие на пункт категории
     $(".dvQuestCategory p").not("input[type=checkbox]").click(function() {
@@ -26,7 +26,6 @@ $(document).ready(function(){
         if ($(this).is(":checked") == false) {
         $("#"+$(this).attr("name")).remove();
         } else {
-//            alert($(this).attr('name'));
             $(".ololo").append("<div class='label' id='"+$(this).attr('name')+"'><p>"+$(this).parent().text()+"</p></div>");
 
         }
@@ -49,8 +48,26 @@ $(document).ready(function(){
            "Пишите выразительно и доходчиво, дабы ответы были точны и лаконичны.</p>");
     });
 
-    $(".questionFull").click(function(){
-       alert('aa');
+
+
+    // Нажатие на кнопку поиска в ВиО
+    $("form[name=frmQuestion] input[name=btnSearch]").click(function(){
+        // Передаем в функцию поиска 1й обьект куда выводим, 2й обьект с которого считываем 3й настройки
+        googleSearch($("#searchResult"),$("form[name=frmQuestion] #search"),{siteURL:'habrahabr.ru'});
+        $(".dvTop").css("display","none");
+        $(".dvLastQuestions").css("display","none");
+        if(!$("#goback").length) {
+            $(".dvSearch").append("<div id='goback' style='height: 0; float: left;'><a>Вернуться</a></div>");
+        }
     });
 
+
+    /* Кнопка вернуться при выдаче результатов поиска */
+    $("#goback").live('click',function(){
+        $("#searchResult").empty();
+        $("#dvPagination").remove();
+        $(".dvTop").css("display","block");
+        $(".dvLastQuestions").css("display","block");
+        $("#goback").remove();
+    });
 });

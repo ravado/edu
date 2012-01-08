@@ -46,12 +46,14 @@
 
         <!--    Блок с поиском    -->
         <div class="dvSearch">
-            <form action="/questions/ask" class="frmQuestion" name="frmQuestion" method="POST">
+            <form action="/questions/ask" class="frmQuestion" name="frmQuestion" method="POST" onsubmit="$('[name=btnSearch]').click(); return false;">
                 <input type="text" name="question" maxlength="300" id="search" placeholder="Введите свой вопрос" required>
-                <input type="submit" name="btnSearch" value="Найти" class="submit">
-                <input type="submit" name="btnAsk" value="Спросить" class="submit">
+                <input type="button" name="btnSearch" value="Найти" class="submit">
+                <input type="button" name="btnAsk" value="Спросить" onclick="form.submit()" class="submit">
             </form>
         </div>
+
+        <div id="searchResult"></div>
 
         <!--   Блок с топом вопросов     -->
         <div class="dvTop shadowBlock">

@@ -116,6 +116,14 @@ Cookie::$salt = 'a234aflk234jbdf';
  * defaults for the URI.
  */
 
+/*роут поиска*/
+Route::set('search', 'search(/<action>)')
+    ->defaults(array(
+    'directory'  => 'search',
+    'controller' => 'search',
+    'action'     => 'index',
+));
+
 /*роут вопросов и ответов*/
 Route::set('questions', 'questions(/<action>(/<id>))')
 	->defaults(array(

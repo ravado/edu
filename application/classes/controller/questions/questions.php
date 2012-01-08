@@ -48,9 +48,9 @@ class Controller_Questions_Questions extends Controller_Base {
             $result = Model::factory('Mquestions')->askQuestion($questionData);
 
             if ($result) {
-                $data["result"] = 'its OK :)';
+                $data["result"] = $result;
             } else {
-                $data["result"] = 'is`nt OK :(';
+                $data["result"] = '';
             }
 
         }

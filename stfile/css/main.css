@@ -267,4 +267,72 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
   border-bottom-color: #ccc;
   top: -9px;
 }
-/*======================================================*/
+/*---------------------------------------------------------*/
+
+/* ============================== Все что относиться к поиску ======================================================= */
+
+    /* ===== Пагинаци для поиска ==== */
+
+    /* Блок с номерами страниц */
+    #dvPagination {height: 40px;}
+
+    /*кнопка с номером страницы*/
+    .pagination {
+        width: 10px;
+        height: 10px;
+        float: left;
+        background-color: #98c5e4;
+        border-radius: 3px;
+        margin-right: 5px;
+        padding: 10px;
+    }
+    .pagination:hover {
+        cursor: pointer;
+        background-color: #70aed9;
+    }
+
+    /* Текущая страница */
+    .selected {
+        background-color: #2c74a6;
+    }
+    /* ------------------------------ */
+
+    /* ===== Результаты поиска ====== */
+    /*Блок с одним результатом*/
+    .webResult {
+        padding: 5px;
+        line-height: 18px;
+    }
+    .webResult:hover{
+        background-color: #ececec;
+    }
+    /*Заглавие найденого*/
+    .resultTitle{
+        font-size: 18px;
+    }
+    /*Превью найденого*/
+    .resultContent{
+        font-size: 12px;
+    }
+    /*Ссылка найденого*/
+    .resultUrl{
+        color: #006505;
+    }
+    .resultUrl:hover{
+        color: #008200;
+    }
+    /* ------------------------------ */
+
+
+    /* Вывод сообщений перед результатами поиска */
+    .searchTitle {
+        height: 20px;
+        padding-top: 10px;
+        padding-bottom: 5px;
+        margin-top: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        color: graytext;
+    }
+
+/* ------------------------------------------------------------------------------------------------------------------ */

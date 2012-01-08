@@ -242,6 +242,10 @@
                 border: 0;
         }
 
+        /*Кнопка вернуться, отображаеться при выводе результатов поиска на главной ВиО*/
+        #goback{ position: relative; display: inline; top: 10px; left: 680px;}
+        #goback a{background-image: url("../../stfile/img/questions/back-icon.png");background-repeat: no-repeat;background-position: 0; padding-left: 25px;}
+
     /* ------------------------------------------------------ */
 
         /*Иконки в таблице топа и новых вопросов*/

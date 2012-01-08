@@ -17,7 +17,7 @@
     <div class="dvAsk">
         <form action="" method="POST" id="frmAskQuestion">
             <h5 class="textGuide">1 введите краткое содержание вашего вопроса </h5>
-            <input type="text" class="inpColor" maxlength="100" placeholder="Введите заголовок вопроса (не более 100 символов)" value="<?php if(!empty($result)){print_r($result['title']);}?>" name="questionTitle">
+            <input type="text" class="inpColor" maxlength="100" placeholder="Введите заголовок вопроса (не более 100 символов)" value="<?php if(!empty($question)){echo $question; }?>" name="questionTitle">
             <h5 class="textGuide">2 опишите интересующий вас вопрос в полной мере </h5>
             <textarea class="inpColor" placeholder="Введите текст вопроса" name="questionFull"></textarea>
             <h5 class="textGuide">3 выберите категорию к которому максимально относиться ваш вопрос</h5>

@@ -8,10 +8,10 @@ class Model_Mquestions extends Model_Database{
 
     /*Возвращает ленту новостей*/
     public function askQuestion($questionData){
-
+        $res = $questionData['question'];
         $query = DB::select()->from('subcategory')->where('id_subcategory','=','1');
         $result = $query->execute()->as_array();
-        return $result;
+        return $res;
     }
 }
 
