@@ -31,32 +31,69 @@ class Controller_Questions_Questions extends Controller_Base {
         $this->template->styles = array("stfile/css/questions.css" => "screen");
         $this->template->scripts = array('stfile/js/questions.js');
 
-        /*Проверяем статус пользователя (Авторизирован или нет)*/
-        $auth = Auth::instance();
-        if($auth->logged_in()){
-            $data['userAuth'] = TRUE;
-            $data['userName'] = $auth->get_user()->username;
-        }else{
-            $data['userAuth'] = FALSE;
-        }
-
         // Проверяем было ли что то передано формой //
         if (!empty($_POST)) {
-            $data["question"] = $_POST["question"];
-            $questionData = true;
+            $data['question'] = $_POST['question'];
+//
 //            // передаем в модель введенный вопрос и результат записываем в переменную
-            $result = Model::factory('Mquestions')->askQuestion($questionData);
-
-            if ($result) {
-                $data["result"] = $result;
-            } else {
-                $data["result"] = '';
-            }
-
+//            $result = Model::factory('Mquestions')->askQuestion($questionData);
+//
+//            if ($result) {
+//                $data["result"] = $result;
+//            } else {
+//                $data["result"] = '';
+//            }
+        } else {
+            $data['question'] = '';
         }
-
         $this->template->content = View::factory('questions/vQuestionsAsk',$data);
 	}
+
+    /*Задаем вопрос*/
+    public function action_askquestion(){
+
+        $this->template->title = "Задать вопрос";
+
+        //$this->template->styles = array("stfile/css/questions.css" => "screen");
+        //$this->template->scripts = array('stfile/js/questions.js');
+
+        // для записи в бд нужен юзернейм так что пока побудет так
+        $auth = Auth::instance();
+        if($auth->logged_in()) {
+            $data['username'] = $auth->get_user()->username;
+
+            // Проверяем было ли что то передано формой //
+            if (!empty($_POST) && ($_POST['questionTitle'] != '' || $_POST['questionFull'] != '')) {
+                $data['questionTitle'] = $_POST['questionTitle'];
+                $data['questionFull'] = $_POST['questionFull'];
+                $data['tags'] = '';
+                $temp = $_POST['tags'];
+                foreach($temp as $key=>$v){
+                    if(next($temp)) {
+                        $data['tags'] .=$temp[$key].',';
+                    } else {
+                        $data['tags'] .=$temp[$key];
+                    }
+                }
+
+    //            foreach($_POST['questionTags'] as $key) {
+    //                $data['questionTags'][$key] = $_POST['questionFull'][$key];
+    //            }
+
+                // передаем в модель введенный вопрос и результат записываем в переменную
+                $result = Model::factory('Mquestions')->askQuestion($data);
+                if ($result) {
+                    $this->template->content = "Вопрос задан";
+                } else {
+                    $this->template->content = "Вопрос не задан, потому что в модели пошло что то не так";
+                }
+            } else {
+                $this->template->content = "Вопрос не задан потому что не были переданы даные в POST";
+            }
+        } else {
+            $this->template->content = "Для того чтобы задать вопрос Вы должны быть залогинены!";
+        }
+    }
 
 
     /* Показываем страницу поиска вопросов */
