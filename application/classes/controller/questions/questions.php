@@ -21,6 +21,8 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['userAuth'] = FALSE;
         }
 
+        $data['result'] = Model::factory('Mquestions')->mainQA();
+
         $this->template->content = View::factory('questions/vQuestions',$data);
 	}
 

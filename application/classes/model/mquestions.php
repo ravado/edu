@@ -5,8 +5,28 @@
  */
 class Model_Mquestions extends Model_Database{
 
+    // Выводим на главную ВиО данные из бд
+    public  function mainQA(){
+        $result = null;
+        $last = DB::select()->from('questions')->limit(20)->order_by('public_date','DESC');
+        if ($result_last = $last->execute()->as_array()) {
+            $result['last'] = $result_last;
+        } else {
+            $result['last'] = null;
+        }
 
-    /*Возвращает ленту новостей*/
+        $popular = DB::select()->from('questions')->limit(7)->order_by('answers_count','DESC');
+        if ($result_popular = $popular->execute()->as_array()) {
+            $result['popular'] = $result_popular;
+        } else {
+            $result['popular'] = null;
+        }
+
+        return $result;
+
+    }
+
+    /*Добавляем новый вопрос*/
     public function askQuestion($data){
         $qTitle = $data['questionTitle'];
         $qFull = $data['questionFull'];
@@ -39,5 +59,7 @@ class Model_Mquestions extends Model_Database{
             return false;
         }
     }
+
+
 }
 
