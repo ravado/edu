@@ -77,7 +77,7 @@
                             <td><a href=""> '.$result['popular'][$key]['title'] .'</a>'
                             .'<span class="spnTags">'. $tags .'</span>'
                             .'</td>'
-                            .'<td class="username"><a href="">' .$result['popular'][$key]['id_user'] .'</a></td>'
+                            .'<td class="username"><a href="">' .$result['popular'][$key]['username'] .'</a></td>'
                             .'<td class="answers">'.$result['popular'][$key]['answers_count'].'</td>'
                             .'<td class="time">' .date('d/m/y',strtotime($result['popular'][$key]['public_date'])) .'</td></tr>');
                     }
@@ -111,7 +111,7 @@
                             <td><a href=""> '.$result['last'][$key]['title'] .'</a>'
                             .'<span class="spnTags">'. $tags .'</span>'
                             .'</td>'
-                            .'<td class="username"><a href="">' .$result['last'][$key]['id_user'] .'</a></td>'
+                            .'<td class="username"><a href="">' .$result['last'][$key]['username'] .'</a></td>'
                             .'<td class="answers">'.$result['last'][$key]['answers_count'].'</td>'
                             .'<td class="time">' .date('G:i',strtotime($result['last'][$key]['public_date'])) .'</td></tr>');
                     }
