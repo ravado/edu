@@ -176,6 +176,9 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
         -moz-box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
         -webkit-box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
         box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
 
 .btnSilver:hover{

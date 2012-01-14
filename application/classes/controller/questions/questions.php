@@ -78,10 +78,6 @@ class Controller_Questions_Questions extends Controller_Base {
                     }
                 }
 
-    //            foreach($_POST['questionTags'] as $key) {
-    //                $data['questionTags'][$key] = $_POST['questionFull'][$key];
-    //            }
-
                 // передаем в модель введенный вопрос и результат записываем в переменную
                 $result = Model::factory('Mquestions')->askQuestion($data);
                 if ($result) {
@@ -117,5 +113,29 @@ class Controller_Questions_Questions extends Controller_Base {
         $this->template->content = View::factory('questions/vQuestionsSearch',$data);
 	}
 
+    public function action_question(){
+        $questionID = $this->request->param('id');
+        $data['idQuestion'] = $questionID;
 
+        $this->template->styles = array("stfile/css/questions.css" => "screen");
+        $this->template->scripts = array('stfile/js/questions.js');
+
+        /*Проверяем статус пользователя (Авторизирован или нет)*/
+        $auth = Auth::instance();
+        if($auth->logged_in()){
+            $data['userAuth'] = TRUE;
+            $data['userName'] = $auth->get_user()->username;
+            $data['user_id'] = $auth->get_user()->id;
+        }else{
+            $data['userAuth'] = FALSE;
+        }
+
+        $data['result'] = Model::factory('Mquestions')->getOneQuestion($questionID);
+        $this->template->title = "ВиО: " .$data['result']['question'][0]['title'];
+        $this->template->content = View::factory('questions/vQuestionOne',$data);
+    }
+
+    public function action_addAnswer () {
+        return true;
+    }
 }

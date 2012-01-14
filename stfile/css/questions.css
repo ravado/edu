@@ -26,16 +26,20 @@
 
         /*Ссылки категорий в разделе категорий*/
         .catTitle > a{
+            padding-top: 10px;
+        }
+
+        .catLinks {
             color: #79d;
             text-decoration: none;
             font-weight: bolder;
             font-size: 12px;
-            padding-top: 10px;
         }
 
         /*Ссылки на подкатегории в разделе категорий*/
         .catTitle .greenCat {
             color: green;
+            opacity: 0.8;
             font-size: 11px;
             font-weight: bold;
             margin-left: -8px;
@@ -266,15 +270,13 @@
         }
 
         /*Делаем табличку красивой и полосатой*/
-        tr:nth-child(2n+3){
+        .dvLastQuestions tr:nth-child(2n+3), .dvTop tr:nth-child(2n+3){
             background-color: #f1f1f1;
         }
 
         /*Блок с тегами возле каждого вопроса*/
         .spnTags {
-            font-size: 10px;
-            font-weight: bolder;
-            color: green;
+
             white-space: nowrap;
             padding: 3px;
         }
@@ -282,21 +284,23 @@
         /*Зелененикие подкатегории-теги*/
         .greenCat {
             font-size: 10px;
-            font-weight: bold;
             text-decoration: none;
             color: green;
+            opacity: 0.6;
         }
 
         .greenCat:hover {
             text-decoration: none;
-            color: #98c12d
+            color: green;
+            opacity: 1;
         }
 
 
         /* Лента для заголовков блоков */
         .lenta {
             text-align: left;
-            position: relative;
+            /*position: relative;*/
+            vertical-align: middle;
             color: #1b5d9d;
             padding: 10px;
             background: #d0e4f7;
@@ -312,7 +316,7 @@
     .shadowBlock{
         margin-bottom: 15px;
         width: auto;
-        position:relative;
+        /*position:relative;*/
         background: #fff;
         background: -webkit-gradient(linear, 0% 20%, 0% 92%, from(#fff), to(#f3f3f3), color-stop(.1,#fff));
         background: -moz-linear-gradient(0 0 270deg, #fff, #fff 10%, #f3f3f3);
@@ -354,6 +358,9 @@
         }
     /* ------------------------------------------------------ */
 
+    table {
+        width: 100%;
+    }
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* --------------------------------------- Главная страница ВиО ----------------------------------------------------- */
@@ -609,6 +616,17 @@
         float: left; display: inline-block; width: 100%;height: 35px;padding-top: 10px;
     }
 
+    .removeTag {
+        background-image: url("../../stfile/img/questions/tags-remove.png");
+        background-repeat: no-repeat;
+        background-position: 1px 1px;
+        display: block;
+        float: right;
+        height: 15px;
+        width: 10px;
+        padding-left: 3px;
+    }
+
     /*Текст выбраных категорий*/
     .dvCategoryLabel h6 {
         display: inline-block; margin-top: 0;color: #a9a9a9;
@@ -617,4 +635,217 @@
     /* ------------------------------------------------------ */
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* --------------------------------- Страница задания нового вопроса ------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------------ */
+
+
+/* ================================================================================================================== */
+/* ===================================== Страница одного вопроса ==================================================== */
+/* ================================================================================================================== */
+
+    .dvQuestionAndAnswers {
+        width: 750px;
+     }
+    .dvQuestionAndAnswers .spnTags a{
+        padding-right: 5px;
+    }
+
+    .dvQuestionAndAnswers p {
+        font-size: 14px;
+        color: #434343;
+        padding: 10px;
+        line-height: 1.5em;
+    }
+
+    .dvOneQuestion {
+
+    }
+    .dvOneQuestion .oneQuestion{
+        vertical-align: middle;
+
+    }
+
+    .dvOneQuestion .catLinks {
+        font-size: 10px;
+    }
+
+    .dvOneQuestion.shadowBlock {
+        border: 2px solid #D0E4F7;
+        margin-bottom: 0;
+    }
+
+    .bestAnswer-icon{
+        min-width: 40px;
+        width: 40px;
+        max-width: 40px;
+    }
+
+    .dvBestAnswer {
+        background: #fff;
+        background: -webkit-gradient(linear, 0% 2%, 0% 2%, from(#dbffdb), to(#fff), color-stop(.9,#fff));
+        background: -moz-linear-gradient(1pt 1pt 270deg, #dbffdb, #fff 200%, #fff);
+        background: -o-linear-gradient(#dbffdb 100%, #fff 10%, #dbffdb 51%);
+        background: -ms-linear-gradient(#dbffdb 100%, #fff 10%, #dbffdb 51%);
+        border: 1px solid #98ff9d;
+    }
+
+    .badRating {
+        opacity: 0.3;
+    }
+
+    .badRating:hover {
+        opacity: 1;
+    }
+
+    .titleToBest {
+        color: #006400;
+        float: right;
+        padding-right: 10px;
+    }
+
+    .bestAnswerLabel {
+        background-image: url("../../stfile/img/questions/best-answer.png");
+        /*background-position: 30 30;*/
+        background-repeat: no-repeat;
+        width: 55px;
+        height: 64px;
+
+        margin: 0 auto;
+        margin-left: -25px;
+
+        display: block;
+    }
+
+    .tblAnswers {
+
+
+        border-collapse: collapse;
+    }
+
+    .tblAnswers tr {
+
+    }
+
+    .dvAllAnswers .shadowBlock {
+        /*background-color: #f5deb3;*/
+        max-width: 695px;
+        mim-width: 695px;
+        width: 695px;
+    }
+.dvAllAnswers .btnSilver {
+    float: right;
+}
+
+
+    .dvAllAnswers .lenta {
+        background: none;
+    }
+
+    .frmAddAnswer {
+        display: none;
+        padding-top: 10px;
+    }
+
+    .frmAddAnswer textarea {
+        width: 690px;
+        height: 100px;
+    }
+
+
+
+    .dvAllAnswers hr {
+        height: 1px;
+        border: none;
+        background-color: #a9a9a9;
+        width: 40%;
+        margin-bottom: 1px;
+        opacity: 0.6;
+    }
+
+    .favorite {
+        background-image: url("../../stfile/img/questions/star_off.png");
+        background-repeat: no-repeat;
+        display: block;
+        float: left;
+        width: 24px;
+        height: 24px;
+        padding-right: 10px;
+    }
+    .favorite:hover {
+        cursor: pointer;
+        background-image: url("../../stfile/img/questions/star_on.png");
+    }
+
+
+
+    .dvVote {
+        width: 50px;
+        text-align: center;
+        float: left;
+
+    }
+
+    .voteUp-off {
+        background-image: url("../../stfile/img/questions/voteupoff.png");
+        background-repeat: no-repeat;
+        display: block;
+        margin: 0 auto;
+        width: 24px;
+        height: 24px;
+    }
+
+    .voteUp-off:hover {
+        background-image: url("../../stfile/img/questions/voteup.png");
+    }
+
+    .voteUp {
+        background-image: url("../../stfile/img/questions/voteup.png");
+    }
+
+    .voteDown-off {
+        background-image: url("../../stfile/img/questions/votedownoff.png");
+        background-repeat: no-repeat;
+        /*background-position: 0 px;*/
+        display: block;
+        margin: 0 auto;
+        width: 24px;
+        height: 24px;
+    }
+
+    .voteDown-off:hover {
+        background-image: url("../../stfile/img/questions/votedown.png");
+    }
+
+    .voteDown {
+        background-image: url("../../stfile/img/questions/votedown.png");
+    }
+
+    .spnVotesCount {
+        font-size: 120%;
+        color: #545454;
+    }
+
+    .dvSimilarQuestions {
+        /*background-color: #118372;*/
+        min-height: 100px;
+        min-width: 235px;
+        float: right;
+    }
+
+    .tdVote {
+        width: 50px;
+    }
+
+    .checkAsBest {
+        padding-right: 5px;
+        font-size: 12px;
+        float: right;
+    }
+
+    .tdAnswerText {
+        max-width: 300px;
+    }
+
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------- Страница одного вопроса ---------------------------------------------------- */
 /* ------------------------------------------------------------------------------------------------------------------ */

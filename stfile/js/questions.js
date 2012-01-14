@@ -46,7 +46,7 @@ $(document).ready(function(){
                     alert('is similar');
                 } else {
                     rand = Math.random();
-                    $(".dvCategoryLabel").append("<div class='label' id='"+rand+"'><p>"+arr[j]+"</p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
+                    $(".dvCategoryLabel").append("<div class='label' id='"+rand+"'><p>"+arr[j]+"<span class='removeTag'></span></p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
                     alert(arr[j]);
                 }
             } else {
@@ -80,7 +80,7 @@ $(document).ready(function(){
 
 
         } else {
-            $(".dvCategoryLabel").append("<div class='label' id='"+$(this).attr('id')+"'><p>"+$(this).parent('').text()+"</p></div>");
+            $(".dvCategoryLabel").append("<div class='label' id='"+$(this).attr('id')+"'><p>"+$(this).parent('').text()+"<span class='removeTag'></span></p></div>");
        isTagsComplete();
         }
     });
@@ -151,4 +151,92 @@ $(document).ready(function(){
         $(".dvLastQuestions").css("display","block");
         $("#goback").remove();
     });
+
+
+    // Отдельнно один вопрос
+
+    //Нажатие на кнопку-звездочку избраное
+    $(".favorite").toggle(function() {
+            // если включаем звездочку
+            $(this).css("background-image","url('../../stfile/img/questions/star_on.png')")
+        },
+        function(){
+            // если выключаем звездочку
+            $(this).css("background-image","url('../../stfile/img/questions/star_off.png')")
+    });
+
+    //Голосование за вопрос или ответ
+    $(".voteDown-off , .voteUp-off").click(function() {
+        if ($(this).hasClass('voteUp-off')) {
+
+            $(this).addClass('voteUp');
+            $(this).parent('div').children($(".voteDown-off")).removeClass('voteDown');
+        } else {
+
+            if($(this).hasClass('voteDown-off')) {
+                $(this).addClass('voteDown');
+                $(this).parent('div').children($(".voteUp-off")).removeClass('voteUp');
+            }
+        }
+    });
+
+    $("#btnGiveAnswer").click(function() {
+        $(".frmAddAnswer").slideDown('fast');
+        $(this).css("visibility","hidden");
+    });
+
+    $(".cancelAnswer").click(function() {
+       $(".frmAddAnswer").slideUp('fast');
+       $("#btnGiveAnswer").css("visibility","visible");
+    });
+
+    $("#btnGiveAnswerNotAuth").click(function() {
+       hints('error','Что бы отвечать на вопросы вы должны быть авторизированы!');
+    });
+
+    // Добавляем новый ответ
+    $(".postAnswer").click(function() {
+        curr_textarea = $(".frmAddAnswer textarea");
+        if (curr_textarea.val() != '') {
+
+            var arr = [''],some;
+            arr['id_question'] = $("#inpQuestionID").val();
+            arr['answer_text'] = $(".frmAddAnswer textarea").val();
+            some = $(".frmAddAnswer").serialize();
+            //запись в базу данных ответа
+            $.ajax({type:"GET", async:true, data: some, url: "/questions/qhid/addAnswer", dataType:"json",
+                success:function(data){
+                    if(data){//что нужно делать если найдена запись в базе
+                        $(".tblAnswers").append('<tr><td class="bestAnswer-icon"></td>' +
+                            '<td><div class="shadowBlock "><table cellspacing="0"><tr>' +
+                            '<td><table><tr><td colspan="2"><a href="" class="username">' + data.username + ' </a>' +
+                            '<span class="time">' + data.public_date + '</span></td></tr>' +
+                            '<tr><td class="tdVote"><div class="dvVote"><a class="voteUp-off"></a><span class="spnVotesCount">0</span>' +
+                            '<a class="voteDown-off"></a></div></td><td><p>' + curr_textarea.val() + '</p>' +
+                            '</td></tr></table></td></tr></table></div></td></tr>');
+
+                        // Скролим вниз страницы к ответу пользователя
+                        $('body,html').animate({scrollTop: $(".tblAnswers").height()}, 800);
+                        curr_textarea.val('');
+
+                        $(".frmAddAnswer").slideUp('fast');
+                        $("#btnGiveAnswer").css("visibility","visible");
+
+                    }
+                    if(!data){//что нужно делать если запись в базе не найдена
+                        alert('not writed');
+                    }
+                },
+                error:function(){
+                    alert('error in ajax query, when add answer :(');
+                }
+            });
+        }
+    });
+
+    $(".checkAsBest").click(function() {
+        var some =$(this).parent('td').children('input').val();
+       alert(some);
+    });
+
 });

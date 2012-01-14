@@ -12,7 +12,7 @@
         <div class="dvCategory shadowBlock">
             <h4 class="lenta">Категории</h4>
             <div class="catTitle">
-                <a href="" class="">Наука</a><br />
+                <a href="" class="catLinks">Наука</a><br />
                 <div>
                     <a href="" class="greenCat">физика</a>
                     <a href="" class="greenCat">математика</a>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="catTitle">
-                <a href="" class="">Досуг</a><br />
+                <a href="" class="catLinks">Досуг</a><br />
                 <div>
                     <a href="" class="greenCat">дизайн</a>
                     <a href="" class="greenCat">кино</a>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="catTitle">
-                <a href="" class="">Компьютеры</a><br />
+                <a href="" class="catLinks">Компьютеры</a><br />
                 <div>
                     <a href="" class="greenCat">игры</a>
                     <a href="" class="greenCat">windows</a>
@@ -58,7 +58,7 @@
         <div class="dvTop shadowBlock">
             <table cellspacing="0" width="100%">
                 <tr class="lenta">
-                    <th class="tblTitle lenta">Самые популярные</th>
+                    <th class="lenta">Самые популярные</th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/user-icon.png"></th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/comment-icon.png"></th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/clock-icon.png"></th>
@@ -74,7 +74,7 @@
                             $tags .= '<a href="" class="greenCat">' .$pieces[$k] .'</a>';
                         }
                         echo ('<tr class="border">
-                            <td><a href=""> '.$result['popular'][$key]['title'] .'</a>'
+                            <td><a href="questions/question/'. $result['popular'][$key]['id_question'] .'"> '.$result['popular'][$key]['title'] .'</a>'
                             .'<span class="spnTags">'. $tags .'</span>'
                             .'</td>'
                             .'<td class="username"><a href="">' .$result['popular'][$key]['username'] .'</a></td>'
@@ -92,7 +92,7 @@
             <table cellspacing="0px" width="100%">
 
                 <tr class="lenta">
-                    <th class="tblTitle lenta">Новые</th>
+                    <th class="lenta">Новые</th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/user-icon.png"></th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/comment-icon.png"></th>
                     <th align="center" class="icons "><img src="../../../stfile/img/questions/clock-icon.png"></th>
@@ -108,7 +108,7 @@
                             $tags .= '<a href="" class="greenCat">' .$pieces[$k] .'</a>';
                         }
                         echo ('<tr class="border">
-                            <td><a href=""> '.$result['last'][$key]['title'] .'</a>'
+                            <td><a href="questions/question/'. $result['last'][$key]['id_question'] .'"> '.$result['last'][$key]['title'] .'</a>'
                             .'<span class="spnTags">'. $tags .'</span>'
                             .'</td>'
                             .'<td class="username"><a href="">' .$result['last'][$key]['username'] .'</a></td>'

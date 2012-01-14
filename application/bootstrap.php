@@ -116,6 +116,22 @@ Cookie::$salt = 'a234aflk234jbdf';
  * defaults for the URI.
  */
 
+/*роут для аяксов в ВиО*/
+Route::set('hide_question', 'questions/qhid/(<action>)')
+    ->defaults(array(
+    'directory'  => 'questions',
+    'controller' => 'qhid',
+    'action'     => 'getOneNews',
+));
+
+/*роут отдельного вопроса*/
+Route::set('one_question', 'questions/question(/<id>)')
+    ->defaults(array(
+    'directory'  => 'questions',
+    'controller' => 'questions',
+    'action'     => 'question',
+));
+
 /*роут поиска*/
 Route::set('search', 'search(/<action>)')
     ->defaults(array(
@@ -124,8 +140,16 @@ Route::set('search', 'search(/<action>)')
     'action'     => 'index',
 ));
 
+/*роут задания вопроса*/
+Route::set('ask_questions', 'questions/(<action>(/<id>))')
+    ->defaults(array(
+    'directory'  => 'questions',
+    'controller' => 'questions',
+    'action'     => 'ask',
+));
+
 /*роут вопросов и ответов*/
-Route::set('questions', 'questions(/<action>(/<id>))')
+Route::set('questions', 'questions(/<controller>(/<action>(/<id>)))')
 	->defaults(array(
 		'directory'  => 'questions',
 		'controller' => 'questions',
