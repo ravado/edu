@@ -63,7 +63,7 @@ class Controller_Questions_Questions extends Controller_Base {
         $auth = Auth::instance();
         if($auth->logged_in()) {
             $data['username'] = $auth->get_user()->username;
-
+            $data['id_user'] = $auth->get_user()->id;
             // Проверяем было ли что то передано формой //
             if (!empty($_POST) && ($_POST['questionTitle'] != '' || $_POST['questionFull'] != '')) {
                 $data['questionTitle'] = $_POST['questionTitle'];
@@ -114,8 +114,8 @@ class Controller_Questions_Questions extends Controller_Base {
 	}
 
     public function action_question(){
-        $questionID = $this->request->param('id');
-        $data['idQuestion'] = $questionID;
+        $data['question_id'] = $this->request->param('id');
+//        $data['idQuestion'] = $questionID;
 
         $this->template->styles = array("stfile/css/questions.css" => "screen");
         $this->template->scripts = array('stfile/js/questions.js');
@@ -130,12 +130,12 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['userAuth'] = FALSE;
         }
 
-        $data['result'] = Model::factory('Mquestions')->getOneQuestion($questionID);
+        $data['result'] = Model::factory('Mquestions')->getOneQuestion($data);
         $this->template->title = "ВиО: " .$data['result']['question'][0]['title'];
         $this->template->content = View::factory('questions/vQuestionOne',$data);
     }
-
-    public function action_addAnswer () {
-        return true;
-    }
+//
+//    public function action_addAnswer () {
+//        return true;
+//    }
 }

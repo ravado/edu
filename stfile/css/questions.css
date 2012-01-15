@@ -775,6 +775,9 @@
         background-image: url("../../stfile/img/questions/star_on.png");
     }
 
+    .favoriteChecked {
+        background-image: url("../../stfile/img/questions/star_on.png");
+    }
 
 
     .dvVote {

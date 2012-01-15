@@ -156,13 +156,65 @@ $(document).ready(function(){
     // Отдельнно один вопрос
 
     //Нажатие на кнопку-звездочку избраное
-    $(".favorite").toggle(function() {
+    $(".favorite").click(function() {
+        var star = $(".favorite");
             // если включаем звездочку
-            $(this).css("background-image","url('../../stfile/img/questions/star_on.png')")
-        },
-        function(){
-            // если выключаем звездочку
-            $(this).css("background-image","url('../../stfile/img/questions/star_off.png')")
+            if (!star.hasClass('favoriteChecked')) {
+                star.addClass('favoriteChecked');
+                $.ajax({type:"POST", async:true, data: "question_id="+$("#hQuestionId").val(), url: "/questions/qhid/addFavorite", dataType:"json",
+                    success:function(data){
+                        switch (data) {
+                            case 'inserted' : {
+//                                alert('inserted');
+                                break;
+                            }
+                            case 'not inserted' : {
+                                star.removeClass('favoriteChecked');
+//                                alert('not inserted');
+                                break;
+                            }
+                            case 'empty data' : {
+                                star.removeClass('favoriteChecked');
+//                                alert('empty data');
+                                break;
+                            }
+                            case 'not auth' : {
+                                star.removeClass('favoriteChecked');
+                                hints('error','Что бы добавлять вопросы в избранное Вы должны быть авторизированы!');
+                                break;
+                            }
+                            case 'exist' : {
+//                                alert('exist');
+                                break;
+                            }
+                        }
+                    },
+                    error:function(){
+                        star.removeClass('favoriteChecked');
+                        alert('error in ajax query, when add to favor :(');
+                    }
+                });
+            } else {
+                // если выключаем звездочку
+                star.removeClass('favoriteChecked');
+                $.ajax({type:"POST", async:true, data: "question_id="+$("#hQuestionId").val(), url: "/questions/qhid/removeFavorite", dataType:"json",
+                    success:function(data){
+                        switch (data) {
+                            case 'deleted' : {
+                                break;
+                            }
+                            case 'not deleted' : {
+                                star.addClass('favoriteChecked');
+                                break;
+                            }
+                        }
+                    },
+                    error:function(){
+                        star.addClass('favoriteChecked');
+                        alert('error in ajax query, when del from favor :(');
+                    }
+                });
+            }
     });
 
     //Голосование за вопрос или ответ
@@ -207,6 +259,12 @@ $(document).ready(function(){
             $.ajax({type:"GET", async:true, data: some, url: "/questions/qhid/addAnswer", dataType:"json",
                 success:function(data){
                     if(data){//что нужно делать если найдена запись в базе
+
+                        if ($(".searchTitle").length) {
+                            $(".searchTitle").remove();
+                            $(".tblAnswers").before("<hr>");
+                        }
+
                         $(".tblAnswers").append('<tr><td class="bestAnswer-icon"></td>' +
                             '<td><div class="shadowBlock "><table cellspacing="0"><tr>' +
                             '<td><table><tr><td colspan="2"><a href="" class="username">' + data.username + ' </a>' +

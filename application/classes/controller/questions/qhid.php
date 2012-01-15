@@ -7,7 +7,7 @@ class Controller_Questions_Qhid extends Controller {
 
 	}
 
-    /*Показываем страницу  задания вопроса*/
+    /*Добавляем ответ на вопрос в базу*/
 	public function action_addAnswer(){
         $auth = Auth::instance();
         if($auth->logged_in()) {
@@ -17,6 +17,35 @@ class Controller_Questions_Qhid extends Controller {
             $result = Model::factory('Mquestions')->addAnswer($data);
 
             echo json_encode($result);
+        }
+
+    }
+
+    /*Добавляем вопрос в избраное пользователя*/
+    public function action_addFavorite(){
+        $auth = Auth::instance();
+        if($auth->logged_in()) {
+            $data['user_id'] = $auth->get_user()->id;
+            $data['question_id'] = $_POST['question_id'];
+            $result = Model::factory('Mquestions')->addFavorite($data);
+
+            echo json_encode($result);
+        } else {
+            echo json_encode('not auth');
+        }
+
+    }
+
+    /*Удаляем вопрос из избраного пользователя*/
+    public function action_removeFavorite(){
+        $auth = Auth::instance();
+        if($auth->logged_in()) {
+            $data['user_id'] = $auth->get_user()->id;
+            $data['question_id'] = $_POST['question_id'];
+            $result = Model::factory('Mquestions')->removeFavorite($data);
+            echo json_encode($result);
+        } else {
+            echo json_encode('not auth');
         }
 
     }

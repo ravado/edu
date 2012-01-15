@@ -48,9 +48,9 @@ class Model_Mquestions extends Model_Database{
         $date = date("Y-m-d H:i:s");
 
         // Узнаем ID пользователя
-        $query2 = DB::select('id')->from('users')->where('username','=', $data['username'] );
-        $id = $query2->execute();
-        $userID = $id[0];
+        //$query2 = DB::select('id')->from('users')->where('username','=', $data['username'] );
+        //$id = $query2->execute();
+        $userID = $data['id_user'];
 
         // Выполняем запись вопроса
         $query = DB::insert('questions',array(
@@ -72,10 +72,11 @@ class Model_Mquestions extends Model_Database{
             return false;
         }
     }
-    public function  getOneQuestion($idQuestion) {
-        if(!empty($idQuestion)) {
+    public function  getOneQuestion($data) {
+        if(!empty($data)) {
 //            $query = DB::select('title')->from('questions')->where('id_question','=', $idQuestion );
 //            $some = 24;
+            $result['favorite'] = false;
             $temp = null;
             $queryQuestion = DB::select('questions.id_question',
                     'questions.title',
@@ -88,9 +89,16 @@ class Model_Mquestions extends Model_Database{
                     'questions.closed',
                     'questions.tags'
                     )->from('questions')->join('users')->on(
-                                    'users.id','=', 'questions.id_user')->on('questions.id_question','=',DB::expr($idQuestion));
+                                    'users.id','=', 'questions.id_user')->on('questions.id_question','=',DB::expr($data['question_id']));
             if ($temp = $queryQuestion->execute()) {
                 $result['question'] = $temp;
+                if(!empty($data['user_id'])) {
+                    $queryFavorite = DB::select('id_qfavorite')->from('qfavorite')->where('id_user','=',DB::expr($data['user_id']))->where('id_question','=',DB::expr($data['question_id']));
+                    $favorite = $queryFavorite->execute();
+                    if($favorite[0]['id_qfavorite'] > -1) {
+                        $result['favorite'] = true;
+                    }
+                }
             }
 
             $queryAnswers = DB::select('answers.id_answer',
@@ -100,7 +108,7 @@ class Model_Mquestions extends Model_Database{
 
                     'users.username',
 
-                    'answers.answer_text')->from('questions_and_answers')->where('questions_and_answers.id_questions','=',DB::expr($idQuestion))->join('answers')->on('answers.id_answer','=','questions_and_answers.id_answers')->join('users','LEFT')->on('users.id','=','answers.id_user');
+                    'answers.answer_text')->from('questions_and_answers')->where('questions_and_answers.id_questions','=',DB::expr($data['question_id']))->join('answers')->on('answers.id_answer','=','questions_and_answers.id_answers')->join('users','LEFT')->on('users.id','=','answers.id_user');
 
             if ($temp = $queryAnswers->execute()) {
                 $result['answers'] = $temp;
@@ -117,7 +125,7 @@ class Model_Mquestions extends Model_Database{
 
     public function addAnswer($data) {
         if (!empty($data)) {
-            $result=null;
+            $result = null;
             $tempquery = DB::select('id')->from('users')->where('username','=', $data['username']);
             $userID = $tempquery->execute();
             $shieldingText = addslashes($data['answer_text']);
@@ -151,6 +159,60 @@ class Model_Mquestions extends Model_Database{
             }
         } else {
             return false;
+        }
+    }
+
+    public function addFavorite($data) {
+        $message = '';
+        if (!empty($data)) {
+            $queryExist = DB::select('id_qfavorite')->from('qfavorite')->where('id_user','=',$data['user_id'])->where('id_question','=',$data['question_id']);
+            $exist = $queryExist->execute();
+            $some = $exist[0]['id_qfavorite'];
+            if($some > -1) {
+                $message = 'exist';
+                return $message;
+            } else {
+                $query = DB::insert('qfavorite',array(
+                    'id_user',
+                    'id_question',
+                ))->values(array($data['user_id'], $data['question_id']));
+                if($temp = $query->execute()) {
+                    $message = 'inserted';
+                    return $message;
+                } else {
+                    $message = 'not inserted';
+                    return $message;
+                }
+            }
+        } else {
+            $message = 'empty data';
+            return $message;
+        }
+
+    }
+
+    public function removeFavorite($data) {
+        $message = '';
+        if (!empty($data)) {
+            $query = DB::select('id_qfavorite')->from('qfavorite')->where('id_user','=',$data['user_id'])->where('id_question','=',$data['question_id']);
+            $id_qfavorite = $query->execute();
+            $some = $id_qfavorite[0]['id_qfavorite'];
+            if($some > -1) {
+                $query2 = DB::delete('qfavorite')->where('id_qfavorite','=',$id_qfavorite[0]['id_qfavorite']);
+                if($result = $query2->execute()) {
+                    $message = 'deleted';
+                    return $message;
+                } else {
+                    $message = 'not deleted';
+                    return $message;
+                }
+            } else {
+                $message = 'not found';
+                return $message;
+            }
+        } else {
+            $message = 'empty data';
+            return $message;
         }
     }
 

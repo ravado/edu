@@ -2,7 +2,7 @@
     <div class="spnTitle Page">Вопросы и ответы: вопрос</div>
 
 <!---->
-<?php print_r($result['question'][0]); ?>
+<?php //if ($result['favorite']) echo 'fav'; else echo 'not' ?>
 
     <div class="dvSimilarQuestions shadowBlock"><h4 class="lenta">тут будет нечто</h4></div>
 
@@ -11,7 +11,7 @@
         <div class="dvOneQuestion shadowBlock">
             <table cellspacing="0">
                 <tr class="lenta">
-                    <th class="lenta""><span class="favorite"></span><span class="oneQuestion"><?php echo $result['question'][0]['title'] ?></span></th>
+                    <th class="lenta"><span class="favorite <?php if ($result['favorite']) echo 'favoriteChecked' ?>"></span><span class="oneQuestion"><?php echo $result['question'][0]['title'] ?></span></th>
                 </tr>
                 <tr>
                     <td>
@@ -21,6 +21,7 @@
                                 <td colspan="2">
                                     <a href="" class="username"><?php echo $result['question'][0]['username'] ?></a>
                                     <span class="time"><?php echo $result['question'][0]['public_date']?></span>
+                                    <input type="hidden" id="hQuestionId" value=" <?php echo $result['question'][0]['id_question']; ?>" >
                                 </td>
                             </tr>
                             <tr>
@@ -60,7 +61,7 @@
                             </tr>
                             <tr style="display: ;">
                                 <td colspan="2">
-                                    <?php if($userAuth) {
+                                    <?php if($userAuth && $result['question'][0]['closed'] == false) {
                                             echo '<form class="frmAddAnswer">
                                                 <table>
                                                     <tr><td><textarea name="answer_text" class="inpColor"></textarea>
@@ -90,17 +91,26 @@
         <div class="dvAllAnswers">
 <!--            <h4 class="lenta ">Ответы</h4>-->
             <?php
-                if($userAuth) {
+                if($userAuth && $result['question'][0]['closed'] == false && $result['question'][0]['id_user'] != $user_id) {
                     echo '<a class="btnSilver" id="btnGiveAnswer">Ответить</a>';
-                } else {
-                    echo '<a class="btnSilver" id="btnGiveAnswerNotAuth">Ответить</a>';
+                } elseif(!$userAuth) {
+                    if ($result['question'][0]['closed']) {
+                        echo '<a class="btnSilver" style="visibility: hidden;" id="btnGiveAnswerNotAuth">Ответить</a>';
+
+                    } else {
+                        echo '<a class="btnSilver" id="btnGiveAnswerNotAuth">Ответить</a>';
+                    }
+
+                } elseif ($result['question'][0]['closed'] || $result['question'][0]['id_user'] == $user_id) {
+                    echo '<a class="btnSilver" style="visibility: hidden;" id="btnGiveAnswerNotAuth">Ответить</a>';
+
                 }
             ?>
             <br />
 
             <table class="tblAnswers">
                 <?php
-                if( ($count = count($result['answers'])) == 0 ) {
+                if( ($count = count($result['answers'])) == 0 && $result['question'][0]['id_user'] != $user_id) {
                     echo '<p class="searchTitle"> Увы ответов на даный вопрос пока нет, станьте первым </p>';
                 } else if($count > 0) {
                     $bestExist = false;
@@ -149,11 +159,14 @@
 
                    }
 
+                    $checkAsBest = '';
                     if($bestExist == true ) {
                         $checkAsBest = '';
 //                        echo 'best is true';
-                    } else if($bestExist == false && $user_id == $result['question'][0]['id_user']) {
+                    } else if($bestExist == false && !empty($user_id)) {
+                        if($user_id == $result['question'][0]['id_user']) {
                         $checkAsBest = "<a class='checkAsBest'>Признать ответ лучшим</a>";
+                        }
 //                        echo 'best is not true';
                     } else {
                         $checkAsBest ='';
