@@ -115,6 +115,7 @@ class Controller_Questions_Questions extends Controller_Base {
 
     public function action_question(){
         $data['question_id'] = $this->request->param('id');
+        $data['user_id'] = -1;
 //        $data['idQuestion'] = $questionID;
 
         $this->template->styles = array("stfile/css/questions.css" => "screen");

@@ -49,4 +49,30 @@ class Controller_Questions_Qhid extends Controller {
         }
 
     }
+
+
+    public function action_voteUp() {
+        $auth = Auth::instance();
+        if($auth->logged_in()) {
+            $data['user_id'] = $auth->get_user()->id;
+            $data['qa_id'] = $_POST['qa_id'];
+            $result = Model::factory('Mquestions')->voteUp($data);
+            echo json_encode($result);
+        } else {
+            echo json_encode('not auth');
+        }
+    }
+
+    public function action_voteDown() {
+        $auth = Auth::instance();
+        if($auth->logged_in()) {
+            $data['user_id'] = $auth->get_user()->id;
+            $data['qa_id'] = $_POST['qa_id'];
+            $result = Model::factory('Mquestions')->voteDown($data);
+            echo json_encode($result);
+        } else {
+            echo json_encode('not auth');
+        }
+    }
+
 }

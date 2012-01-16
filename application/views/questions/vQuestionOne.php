@@ -2,7 +2,26 @@
     <div class="spnTitle Page">Вопросы и ответы: вопрос</div>
 
 <!---->
-<?php //if ($result['favorite']) echo 'fav'; else echo 'not' ?>
+<?php
+    foreach ($result['answers'] as $k => $v) {
+        print_r($result['question'][$k]);
+        echo '<br><br>';
+    }
+    $voteClassDown = '';
+    $voteClassUp = '';
+
+    //Проверка голосовал ли этот человек уже
+    if(!empty($result['question'][0]['value'])) {
+        if($result['question'][0]['value'] == 1) {
+            $voteClassUp = 'voteUp';
+            $voteClassDown = '';
+        } elseif ($result['question'][0]['value'] == -1) {
+            $voteClassUp = '';
+            $voteClassDown = 'voteDown';
+        }
+    }
+?>
+
 
     <div class="dvSimilarQuestions shadowBlock"><h4 class="lenta">тут будет нечто</h4></div>
 
@@ -18,19 +37,20 @@
                         <table>
                             <tr>
 
-                                <td colspan="2">
+                                <td colspan="2" class="itemInfo">
                                     <a href="" class="username"><?php echo $result['question'][0]['username'] ?></a>
                                     <span class="time"><?php echo $result['question'][0]['public_date']?></span>
                                     <input type="hidden" id="hQuestionId" value=" <?php echo $result['question'][0]['id_question']; ?>" >
+                                    <input type="hidden" class="hQAid" value=" <?php echo $result['question'][0]['id_questions_and_answers']; ?>" >
                                 </td>
                             </tr>
                             <tr>
                                 <!-- Голосовалочка -->
                                 <td class="tdVote">
                                     <div class="dvVote">
-                                        <a class="voteUp-off"></a>
+                                        <a class="voteUp-off <?php echo $voteClassUp; ?>"></a>
                                         <span class="spnVotesCount"><?php echo $result['question'][0]['rating'] ?></span>
-                                        <a class="voteDown-off"></a>
+                                        <a class="voteDown-off <?php echo $voteClassDown; ?>"></a>
                                     </div>
                                 </td>
                                 <td>
@@ -115,9 +135,26 @@
                 } else if($count > 0) {
                     $bestExist = false;
                     echo '<hr>';
+
+
+
                     // Ищем сразу есть ли лучший ответ и выводим его
                     foreach ($result['answers'] as $k=>$v) {
                         if ($result['answers'][$k]['best'] == true) {
+
+                            $voteClassDown = '';
+                            $voteClassUp = '';
+                            //Проверка голосовал ли этот человек уже
+                            if(!empty($result['answers'][$k]['value'])) {
+                                if($result['answers'][$k]['value'] == 1) {
+                                    $voteClassUp = 'voteUp';
+                                    $voteClassDown = '';
+                                } elseif ($result['answers'][$k]['value'] == -1) {
+                                    $voteClassUp = '';
+                                    $voteClassDown = 'voteDown';
+                                }
+                            }
+
                         echo '<tr>
                                 <td class="bestAnswer-icon"><span class="bestAnswerLabel" title="лучший ответ"></span></td>
                                 <td>
@@ -127,20 +164,21 @@
                                                 <td>
                                                     <table>
                                                         <tr>
-                                                            <td colspan="2">
+                                                            <td colspan="2" class="itemInfo">
                                                                 <a href="" class="username">' .$result['answers'][$k]['username'] .'</a>
                                                                 <span class="time">' .$result['answers'][$k]['public_date'] .'</span>
                                                                 <span class="titleToBest">этот ответ выбран в качестве лучшего</span>
                                                                 <input type="hidden" value="' .$result['answers'][$k]['id_answer'] .'">
+                                                                <input type="hidden" class="hQAid" value="' .$result['answers'][$k]['id_questions_and_answers'] .'" >
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <!-- Голосовалочка -->
                                                             <td class="tdVote">
                                                                 <div class="dvVote">
-                                                                    <a class="voteUp-off"></a>
+                                                                    <a class="voteUp-off ' .$voteClassUp .' "></a>
                                                                     <span class="spnVotesCount">' .$result['answers'][$k]['rating'] .'</span>
-                                                                    <a class="voteDown-off"></a>
+                                                                    <a class="voteDown-off ' .$voteClassDown .' "></a>
                                                                 </div>
                                                             </td>
                                                             <td class="tdAnswerText" ><p>' .$result['answers'][$k]['answer_text'] .'</p>
@@ -180,7 +218,19 @@
                             } else {
                                 $isBadRating = '';
                             }
-                            
+
+                            $voteClassDown = '';
+                            $voteClassUp = '';
+                            //Проверка голосовал ли этот человек уже
+                            if(!empty($result['answers'][$k]['value'])) {
+                                if($result['answers'][$k]['value'] == 1) {
+                                    $voteClassUp = 'voteUp';
+                                    $voteClassDown = '';
+                                } elseif ($result['answers'][$k]['value'] == -1) {
+                                    $voteClassUp = '';
+                                    $voteClassDown = 'voteDown';
+                                }
+                            }
 
                             
                             echo '<tr>
@@ -194,10 +244,11 @@
                                     <td>
                                         <table>
                                             <tr>
-                                                <td colspan="2">
+                                                <td colspan="2" class="itemInfo">
                                                     <a href="" class="username">' .$result['answers'][$k]['username'] .'</a>
                                                     <span class="time">' .$result['answers'][$k]['public_date'] .'</span>
                                                     <input type="hidden" value="' .$result['answers'][$k]['id_answer'] .'">
+                                                    <input type="hidden" class="hQAid" value="' .$result['answers'][$k]['id_questions_and_answers'] .'" >
                                                     ' .$checkAsBest .'
                                                 </td>
                                             </tr>
@@ -205,9 +256,9 @@
                                                 <!-- Голосовалочка -->
                                                 <td class="tdVote">
                                                     <div class="dvVote">
-                                                        <a class="voteUp-off"></a>
+                                                        <a class="voteUp-off ' .$voteClassUp .' "></a>
                                                         <span class="spnVotesCount">' .$result['answers'][$k]['rating'] .'</span>
-                                                        <a class="voteDown-off"></a>
+                                                        <a class="voteDown-off ' .$voteClassDown .' "></a>
                                                     </div>
                                                 </td>
                                                 <td class="tdAnswerText">

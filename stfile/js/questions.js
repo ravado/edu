@@ -219,16 +219,77 @@ $(document).ready(function(){
 
     //Голосование за вопрос или ответ
     $(".voteDown-off , .voteUp-off").click(function() {
+
+        var curr_id = $(this).parent().parent().parent().parent().find($(".hQAid")),
+            curr_span = $(this).parent('div').children('span'),
+            curr_span_text = parseInt(curr_span.text()),
+            cuur_item = $(this);
         if ($(this).hasClass('voteUp-off')) {
 
-            $(this).addClass('voteUp');
-            $(this).parent('div').children($(".voteDown-off")).removeClass('voteDown');
-        } else {
+            // Отдаем положительный голос
+            $.ajax({type:"POST", async:true, data: "qa_id="+curr_id.val(), url: "/questions/qhid/voteUp", dataType:"json",
+                success:function(data){
+                    switch (data) {
+                        case 'voted up' : {
+                            curr_span.text(curr_span_text+1);
+                            cuur_item.addClass('voteUp');
+                            cuur_item.parent('div').children($(".voteDown-off")).removeClass('voteDown');
+                            break;
+                        }
+                        case 'changed to +2' : {
+                            curr_span.text(curr_span_text+2);
+                            cuur_item.addClass('voteUp');
+                            cuur_item.parent('div').children($(".voteDown-off")).removeClass('voteDown');
+                            break;
+                        }
+                        case 'empty data' : {
 
-            if($(this).hasClass('voteDown-off')) {
-                $(this).addClass('voteDown');
-                $(this).parent('div').children($(".voteUp-off")).removeClass('voteUp');
-            }
+                            break;
+                        }
+                        case 'not auth' : {
+                            hints('info','Что бы голосовать необходимо <a href="/">авторизироваться</a>')
+                            break;
+                        }
+                    }
+                },
+                error:function(){
+                    alert('error in ajax query, when vote up :(');
+                }
+            });
+
+
+        } else if(cuur_item.hasClass('voteDown-off')) {
+
+            // Отдаем  отрицательный голос
+            $.ajax({type:"POST", async:true, data: "qa_id="+curr_id.val(), url: "/questions/qhid/voteDown", dataType:"json",
+                success:function(data){
+                    switch (data) {
+                        case 'voted down' : {
+                            curr_span.text(curr_span_text-1);
+                            cuur_item.addClass('voteDown');
+                            cuur_item.parent('div').children($(".voteUp-off")).removeClass('voteUp');
+                            break;
+                        }
+                        case 'changed to -2' : {
+                            curr_span.text(curr_span_text-2);
+                            cuur_item.addClass('voteDown');
+                            cuur_item.parent('div').children($(".voteUp-off")).removeClass('voteUp');
+                            break;
+                        }
+                        case 'empty data' : {
+
+                            break;
+                        }
+                        case 'not auth' : {
+                            hints('info','Что бы голосовать необходимо <a href="/">авторизироваться</a>')
+                            break;
+                        }
+                    }
+                },
+                error:function(){
+                    alert('error in ajax query, when vote down :(');
+                }
+            });
         }
     });
 
