@@ -337,6 +337,16 @@ class Model_Mquestions extends Model_Database{
         }
     }
 
+    public function checkAsBest($data) {
+        if (!empty($data)) {
+            DB::update('answers')->set(array('best' => '1' ))->
+                where('id_answer','=',DB::expr($data['answer_id']))->execute();
+            DB::update('questions')->set(array('closed' => '1'))->where('id_question','=',DB::expr($data['question_id']))->execute();
+            return 'checked';
+        } else {
+            return 'empty data';
+        }
+    }
 
 }
 

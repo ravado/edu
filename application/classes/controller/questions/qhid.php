@@ -75,4 +75,17 @@ class Controller_Questions_Qhid extends Controller {
         }
     }
 
+    public function action_checkAsBest() {
+        $auth = Auth::instance();
+        if($auth->logged_in()) {
+            $data['user_id'] = $auth->get_user()->id;
+            $data['answer_id'] = $_POST['answer_id'];
+            $data['question_id'] = $_POST['question_id'];
+            $result = Model::factory('Mquestions')->checkAsBest($data);
+            echo json_encode($result);
+        } else {
+            echo json_encode('not auth');
+        }
+    }
+
 }

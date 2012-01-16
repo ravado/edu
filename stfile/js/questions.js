@@ -353,9 +353,36 @@ $(document).ready(function(){
         }
     });
 
+
+
+    //Выбрать лучший ответ
     $(".checkAsBest").click(function() {
-        var some =$(this).parent('td').children('input').val();
-       alert(some);
+        var curr_item = $(this),
+            curr_answer_id = curr_item.parent('td').children('.hAnswerId');
+
+        //Запрос на отметку ответа как лучшего
+        $.ajax({type:"POST", async:true, data: "answer_id="+curr_answer_id.val() + "&" +"question_id="+$("#hQuestionId").val(), url: "/questions/qhid/checkAsBest", dataType:"json",
+            success:function(data){
+                switch(data) {
+                    case 'checked' : {
+                        window.location.reload();
+                        break;
+                    }
+                    case 'not auth' : {
+                        alert('not auth');
+                        break;
+                    }
+                    case 'empty data' : {
+                        alert('empty data');
+                        break;
+                    }
+                }
+            },
+            error:function(){
+                alert('error in ajax query, when check as best :(');
+            }
+        });
+
     });
 
 });

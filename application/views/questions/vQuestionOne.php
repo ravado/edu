@@ -3,10 +3,10 @@
 
 <!---->
 <?php
-    foreach ($result['answers'] as $k => $v) {
-        print_r($result['question'][$k]);
-        echo '<br><br>';
-    }
+//    foreach ($result['answers'] as $k => $v) {
+//        print_r($result['question'][$k]);
+//        echo '<br><br>';
+//    }
     $voteClassDown = '';
     $voteClassUp = '';
 
@@ -40,8 +40,8 @@
                                 <td colspan="2" class="itemInfo">
                                     <a href="" class="username"><?php echo $result['question'][0]['username'] ?></a>
                                     <span class="time"><?php echo $result['question'][0]['public_date']?></span>
-                                    <input type="hidden" id="hQuestionId" value=" <?php echo $result['question'][0]['id_question']; ?>" >
-                                    <input type="hidden" class="hQAid" value=" <?php echo $result['question'][0]['id_questions_and_answers']; ?>" >
+                                    <input type="hidden" id="hQuestionId" value="<?php echo $result['question'][0]['id_question']; ?>" >
+                                    <input type="hidden" class="hQAid" value="<?php echo $result['question'][0]['id_questions_and_answers']; ?>" >
                                 </td>
                             </tr>
                             <tr>
@@ -168,7 +168,7 @@
                                                                 <a href="" class="username">' .$result['answers'][$k]['username'] .'</a>
                                                                 <span class="time">' .$result['answers'][$k]['public_date'] .'</span>
                                                                 <span class="titleToBest">этот ответ выбран в качестве лучшего</span>
-                                                                <input type="hidden" value="' .$result['answers'][$k]['id_answer'] .'">
+                                                                <input type="hidden" class="hAnswerId" value="' .$result['answers'][$k]['id_answer'] .'">
                                                                 <input type="hidden" class="hQAid" value="' .$result['answers'][$k]['id_questions_and_answers'] .'" >
                                                             </td>
                                                         </tr>
@@ -247,7 +247,7 @@
                                                 <td colspan="2" class="itemInfo">
                                                     <a href="" class="username">' .$result['answers'][$k]['username'] .'</a>
                                                     <span class="time">' .$result['answers'][$k]['public_date'] .'</span>
-                                                    <input type="hidden" value="' .$result['answers'][$k]['id_answer'] .'">
+                                                    <input type="hidden" class="hAnswerId" value="' .$result['answers'][$k]['id_answer'] .'">
                                                     <input type="hidden" class="hQAid" value="' .$result['answers'][$k]['id_questions_and_answers'] .'" >
                                                     ' .$checkAsBest .'
                                                 </td>
