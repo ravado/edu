@@ -11,29 +11,68 @@ class Model_Mquestions extends Model_Database{
         $last = DB::select('questions.id_question',
                             'questions.title',
                             'questions.id_user',
-                            'questions.tags',
                             'questions.public_date',
                             'questions.answers_count',
-                            'users.username')->from('questions')->join('users')->on('questions.id_user','=','users.id')->limit(20)->order_by('public_date','DESC');
-        if ($result_last = $last->execute()->as_array()) {
-            $result['last'] = $result_last;
-        } else {
-            $result['last'] = null;
+                            'users.username'
+                            )->
+            from('questions')
+            ->join('users')->on('questions.id_user','=','users.id')
+            ->order_by('questions.public_date','DESC')->limit(5)
+            ->execute()->as_array();
+        if(!empty($last)) {
+            foreach($last as $k=>$v) {
+                $temp = DB::select('questions_cat.id_question',
+                    'questions_cat.id_subcategory',
+                    'subcategory.id_subcategory',
+                    'subcategory.stitle')
+                    ->from('questions_cat')->where('questions_cat.id_question','=', $last[$k]['id_question'])
+                    ->join('subcategory')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->execute()->as_array();
+                array_push($last[$k],$temp);
+            }
+
+            $result['last'] = $last;
         }
+
 
 
         $popular = DB::select('questions.id_question',
             'questions.title',
             'questions.id_user',
-            'questions.tags',
             'questions.public_date',
             'questions.answers_count',
-            'users.username')->from('questions')->join('users')->on('questions.id_user','=','users.id')->limit(7)->order_by('answers_count','DESC');
-        if ($result_popular = $popular->execute()->as_array()) {
-            $result['popular'] = $result_popular;
-        } else {
-            $result['popular'] = null;
+            'users.username')
+            ->from('questions')
+            ->join('users')->on('questions.id_user','=','users.id')
+            ->limit(7)->order_by('answers_count','DESC')->execute()->as_array();
+
+        if(!empty($popular)) {
+            foreach($popular as $k=>$v) {
+                $temp = DB::select('questions_cat.id_question',
+                    'questions_cat.id_subcategory',
+                    'subcategory.id_subcategory',
+                    'subcategory.stitle')
+                    ->from('questions_cat')->where('questions_cat.id_question','=', $popular[$k]['id_question'])
+                    ->join('subcategory')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->execute()->as_array();
+                array_push($popular[$k],$temp);
+            }
+            $result['popular'] = $popular;
         }
+
+
+
+        /*$popular = DB::select('questions.id_question',
+            'questions.title',
+            'questions.id_user',
+            'questions.public_date',
+            'questions.answers_count',
+            'users.username',
+            'questions_cat.id_question',
+            'subcategory.id_subcategory',
+            'subcategory.stitle')->
+            from('questions')->where('questions.id_question','>','0')->join('users')->
+            on('questions.id_user','=','users.id')->join('questions_cat')->on('questions_cat.id_question','=','questions.id_question')->
+            join('subcategory')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->
+            limit(100)->order_by('questions.answers_count','DESC')->execute()->as_array();*/
 
         return $result;
 
@@ -44,29 +83,74 @@ class Model_Mquestions extends Model_Database{
         $qTitle = $data['questionTitle'];
         $qFull = $data['questionFull'];
 
-        $qTags = $data['tags'];
         $date = date("Y-m-d H:i:s");
-
-        // Узнаем ID пользователя
-        //$query2 = DB::select('id')->from('users')->where('username','=', $data['username'] );
-        //$id = $query2->execute();
         $userID = $data['id_user'];
+
+        //Выбираем все записи с таблицы подкатегорий для сверки на существование добавленых подкатегорий
+        $some =  DB::select('id_subcategory','stitle')->from('subcategory')->execute()->as_array();
+
+        //В этот массив будем записывать id подкатегорий которые уже есть в базе
+        $catexist = array();
+        $count = 0;
+        foreach($some as $k=>$v) {
+
+            //Ищем совпадения
+            foreach($data['cat'] as $key=>$val) {
+                if($some[$k]['stitle'] == $data['cat'][$key]) {
+
+                    //Найденные подкатегории удаляем со списка поиска
+                    unset($data['cat'][$key]);
+
+                    //Записываем id подкатегории
+                    $catexist[$count] = $some[$k]['id_subcategory'];
+                    $count++;
+                }
+            }
+        }
+
+        // Тех категорий которых не было в базе записываем в нее
+
+        foreach ($data['cat'] as $k=>$v) {
+
+            // Id только что записаных данных сохраняем
+            $idsubcat[$k] = DB::insert('subcategory', array('stitle'))->
+                values(array($data['cat'][$k]))->execute();
+            array_push($catexist,$idsubcat[$k][0]);
+        }
+
+
+        // Из 2х массивов содержащих id подкатегорий делаем один
+//        $nmass[] = array_merge($catexist,$idsubcat[0]);
+//        foreach($catexist as $k=>$v) {
+//            $nmass[$k] = $catexist[$k];
+//        }
+//        foreach($idsubcat as $k=>$v) {
+//            $nmass[$k+count($catexist)] = $idsubcat[$k][0];
+//        }
+
+
+
 
         // Выполняем запись вопроса
         $query = DB::insert('questions',array(
                     'title',
                     'full',
                     'id_user',
-                    'tags',
-                    'public_date',
+                    'public_date'
                     ))->values(array(
                         $qTitle,
                         $qFull,
                         $userID,
-                        $qTags,
                         $date));
         if($some = $query->execute()){
             $temp = DB::insert('questions_and_answers',array('id_questions'))->values(array($some[0]))->execute();
+
+            //Теперь вставляем в главную таблицу категорий запись с id вопроса и id категорий
+            foreach ($catexist as $k=>$v) {
+                DB::insert('questions_cat', array('id_question','id_subcategory'))->
+                    values(array($some[0],$catexist[$k]))->execute();
+            }
+
             return true;
         } else {
             return false;
@@ -87,7 +171,6 @@ class Model_Mquestions extends Model_Database{
                     'questions.public_date',
                     'questions.full',
                     'questions.closed',
-                    'questions.tags',
                     'questions_and_answers.id_questions_and_answers',
                     'vote.value')->
                 from('questions')->join('users')->
@@ -96,9 +179,9 @@ class Model_Mquestions extends Model_Database{
                 on('questions_and_answers.id_questions','=',DB::expr($data['question_id']))->
                 on('questions_and_answers.id_answers','is', DB::expr('null'))->join('vote','LEFT')->
                 on('vote.id_user','=',DB::expr($data['user_id']))->
-                on('vote.id_qa','=','questions_and_answers.id_questions_and_answers');;
-            if ($temp = $queryQuestion->execute()) {
-                $result['question'] = $temp;
+                on('vote.id_qa','=','questions_and_answers.id_questions_and_answers')->execute()->as_array();
+            if (!empty($queryQuestion)) {
+
                 if(!empty($data['user_id'])) {
                     $queryFavorite = DB::select('id_qfavorite')->from('qfavorite')->where('id_user','=',DB::expr($data['user_id']))->
                         where('id_question','=',DB::expr($data['question_id']));
@@ -107,6 +190,15 @@ class Model_Mquestions extends Model_Database{
                         $result['favorite'] = true;
                     }
                 }
+
+                $temp = DB::select('questions_cat.id_question',
+                    'questions_cat.id_subcategory',
+                    'subcategory.id_subcategory',
+                    'subcategory.stitle')
+                    ->from('questions_cat')->where('questions_cat.id_question','=', $queryQuestion[0]['id_question'])
+                    ->join('subcategory')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->execute()->as_array();
+                array_push($queryQuestion,$temp);
+                $result['question'] = $queryQuestion;
             }
 
             $queryAnswers = DB::select('answers.id_answer',
@@ -121,17 +213,15 @@ class Model_Mquestions extends Model_Database{
                 where('questions_and_answers.id_questions','=',DB::expr($data['question_id']))->join('answers')->
                 on('answers.id_answer','=','questions_and_answers.id_answers')->join('users','LEFT')->
                 on('users.id','=','answers.id_user')->join('vote','LEFT')->on('vote.id_user','=',DB::expr($data['user_id']))->
-                on('vote.id_qa','=','questions_and_answers.id_questions_and_answers');
+                on('vote.id_qa','=','questions_and_answers.id_questions_and_answers')->execute()->as_array();
 
-            if ($temp = $queryAnswers->execute()) {
-                $result['answers'] = $temp;
+            if (!empty($queryAnswers)) {
+                $result['answers'] = $queryAnswers;
             }
 
-            if ($temp != null) {
+
                 return $result;
-            } else {
-                return false;
-            }
+
         }
     }
 
@@ -346,6 +436,25 @@ class Model_Mquestions extends Model_Database{
         } else {
             return 'empty data';
         }
+    }
+
+    public function getAllCategories($data) {
+        $some = DB::select('questions.id_question', 'questions_cat.id_questions_cat',
+            'questions_cat.id_subcategory' ,'subcategory.id_subcategory', 'subcategory.stitle')->
+            from('questions')->where('questions.id_question','>','54')->
+            join('questions_cat','LEFT')->
+            on('questions_cat.id_question','=','questions.id_question')->
+            join('subcategory','LEFT')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->
+            execute();
+
+        $some2 = DB::select('subcategory.id_subcategory', 'subcategory.stitle', 'category.id_category',
+            'category.ctitle')->
+            from('category')->where('category.ctitle','!=','usercategory')->
+            join('subcategory')->
+            on('subcategory.id_category','=','category.id_category')->order_by('subcategory.id_category','ASC')->
+            execute();
+
+        return $some2;
     }
 
 }

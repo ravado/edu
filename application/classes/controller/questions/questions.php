@@ -65,10 +65,11 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['username'] = $auth->get_user()->username;
             $data['id_user'] = $auth->get_user()->id;
             // Проверяем было ли что то передано формой //
-            if (!empty($_POST) && ($_POST['questionTitle'] != '' || $_POST['questionFull'] != '')) {
+            if (!empty($_POST) && ($_POST['questionTitle'] != '')) {
                 $data['questionTitle'] = $_POST['questionTitle'];
                 $data['questionFull'] = $_POST['questionFull'];
                 $data['tags'] = '';
+                $data['cat'] = $_POST['tags'];
                 $temp = $_POST['tags'];
                 foreach($temp as $key=>$v){
                     if(next($temp)) {
@@ -117,26 +118,41 @@ class Controller_Questions_Questions extends Controller_Base {
         $data['question_id'] = $this->request->param('id');
         $data['user_id'] = -1;
 //        $data['idQuestion'] = $questionID;
+        if(!empty($data['question_id'])) {
 
+            $this->template->styles = array("stfile/css/questions.css" => "screen");
+            $this->template->scripts = array('stfile/js/questions.js');
+
+            /*Проверяем статус пользователя (Авторизирован или нет)*/
+            $auth = Auth::instance();
+            if($auth->logged_in()){
+                $data['userAuth'] = TRUE;
+                $data['userName'] = $auth->get_user()->username;
+                $data['user_id'] = $auth->get_user()->id;
+            }else{
+                $data['userAuth'] = FALSE;
+            }
+
+            $data['result'] = Model::factory('Mquestions')->getOneQuestion($data);
+            $this->template->title = "ВиО: " .$data['result']['question'][0]['title'];
+            $this->template->content = View::factory('questions/vQuestionOne',$data);
+        } else {
+            $this->template->title = "ВиО: вопрос" ;
+        }
+    }
+
+    public function action_category () {
         $this->template->styles = array("stfile/css/questions.css" => "screen");
         $this->template->scripts = array('stfile/js/questions.js');
 
-        /*Проверяем статус пользователя (Авторизирован или нет)*/
-        $auth = Auth::instance();
-        if($auth->logged_in()){
-            $data['userAuth'] = TRUE;
-            $data['userName'] = $auth->get_user()->username;
-            $data['user_id'] = $auth->get_user()->id;
-        }else{
-            $data['userAuth'] = FALSE;
+        $data['category_id'] = 'lll';//$this->request->param('id');
+        if (!empty($data['category_id'])) {
+            $data['result'] = Model::factory('Mquestions')->getAllCategories($data);
+            $this->template->title = "ВиО: ";
+            $this->template->content = View::factory('questions/vQuestionCategory',$data);
+        } else {
+            $this->template->title = "ВиО: " ."Все категории";
+            $this->template->content = View::factory('questions/vQuestionCategory',$data);
         }
-
-        $data['result'] = Model::factory('Mquestions')->getOneQuestion($data);
-        $this->template->title = "ВиО: " .$data['result']['question'][0]['title'];
-        $this->template->content = View::factory('questions/vQuestionOne',$data);
     }
-//
-//    public function action_addAnswer () {
-//        return true;
-//    }
 }

@@ -1,6 +1,6 @@
 <div id="dvContent">
     <div class="spnTitle Page">Задать вопрос</div>
-
+    <p class="navigation"><a href="/questions">главная ВиО</a> => задать вопрос</p>
     <!--  Блок с информацией по каждому полю справа  -->
     <div class="dvRightHelp">
         <div>

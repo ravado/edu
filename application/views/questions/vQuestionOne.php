@@ -1,12 +1,9 @@
 <div id="dvContent">
     <div class="spnTitle Page">Вопросы и ответы: вопрос</div>
-
+    <p class="navigation"><a href="/questions">главная ВиО</a> => <a href="/questions">список вопросов</a> => вопрос</p>
 <!---->
 <?php
-//    foreach ($result['answers'] as $k => $v) {
-//        print_r($result['question'][$k]);
-//        echo '<br><br>';
-//    }
+
     $voteClassDown = '';
     $voteClassUp = '';
 
@@ -66,13 +63,16 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <?php $tags = '';
+                                    <?php
+                                    $tags = '';
                                     $countTags = 0;
-                                    $pieces = explode(",", $result['question'][0]['tags']);
-                                    foreach ($pieces as $k=>$v) {
-                                    $tags .= '<a href="" class="greenCat">' .$pieces[$k] .'</a>';
-                                        $countTags++;                                        
-                                    } ?>
+                                    $question = $result['question'];
+
+                                    foreach($question[1] as $key=>$val) {
+                                        $tags .= '<a href="" class="greenCat">' .$question[1][$key]['stitle'] .'</a>';
+                                        $countTags++;
+                                    }
+                                    ?>
                                     <span class="catLinks"><?php if($countTags > 1) echo 'Категории:'; else echo 'Категория' ?></span> <span class="spnTags">
                                     <?php
                                         echo $tags;
