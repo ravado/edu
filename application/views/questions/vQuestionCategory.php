@@ -4,11 +4,11 @@
     <div class="shadowBlock dvAllCategory">
         <table cellpadding="0" cellspacing="0">
     <?php
-
-//    foreach ($result as $k=>$v) {
-//        print_r($result[$k]);
-//        echo '<br>';
-//    }
+/*
+    foreach ($result as $k=>$v) {
+        print_r($result[$k]);
+        echo '<br>';
+    }*/
 
     $some = -1;
     $count = 0;
@@ -18,7 +18,7 @@
                 echo '</tr><tr>';
                 $count = 0;
             }
-            echo '<td><a href="' .$result[$key]['id_subcategory'] .'" class="greenCat">' .$result[$key]['stitle'] .'</td>';
+            echo '<td><a href="all/category/' .$result[$key]['id_subcategory'] .'" class="greenCat">' .$result[$key]['stitle'] .'</td>';
             $count++;
 
         } else {
@@ -30,7 +30,7 @@
             }
             echo '<th class="lenta" colspan="5">' .$result[$key]['ctitle'] .'</th>';
             echo '<tr>';
-            echo '<td><a href="' .$result[$key]['id_subcategory'] .'" class="greenCat">' .$result[$key]['stitle'] .'</td>';
+            echo '<td><a href="all/category/' .$result[$key]['id_subcategory'] .'" class="greenCat">' .$result[$key]['stitle'] .'</td>';
             $count++;
 
         }

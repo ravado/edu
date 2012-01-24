@@ -6,17 +6,20 @@
 class Model_Mquestions extends Model_Database{
 
     // Выводим на главную ВиО данные из бд
-    public  function mainQA(){
+    public  function mainQA($data){
         $result = null;
         $last = DB::select('questions.id_question',
                             'questions.title',
                             'questions.id_user',
                             'questions.public_date',
                             'questions.answers_count',
-                            'users.username'
+                            'users.username',
+                            'qfavorite.id_qfavorite'
                             )->
             from('questions')
             ->join('users')->on('questions.id_user','=','users.id')
+            ->join('qfavorite','left')
+            ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
             ->order_by('questions.public_date','DESC')->limit(5)
             ->execute()->as_array();
         if(!empty($last)) {
@@ -40,9 +43,12 @@ class Model_Mquestions extends Model_Database{
             'questions.id_user',
             'questions.public_date',
             'questions.answers_count',
-            'users.username')
+            'users.username',
+            'qfavorite.id_qfavorite')
             ->from('questions')
             ->join('users')->on('questions.id_user','=','users.id')
+            ->join('qfavorite','left')
+            ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
             ->limit(7)->order_by('answers_count','DESC')->execute()->as_array();
 
         if(!empty($popular)) {
@@ -57,22 +63,6 @@ class Model_Mquestions extends Model_Database{
             }
             $result['popular'] = $popular;
         }
-
-
-
-        /*$popular = DB::select('questions.id_question',
-            'questions.title',
-            'questions.id_user',
-            'questions.public_date',
-            'questions.answers_count',
-            'users.username',
-            'questions_cat.id_question',
-            'subcategory.id_subcategory',
-            'subcategory.stitle')->
-            from('questions')->where('questions.id_question','>','0')->join('users')->
-            on('questions.id_user','=','users.id')->join('questions_cat')->on('questions_cat.id_question','=','questions.id_question')->
-            join('subcategory')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->
-            limit(100)->order_by('questions.answers_count','DESC')->execute()->as_array();*/
 
         return $result;
 
@@ -161,6 +151,9 @@ class Model_Mquestions extends Model_Database{
 //            $query = DB::select('title')->from('questions')->where('id_question','=', $idQuestion );
 //            $some = 24;
             $result['favorite'] = false;
+            $result['answers'] = array();
+            $result['question'] = array();
+
             $temp = null;
             $queryQuestion = DB::select('questions.id_question',
                     'questions.title',
@@ -439,22 +432,152 @@ class Model_Mquestions extends Model_Database{
     }
 
     public function getAllCategories($data) {
-        $some = DB::select('questions.id_question', 'questions_cat.id_questions_cat',
-            'questions_cat.id_subcategory' ,'subcategory.id_subcategory', 'subcategory.stitle')->
-            from('questions')->where('questions.id_question','>','54')->
-            join('questions_cat','LEFT')->
-            on('questions_cat.id_question','=','questions.id_question')->
-            join('subcategory','LEFT')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->
-            execute();
+        if ($data == 'some') {
+            $allCategories = DB::select('category.id_category',
+                    'category.ctitle')
+                ->from('category')
+                ->where('category.ctitle','!=','usercategory')
+                ->execute()->as_array();
 
-        $some2 = DB::select('subcategory.id_subcategory', 'subcategory.stitle', 'category.id_category',
-            'category.ctitle')->
-            from('category')->where('category.ctitle','!=','usercategory')->
-            join('subcategory')->
-            on('subcategory.id_category','=','category.id_category')->order_by('subcategory.id_category','ASC')->
-            execute();
+            foreach($allCategories as $k => $v) {
+                $temp = DB::select('subcategory.id_subcategory', 'subcategory.stitle', 'category.id_category')
+                    ->from('category')
+                    ->where('category.id_category', '=', $allCategories[$k]['id_category'])
+                    ->join('subcategory')
+                    ->on('subcategory.id_category','=','category.id_category')->execute()->as_array();
+                array_push($allCategories[$k],$temp);
+            }
+        } else {
+            $allCategories = DB::select('subcategory.id_subcategory', 'subcategory.stitle', 'category.id_category',
+                'category.ctitle')->
+                from('category')->where('category.ctitle','!=','usercategory')->
+                join('subcategory')->
+                on('subcategory.id_category','=','category.id_category')->order_by('subcategory.id_category','ASC')->
+                execute();
+        }
 
-        return $some2;
+
+
+        return $allCategories;
+    }
+
+
+    public function getAllQuestions($data) {
+        $result['page'] = $data['page'];
+        $result['count'] = null;
+        $result['questions'] = array();
+        if($data['qtype'] == 'opened') {
+            $allOpenedQuestions = DB::select('questions.id_question',
+                'questions.title',
+                'qfavorite.id_qfavorite',
+                'users.username',
+                'questions.answers_count',
+                'questions.rating',
+                'questions.public_date',
+                'questions.closed')
+                ->from('questions')->where('questions.closed','=','0')
+                ->offset(DB::expr($data['page']))
+                ->join('users')
+                ->on('users.id','=','questions.id_user')
+                ->join('qfavorite','left')
+                ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
+                ->limit(30)
+                ->order_by('questions.public_date','DESC')->execute()->as_array();
+        } elseif($data['qtype'] == 'closed') {
+            $allOpenedQuestions = DB::select('questions.id_question',
+                'questions.title',
+                'qfavorite.id_qfavorite',
+                'users.username',
+                'questions.answers_count',
+                'questions.rating',
+                'questions.public_date',
+                'questions.closed')
+                ->from('questions')->where('questions.closed','=','1')
+                ->offset(DB::expr($data['page']))
+                ->join('users')
+                ->on('users.id','=','questions.id_user')
+                ->join('qfavorite','left')
+                ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
+                ->limit(30)
+                ->order_by('questions.public_date','DESC')->execute()->as_array();
+        } elseif ($data['qtype'] == '') {
+            $allOpenedQuestions = DB::select('questions.id_question',
+                'questions.title',
+                'qfavorite.id_qfavorite',
+                'users.username',
+                'questions.answers_count',
+                'questions.rating',
+                'questions.public_date',
+                'questions.closed')
+                ->from('questions')
+                ->offset(DB::expr($data['page']))
+                ->join('users')
+                ->on('users.id','=','questions.id_user')
+                ->join('qfavorite','left')
+                ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
+                ->limit(30)
+                ->order_by('questions.public_date','DESC')->execute()->as_array();
+
+        } elseif ($data['qtype'] == 'category') {
+            $allOpenedQuestions = DB::select('questions.id_question',
+                'questions.title',
+                'qfavorite.id_qfavorite',
+                'users.username',
+                'questions.answers_count',
+                'questions.rating',
+                'questions.public_date',
+                'questions.closed',
+                'questions_cat.id_question',
+                'questions_cat.id_subcategory',
+                'subcategory.id_subcategory',
+                'subcategory.stitle')
+                ->from('questions_cat')
+                ->where('questions_cat.id_subcategory','=',DB::expr($data['page']))
+                ->join('subcategory','left')
+                ->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')
+                ->join('questions','left')
+                ->on('questions_cat.id_question','=','questions.id_question')
+                ->join('users')
+                ->on('users.id','=','questions.id_user')
+                ->join('qfavorite','left')
+                ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
+                ->limit(30)
+                ->order_by('questions.public_date','DESC')->execute()->as_array();
+        }
+
+        if(!empty($allOpenedQuestions)) {
+            if($data['qtype'] == 'opened') {
+                $countQuestions = DB::select('COUNT("questions.id_question") AS qcount')
+                    ->from('questions')->where('closed','=','0')->execute()->as_array();
+            } elseif ($data['qtype'] == 'closed') {
+                $countQuestions = DB::select('COUNT("questions.id_question") AS qcount')
+                    ->from('questions')->where('closed','=','1')->execute()->as_array();
+            } elseif ($data['qtype'] == '') {
+                $countQuestions = DB::select('COUNT("questions.id_question") AS qcount')
+                    ->from('questions')->execute()->as_array();
+            } elseif ($data['qtype'] == 'category') {
+                $countQuestions = DB::select('COUNT("questions_cat.id_questions_cat") AS qcount')
+                    ->from('questions_cat')->where('id_subcategory','=',DB::expr($data['page']))->execute()->as_array();
+            }
+            $result['qcount'] = $countQuestions[0]['qcount'];
+
+            // Выбираем категории вопросов и добавляем их в массив с вопросами
+            foreach($allOpenedQuestions as $k => $v) {
+                $temp = DB::select('questions_cat.id_question',
+                    'questions_cat.id_subcategory',
+                    'subcategory.id_subcategory',
+                    'subcategory.stitle')
+                    ->from('questions_cat')->where('questions_cat.id_question','=', $allOpenedQuestions[$k]['id_question'])
+                    ->join('subcategory')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->execute()->as_array();
+                array_push($allOpenedQuestions[$k],$temp);
+            }
+
+            $result['questions'] = $allOpenedQuestions;
+            return $result;
+        } else {
+            return false;
+        }
+
     }
 
 }

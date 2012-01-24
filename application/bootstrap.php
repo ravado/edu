@@ -141,7 +141,7 @@ Route::set('search', 'search(/<action>)')
 ));
 
 /*роут задания вопроса*/
-Route::set('ask_questions', 'questions/(<action>(/<id>))')
+Route::set('ask_questions', 'questions/(<action>(/<qtype>(/<page>)))')
     ->defaults(array(
     'directory'  => 'questions',
     'controller' => 'questions',

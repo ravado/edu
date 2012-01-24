@@ -11,18 +11,19 @@ class Controller_Questions_Questions extends Controller_Base {
 		$this->template->title = "Вопросы и Ответы";
         $this->template->styles = array("stfile/css/questions.css" => "screen");
         $this->template->scripts = array('stfile/js/questions.js');
-
+        $data['user_id'] = -1;
         /*Проверяем статус пользователя (Авторизирован или нет)*/
         $auth = Auth::instance();
         if($auth->logged_in()){
             $data['userAuth'] = TRUE;
             $data['userName'] = $auth->get_user()->username;
+            $data['user_id'] = $auth->get_user()->id;
         }else{
             $data['userAuth'] = FALSE;
         }
 
-        $data['result'] = Model::factory('Mquestions')->mainQA();
-
+        $data['result'] = Model::factory('Mquestions')->mainQA($data);
+        $data['categories'] = Model::factory('Mquestions')->getAllCategories('some');
         $this->template->content = View::factory('questions/vQuestions',$data);
 	}
 
@@ -144,15 +145,31 @@ class Controller_Questions_Questions extends Controller_Base {
     public function action_category () {
         $this->template->styles = array("stfile/css/questions.css" => "screen");
         $this->template->scripts = array('stfile/js/questions.js');
-
-        $data['category_id'] = 'lll';//$this->request->param('id');
-        if (!empty($data['category_id'])) {
-            $data['result'] = Model::factory('Mquestions')->getAllCategories($data);
-            $this->template->title = "ВиО: ";
-            $this->template->content = View::factory('questions/vQuestionCategory',$data);
-        } else {
-            $this->template->title = "ВиО: " ."Все категории";
-            $this->template->content = View::factory('questions/vQuestionCategory',$data);
-        }
+        $data['result'] = Model::factory('Mquestions')->getAllCategories('sss');
+        $this->template->title = "ВиО: ";
+        $this->template->content = View::factory('questions/vQuestionCategory',$data);
     }
+
+    public function action_all() {
+        $this->template->styles = array("stfile/css/questions.css" => "screen");
+        $this->template->scripts = array('stfile/js/questions.js');
+        $data['page'] = (int)$this->request->param('page');
+        $data['qtype'] = (string)$this->request->param('qtype');
+
+        $data['user_id'] = -1;
+        /*Проверяем статус пользователя (Авторизирован или нет)*/
+        $auth = Auth::instance();
+        if($auth->logged_in()){
+            $data['userAuth'] = TRUE;
+            $data['userName'] = $auth->get_user()->username;
+            $data['user_id'] = $auth->get_user()->id;
+        }else{
+            $data['userAuth'] = FALSE;
+        }
+
+        $data['result'] = Model::factory('Mquestions')->getAllQuestions($data);
+
+        $this->template->content = View::factory('questions/vQuestionAll',$data);
+    }
+
 }

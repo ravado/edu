@@ -20,13 +20,9 @@
     /* ------------------------------------------------------ */
 
     /* ================ Блок с категориями ================== */
-        .catTitle {
-            padding-left: 2px;
-        }
-
-        /*Ссылки категорий в разделе категорий*/
-        .catTitle > a{
-            padding-top: 10px;
+        .catMenu {
+            padding-left: 5px;
+            padding-top: 5px;
         }
 
         .catLinks {
@@ -34,23 +30,7 @@
             text-decoration: none;
             font-weight: bolder;
             font-size: 12px;
-        }
-
-        /*Ссылки на подкатегории в разделе категорий*/
-        .catTitle .greenCat {
-            color: green;
-            opacity: 0.8;
-            font-size: 11px;
-            font-weight: bold;
-            margin-left: -8px;
-            padding: 0px;
-            padding-left: 10px;
-        }
-
-        /*Блок с подкатегориями*/
-        .catTitle > div{
-            margin-left: 5px;
-            margin-top: -5px;
+            text-align: left;
         }
 
 
@@ -67,13 +47,7 @@
     .dvQuestions{float: left;padding-top: 10px;padding-left: 10px;width: 790px;}
 
 
-    /*Ссылки в блоке с категориями, топом, последними вопросами*/
-    .dvCategory a{
-        display:inline-block;
-        padding: 5px;
-    }
-
-    .dvTop a, .dvLastQuestions a {
+    .dvTop a, .dvLastQuestions a, .catMenu a{
         font-size: 14px;
         line-height: 18px;
     }
@@ -269,12 +243,17 @@
         td {
             padding: 5px;
             /*border-bottom: 1px solid #eaeaea;*/
-            /*vertical-align: middle;*/
+            vertical-align: middle;
         }
 
         /*Делаем табличку красивой и полосатой*/
-        .dvLastQuestions tr:nth-child(2n+3), .dvTop tr:nth-child(2n+3){
+        .dvLastQuestions tr:nth-child(2n+3), .dvTop tr:nth-child(2n+3),
+        #dvAllQuestions tr:nth-child(2n+3){
             background-color: #f1f1f1;
+        }
+
+        #dvAllQuestions .shadowBlock{
+            width: 1000px;
         }
 
         /*Блок с тегами возле каждого вопроса*/
@@ -334,8 +313,8 @@
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     }
 
-    /*Убираем градиентнуб заливку с блоков с вопросами для лучшей видимости полосок*/
-    .dvQuestions .shadowBlock {
+    /*Убираем градиентную заливку с блоков с вопросами для лучшей видимости полосок*/
+    .dvQuestions .shadowBlock, #dvOpenedQuestions .shadowBlock {
         background: white;
     }
 
@@ -353,7 +332,7 @@
     /* Имена пользователей задавших вопросы */
         .username a:hover {
             text-decoration: none;
-            color: #0f4a70;
+            color: #0000ff;
         }
 
         /* Количество ответов на вопросы */
@@ -371,6 +350,19 @@
     table {
         width: 100%;
     }
+
+    /*Ссылка на все вопросы и все категориии на главной странице ВиО*/
+    .lnkAllOther {
+        background-image: url("../../stfile/img/questions/forward-icon.png");
+        background-repeat: no-repeat;
+        background-position: 100% 11px;
+        padding-right: 20px;
+        float: right;
+        padding-bottom: 5px;
+        padding-top: 10px;
+    }
+
+
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* --------------------------------------- Главная страница ВиО ----------------------------------------------------- */
@@ -491,7 +483,7 @@
 
         /*Первый символ помещаем в картинку и увеличиваем шрифт*/
         h5.textGuide:first-letter {
-            background-image: url("../img/questions/punkt6.png");
+            background-image: url("../img/questions/punkt3.png");
             font-weight: bold;
             background-position: center center;
             background-repeat: no-repeat;
@@ -668,6 +660,11 @@
     .dvQuestionAndAnswers {
         width: 750px;
      }
+
+    .dvQuestionAndAnswers .itemInfo {
+        font-size: 12px;
+    }
+
     .dvQuestionAndAnswers .spnTags a{
         padding-right: 5px;
     }
@@ -683,8 +680,16 @@
 
     }
     .dvOneQuestion .oneQuestion{
-        vertical-align: middle;
 
+    }
+
+    .tblQuestionTitle td{
+        padding: 0;
+        min-width: 30px;
+    }
+
+    .tblQuestionTitle .favorite-icon{
+        width: 30px;
     }
 
     .dvOneQuestion .catLinks {
@@ -774,7 +779,9 @@
         height: 100px;
     }
 
-
+    .tdAddAnswer {
+        padding: 0;
+    }
 
     .dvAllAnswers hr {
         height: 1px;
@@ -792,7 +799,6 @@
         float: left;
         width: 24px;
         height: 24px;
-        padding-right: 10px;
     }
     .favorite:hover {
         cursor: pointer;
@@ -880,6 +886,36 @@
 
 
 
+/* ================================================================================================================== */
+/* ===================================== Страница всех вопросов ===================================================== */
+/* ================================================================================================================== */
+
+    /* ячейка с иконкой избраных вопросов */
+    .tdFavorite-icon {
+        width: 24px;
+    }
+
+    /* ячейка с иконкой закрытых вопросов */
+    .tdClosed-icon {
+        width: 16px;
+        padding: 0;
+    }
+
+    .closed-mini {
+        background-image: url("../../stfile/img/questions/best-answer-mini.png");
+        background-repeat: no-repeat;
+        height: 16px;
+        width: 16px;
+        display: block;
+    }
+
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------- Страница всех вопросов ----------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------------------------------ */
+
+
+/*Для теста таблиц*/
 .tblTest {
     border: 1px solid #f08080;
     padding: 0;
@@ -897,3 +933,4 @@
 .tblTest th{
     border: 1px solid #808080;
 }
+

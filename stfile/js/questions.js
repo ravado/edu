@@ -157,11 +157,18 @@ $(document).ready(function(){
 
     //Нажатие на кнопку-звездочку избраное
     $(".favorite").click(function() {
-        var star = $(".favorite");
+
+//        var similiar = $(this).val();
+//        var star = $(".favorite");
+//        alert(star.length);
+
+        var needed = $(this).parent('td').children('input').val();
+        var star = $(this);
+
             // если включаем звездочку
             if (!star.hasClass('favoriteChecked')) {
                 star.addClass('favoriteChecked');
-                $.ajax({type:"POST", async:true, data: "question_id="+$("#hQuestionId").val(), url: "/questions/qhid/addFavorite", dataType:"json",
+                $.ajax({type:"POST", async:true, data: "question_id="+needed, url: "/questions/qhid/addFavorite", dataType:"json",
                     success:function(data){
                         switch (data) {
                             case 'inserted' : {
@@ -197,7 +204,7 @@ $(document).ready(function(){
             } else {
                 // если выключаем звездочку
                 star.removeClass('favoriteChecked');
-                $.ajax({type:"POST", async:true, data: "question_id="+$("#hQuestionId").val(), url: "/questions/qhid/removeFavorite", dataType:"json",
+                $.ajax({type:"POST", async:true, data: "question_id="+needed, url: "/questions/qhid/removeFavorite", dataType:"json",
                     success:function(data){
                         switch (data) {
                             case 'deleted' : {
@@ -328,7 +335,7 @@ $(document).ready(function(){
 
                         $(".tblAnswers").append('<tr><td class="bestAnswer-icon"></td>' +
                             '<td><div class="shadowBlock "><table cellspacing="0"><tr>' +
-                            '<td><table><tr><td colspan="2"><a href="" class="username">' + data.username + ' </a>' +
+                            '<td><table><tr><td colspan="2" class="itemInfo"><a href="" class="username">' + data.username + ' </a>' +
                             '<span class="time">' + data.public_date + '</span></td></tr>' +
                             '<tr><td class="tdVote"><div class="dvVote"><a class="voteUp-off"></a><span class="spnVotesCount">0</span>' +
                             '<a class="voteDown-off"></a></div></td><td><p>' + curr_textarea.val() + '</p>' +

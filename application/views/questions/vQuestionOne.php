@@ -17,6 +17,10 @@
             $voteClassDown = 'voteDown';
         }
     }
+
+/*    foreach($result['question'] as $k=>$v) {
+        print_r($result['question'][$k]);
+    }*/
 ?>
 
 
@@ -25,9 +29,24 @@
     <div class="dvQuestionAndAnswers">
 
         <div class="dvOneQuestion shadowBlock">
-            <table cellspacing="0">
+            <table cellspacing="0" >
                 <tr class="lenta">
-                    <th class="lenta"><span class="favorite <?php if ($result['favorite']) echo 'favoriteChecked' ?>"></span><span class="oneQuestion"><?php echo $result['question'][0]['title'] ?></span></th>
+                    <th class="lenta">
+                        <table class="tblQuestionTitle">
+                            <tr>
+                                <td class="favorite-icon">
+                                    <span class="favorite <?php if ($result['favorite']) echo 'favoriteChecked' ?>"></span>
+                                    <input type="hidden" id="hQuestionId" value="<?php echo $result['question'][0]['id_question']; ?>" >
+                                </td>
+                                <td>
+                                    <span class="oneQuestion"><?php echo $result['question'][0]['title'] ?></span>
+                                </td>
+                            </tr>
+
+                        </table>
+
+
+                    </th>
                 </tr>
                 <tr>
                     <td>
@@ -37,7 +56,6 @@
                                 <td colspan="2" class="itemInfo">
                                     <a href="" class="username"><?php echo $result['question'][0]['username'] ?></a>
                                     <span class="time"><?php echo $result['question'][0]['public_date']?></span>
-                                    <input type="hidden" id="hQuestionId" value="<?php echo $result['question'][0]['id_question']; ?>" >
                                     <input type="hidden" class="hQAid" value="<?php echo $result['question'][0]['id_questions_and_answers']; ?>" >
                                 </td>
                             </tr>
@@ -69,7 +87,7 @@
                                     $question = $result['question'];
 
                                     foreach($question[1] as $key=>$val) {
-                                        $tags .= '<a href="" class="greenCat">' .$question[1][$key]['stitle'] .'</a>';
+                                        $tags .= '<a href="/questions/all/category/' .$question[1][$key]['id_subcategory']  .'" class="greenCat">' .$question[1][$key]['stitle'] .'</a>';
                                         $countTags++;
                                     }
                                     ?>
@@ -79,8 +97,8 @@
                                     ?>
                                 </span></td>
                             </tr>
-                            <tr style="display: ;">
-                                <td colspan="2">
+                            <tr>
+                                <td colspan="2" class="tdAddAnswer">
                                     <?php if($userAuth && $result['question'][0]['closed'] == false) {
                                             echo '<form class="frmAddAnswer">
                                                 <table>

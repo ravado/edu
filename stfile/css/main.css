@@ -11,6 +11,7 @@ html{background: url("../img/bg_white.png");}
 /*Шапка сайта: логотип и главное меню*/
 header{padding: 15px 0;}
 
+
 /*Главное навигационное меню сайта*/
 nav{float: right;padding: 20px 0;}
 
@@ -288,8 +289,12 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
         border-radius: 3px;
         margin-right: 5px;
         padding: 10px;
+        color: #ffffff;
+        text-decoration: none;
     }
     .pagination:hover {
+        color: #ffffff;
+        text-decoration: none;
         cursor: pointer;
         background-color: #70aed9;
     }
