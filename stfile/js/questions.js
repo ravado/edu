@@ -1,3 +1,17 @@
+function addQuestion() {
+    if($("input[name=questionTitle]").val() == '') {
+        hints('warning','Введите краткое содержание вопроса');
+        return false;
+    }
+
+    if($("div.label").length == 0) {
+        hints('warning','Выберите хотя бы одну категорию своему вопросу');
+        return false;
+    }
+
+    $('#frmAskQuestion').submit();
+}
+
 function isTagsComplete() {
     if ($(".label").length > 4) {
         $("input[type=checkbox]").not("input:checked").attr("disabled","disabled");
@@ -27,6 +41,13 @@ function isSimilar(string) {
 
 $(document).ready(function(){
 
+    //Отслеживаем нажатие Enter для входа
+    $("textarea[name=answer_text]").keypress(function(e){
+        if(e.keyCode == 13){
+            $(".postAnswer").click();
+        }
+    });
+
     // При загрузке страницы снимем все галочки, а то некоторые (не будем показывать на ФФ) их сохраняют при перезагрузке
     $(":checkbox").removeAttr("checked");
 
@@ -36,21 +57,21 @@ $(document).ready(function(){
         var tempstring;
         tempstring = str.replace(/[^A-Za-zА-Яа-яЁё0-9]/g,',');
         arr = tempstring.split(',');
-        alert(arr);
+//        alert(arr);
         var tagsCount = $(".label").length;
         var i,j;
         for (i = tagsCount, j = 0; i < 6, j < arr.length; i++, j++) {
             if (i < 5 ) {
                 if(isSimilar(arr[j])) {
                     i--;
-                    alert('is similar');
+//                    alert('is similar');
                 } else {
                     rand = Math.random();
                     $(".dvCategoryLabel").append("<div class='label' id='"+rand+"'><p>"+arr[j]+"<span class='removeTag'></span></p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
-                    alert(arr[j]);
+//                    alert(arr[j]);
                 }
             } else {
-                alert('to much!');
+//                alert('to much!');
                 isTagsComplete();
                 break;
             }
@@ -137,8 +158,9 @@ $(document).ready(function(){
         googleSearch($("#searchResult"),$("form[name=frmQuestion] #search"),{siteURL:'habrahabr.ru'});
         $(".dvTop").css("display","none");
         $(".dvLastQuestions").css("display","none");
+        $("#btnAllQuestions").css("display","none");
         if(!$("#goback").length) {
-            $(".dvSearch").append("<div id='goback' style='height: 0; float: left;'><a>Вернуться</a></div>");
+            $(".dvSearch").append("<div id='goback' style='height: 0; float: left;'><a class='btn'><i class='icon-chevron-left'></i>Вернуться</a></div>");
         }
     });
 
@@ -149,6 +171,7 @@ $(document).ready(function(){
         $("#dvPagination").remove();
         $(".dvTop").css("display","block");
         $(".dvLastQuestions").css("display","block");
+        $("#btnAllQuestions").css("display","inline-block");
         $("#goback").remove();
     });
 
@@ -173,6 +196,7 @@ $(document).ready(function(){
                         switch (data) {
                             case 'inserted' : {
 //                                alert('inserted');
+                                hints('success','Вопрос успешно добавлен в Избранное');
                                 break;
                             }
                             case 'not inserted' : {
@@ -208,6 +232,7 @@ $(document).ready(function(){
                     success:function(data){
                         switch (data) {
                             case 'deleted' : {
+                                hints('info','Вопрос удален из Избранного');
                                 break;
                             }
                             case 'not deleted' : {
@@ -302,6 +327,7 @@ $(document).ready(function(){
 
     $("#btnGiveAnswer").click(function() {
         $(".frmAddAnswer").slideDown('fast');
+        $("textarea").focus();
         $(this).css("visibility","hidden");
     });
 

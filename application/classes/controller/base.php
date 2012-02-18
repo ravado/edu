@@ -33,6 +33,7 @@ class Controller_Base extends Controller_Template {
 
         if ($this->auto_render){
             $styles = array(
+                "stfile/bootstrap/css/bootstrap.css" => "screen",
                 "stfile/css/main.css" => "screen",
                 "stfile/css/reset.css" => "screen"
             );
@@ -40,6 +41,7 @@ class Controller_Base extends Controller_Template {
             $scripts = array(
                 "stfile/js/placeholder.js",
                 "stfile/js/main.js",
+                "stfile/bootstrap/js/bootstrap.js",
                 "stfile/js/jquery.js"
             );
 

@@ -29,7 +29,7 @@
                     echo '<td>';
                     foreach($categories[$k][0] as $key => $val) {
                         if ($key == 5) {break;}
-                        echo '<a href="/questions/all/category/' .$categories[$k][0][$key]['id_subcategory'] .'" class="greenCat">'
+                        echo '<a href="/questions/category/' .$categories[$k][0][$key]['id_subcategory'] .'" class="greenCat">'
                             .$categories[$k][0][$key]['stitle'] .'</a>';
                     }
                     echo '</td></tr>';
@@ -37,9 +37,9 @@
                 ?>
 
             </table>
-                <div><a class="lnkAllOther" href="questions/category">Все категории</a></div>
             </div>
         </div>
+        <a class="btn btn-success" href="questions/category">Все категории <i class='icon-chevron-right icon-white'></i></a>
     </div>
 
     <!--  Блок вопросов  -->
@@ -88,7 +88,7 @@
                             .'<td><a href="questions/question/'. $popular[$k]['id_question'] .'"> '.$popular[$k]['title'] .'</a>'
                             .'<span class="spnTags">';
                         foreach($popular[$k][0] as $key=>$val) {
-                            echo '<a href="questions/all/category/' .$popular[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$popular[$k][0][$key]['stitle'] .'</a>';
+                            echo '<a href="questions/category/' .$popular[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$popular[$k][0][$key]['stitle'] .'</a>';
                         }
                         echo '</span></td>'
                             .'<td class="username"><a href="">' .$popular[$k]['username'] .'</a></td>'
@@ -138,7 +138,7 @@
                             .'<td><a href="questions/question/'. $last[$k]['id_question'] .'"> '.$last[$k]['title'] .'</a>'
                             .'<span class="spnTags">';
                         foreach($last[$k][0] as $key=>$val) {
-                            echo '<a href="questions/all/category/' .$last[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$last[$k][0][$key]['stitle'] .'</a>';
+                            echo '<a href="questions/category/' .$last[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$last[$k][0][$key]['stitle'] .'</a>';
                         }
                         echo '</td>'
                             .'<td class="username"><a href="">' .$last[$k]['username'] .'</a></td>'
@@ -151,8 +151,9 @@
                 }
                 ?>
             </table>
-            <div><a class="lnkAllOther" href="questions/all">Все вопросы</a></div>
-        </div>
 
+
+        </div>
+        <a class="btn-success btn" id="btnAllQuestions" href="questions/all/any">Все вопросы <i class='icon-chevron-right icon-white'></i></a>
     </div>
 </div>

@@ -20,7 +20,7 @@ class Model_Mquestions extends Model_Database{
             ->join('users')->on('questions.id_user','=','users.id')
             ->join('qfavorite','left')
             ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
-            ->order_by('questions.public_date','DESC')->limit(5)
+            ->order_by('questions.public_date','DESC')->limit(15)
             ->execute()->as_array();
         if(!empty($last)) {
             foreach($last as $k=>$v) {
@@ -49,7 +49,7 @@ class Model_Mquestions extends Model_Database{
             ->join('users')->on('questions.id_user','=','users.id')
             ->join('qfavorite','left')
             ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
-            ->limit(7)->order_by('answers_count','DESC')->execute()->as_array();
+            ->limit(5)->order_by('answers_count','DESC')->execute()->as_array();
 
         if(!empty($popular)) {
             foreach($popular as $k=>$v) {
@@ -432,6 +432,7 @@ class Model_Mquestions extends Model_Database{
     }
 
     public function getAllCategories($data) {
+
         if ($data == 'some') {
             $allCategories = DB::select('category.id_category',
                     'category.ctitle')
@@ -453,7 +454,7 @@ class Model_Mquestions extends Model_Database{
                 from('category')->where('category.ctitle','!=','usercategory')->
                 join('subcategory')->
                 on('subcategory.id_category','=','category.id_category')->order_by('subcategory.id_category','ASC')->
-                execute();
+                execute()->as_array();
         }
 
 
@@ -463,9 +464,17 @@ class Model_Mquestions extends Model_Database{
 
 
     public function getAllQuestions($data) {
+        $per_page = $data['per_page'];
         $result['page'] = $data['page'];
         $result['count'] = null;
         $result['questions'] = array();
+
+        if(!empty($data['page'])) {
+            $offset = $data['page']*$per_page-$per_page;
+        } else {
+            $offset = 0;
+        }
+
         if($data['qtype'] == 'opened') {
             $allOpenedQuestions = DB::select('questions.id_question',
                 'questions.title',
@@ -476,12 +485,12 @@ class Model_Mquestions extends Model_Database{
                 'questions.public_date',
                 'questions.closed')
                 ->from('questions')->where('questions.closed','=','0')
-                ->offset(DB::expr($data['page']))
                 ->join('users')
                 ->on('users.id','=','questions.id_user')
                 ->join('qfavorite','left')
                 ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
-                ->limit(30)
+                ->offset($offset)
+                ->limit($per_page)
                 ->order_by('questions.public_date','DESC')->execute()->as_array();
         } elseif($data['qtype'] == 'closed') {
             $allOpenedQuestions = DB::select('questions.id_question',
@@ -493,14 +502,15 @@ class Model_Mquestions extends Model_Database{
                 'questions.public_date',
                 'questions.closed')
                 ->from('questions')->where('questions.closed','=','1')
-                ->offset(DB::expr($data['page']))
                 ->join('users')
                 ->on('users.id','=','questions.id_user')
                 ->join('qfavorite','left')
                 ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
-                ->limit(30)
+                ->offset($offset)
+                ->limit($per_page)
                 ->order_by('questions.public_date','DESC')->execute()->as_array();
-        } elseif ($data['qtype'] == '') {
+        } elseif ($data['qtype'] == 'any') {
+
             $allOpenedQuestions = DB::select('questions.id_question',
                 'questions.title',
                 'qfavorite.id_qfavorite',
@@ -515,10 +525,14 @@ class Model_Mquestions extends Model_Database{
                 ->on('users.id','=','questions.id_user')
                 ->join('qfavorite','left')
                 ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
-                ->limit(30)
+                ->offset($offset)
+                ->limit($per_page)
                 ->order_by('questions.public_date','DESC')->execute()->as_array();
 
+        // Выбираем все вопросы с определенной категории
         } elseif ($data['qtype'] == 'category') {
+
+
             $allOpenedQuestions = DB::select('questions.id_question',
                 'questions.title',
                 'qfavorite.id_qfavorite',
@@ -532,7 +546,7 @@ class Model_Mquestions extends Model_Database{
                 'subcategory.id_subcategory',
                 'subcategory.stitle')
                 ->from('questions_cat')
-                ->where('questions_cat.id_subcategory','=',DB::expr($data['page']))
+                ->where('questions_cat.id_subcategory','=',DB::expr($data['cat_id']))
                 ->join('subcategory','left')
                 ->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')
                 ->join('questions','left')
@@ -541,7 +555,8 @@ class Model_Mquestions extends Model_Database{
                 ->on('users.id','=','questions.id_user')
                 ->join('qfavorite','left')
                 ->on('qfavorite.id_question','=','questions.id_question')->on('qfavorite.id_user','=',DB::expr($data['user_id']))
-                ->limit(30)
+                ->offset($offset)
+                ->limit($per_page)
                 ->order_by('questions.public_date','DESC')->execute()->as_array();
         }
 
@@ -552,12 +567,12 @@ class Model_Mquestions extends Model_Database{
             } elseif ($data['qtype'] == 'closed') {
                 $countQuestions = DB::select('COUNT("questions.id_question") AS qcount')
                     ->from('questions')->where('closed','=','1')->execute()->as_array();
-            } elseif ($data['qtype'] == '') {
+            } elseif ($data['qtype'] == 'any') {
                 $countQuestions = DB::select('COUNT("questions.id_question") AS qcount')
                     ->from('questions')->execute()->as_array();
             } elseif ($data['qtype'] == 'category') {
                 $countQuestions = DB::select('COUNT("questions_cat.id_questions_cat") AS qcount')
-                    ->from('questions_cat')->where('id_subcategory','=',DB::expr($data['page']))->execute()->as_array();
+                    ->from('questions_cat')->where('id_subcategory','=',DB::expr($data['cat_id']))->execute()->as_array();
             }
             $result['qcount'] = $countQuestions[0]['qcount'];
 

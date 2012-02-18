@@ -280,7 +280,7 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
     /* Блок с номерами страниц */
     #dvPagination {height: 40px;}
 
-    /*кнопка с номером страницы*/
+    /*кнопка с номером страницы*//*
     .pagination {
         width: 10px;
         height: 10px;
@@ -297,7 +297,7 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
         text-decoration: none;
         cursor: pointer;
         background-color: #70aed9;
-    }
+    }*/
 
     /* Текущая страница */
     .selected {

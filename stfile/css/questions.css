@@ -26,7 +26,7 @@
         }
 
         .catLinks {
-            color: #79d;
+            color: #698fda;
             text-decoration: none;
             font-weight: bolder;
             font-size: 12px;
@@ -58,7 +58,7 @@
         /*Поле ввода поисковой строки*/
         #search
         {
-            height: 30px;
+            height: 25px;
             padding-left: 5px;
             padding-right: 5px;
             width: 520px;
@@ -142,6 +142,7 @@
                 float: left;
                 font: bold 16px 'lucida sans', 'trebuchet MS', 'Tahoma';
                 border: 1px solid #ccc;
+                margin-bottom: 0px;
                 -moz-box-shadow: 0 1px 1px #ddd inset, 0 1px 0 #fff;
                 -webkit-box-shadow: 0 1px 1px #ddd inset, 0 1px 0 #fff;
                 box-shadow: 0 1px 1px #ddd inset, 0 1px 0 #fff;
@@ -180,6 +181,7 @@
                 height: 34px;
                 width: 110px;
                 padding: 0;
+                margin-bottom: 0;
                 margin-left: 10px;
                 cursor: pointer;
                 font: bold 15px Arial, Helvetica;
@@ -226,8 +228,8 @@
         }
 
         /*Кнопка вернуться, отображаеться при выводе результатов поиска на главной ВиО*/
-        #goback{ position: relative; display: inline; top: 10px; left: 680px;}
-        #goback a{background-image: url("../../stfile/img/questions/back-icon.png");background-repeat: no-repeat;background-position: 0; padding-left: 25px;}
+        #goback{ position: relative; display: inline; top: 10px; left: 685px;}
+        /*#goback a{background-image: url("../../stfile/img/questions/back-icon.png");background-repeat: no-repeat;background-position: 0; padding-left: 25px;}*/
 
     /* ------------------------------------------------------ */
 
@@ -254,6 +256,7 @@
 
         #dvAllQuestions .shadowBlock{
             width: 1000px;
+            background: #ffffff;
         }
 
         /*Блок с тегами возле каждого вопроса*/
@@ -375,13 +378,13 @@
 /* ================================================================================================================== */
 
     /*Главный блок задания вопроса*/
-    .dvAsk {width: 730px;float: left;padding: 10px;}
+    .dvAsk {width: 730px;float: left;padding-left: 10px;}
 
     /*Поле ввода заголовка вопроса*/
-    #frmAskQuestion .inpColor{width: 720px;font-size: 15px;margin-bottom: 10px;margin-top: 10px;}
+    #frmAskQuestion .inpColor{width: 720px;font-size: 15px;margin-bottom: 10px;}
 
     /*Поле ввода полного текста вопроса*/
-    #frmAskQuestion  textarea{font-size: 15px;margin-bottom: 10px;margin-top: 10px;width: 720px;height: 100px;max-height: 300px;max-width: 720px;}
+    #frmAskQuestion  textarea{font-size: 15px;margin-bottom: 10px; width: 720px;height: 100px;max-height: 300px;max-width: 720px;}
 
     /*Блок с категориями вопросов*/
     .dvQuestCategory {width: 150px;float: left;height: 121px;display: block;}
@@ -389,6 +392,14 @@
     /*Наименование категорий*/
     .dvQuestCategory p {display: block;padding: 5px;height: 19px;}
 
+    /**/
+    .tab-pane table {
+        width: 600px;
+    }
+
+    .tab-pane td {
+        width: 50px;
+    }
     /*Белый цвет категорий (Включаеться при выборе категории) */
     .white {
         border-top: 1px solid #ccc;
@@ -446,7 +457,7 @@
     /*Блок содержащий все категории*/
     .dvAllCategory .greenCat{
         font-weight: bold;
-        font-size: 12px;
+        font-size: 12px !important;
     }
 
     .dvAllCategory td{
@@ -525,7 +536,7 @@
             margin-left: 30px;
             position: relative;
             min-width: 20px;
-            height: 24px;
+            height: 21px;
             border-radius: 0 4px 4px 0;
             border: 1px solid #ccc;
             box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
@@ -539,8 +550,8 @@
 
         /* текст внутри меток */
         .label p {
-            padding: 5px;
-            font-size: smaller;
+            padding: 3px;
+            font-size: 9px;
             font-weight: bold;
             text-transform: lowercase;
             color: #333;
@@ -628,13 +639,13 @@
 
     /*Блок с метками выбраных категорий*/
     .dvCategoryLabel {
-        float: left; display: inline-block; width: 100%;height: 35px;padding-top: 10px;
+        /*float: left;*/ display: inline-block; width: 100%;height: 35px;padding-top: 10px;
     }
 
     .removeTag {
         background-image: url("../../stfile/img/questions/tags-remove.png");
         background-repeat: no-repeat;
-        background-position: 1px 1px;
+        background-position: 1px 2px;
         display: block;
         float: right;
         height: 15px;

@@ -1,6 +1,10 @@
 <div id="dvContent">
     <div class="spnTitle Page">Вопросы и ответы: вопрос</div>
-    <p class="navigation"><a href="/questions">главная ВиО</a> => <a href="/questions">список вопросов</a> => вопрос</p>
+    <ul class="breadcrumb">
+        <li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>
+        <li><a href="/questions/all/any">все вопросы</a><span class="divider">/</span></li>
+        <li class="active"><a href="#">вопрос</a></li>
+    </ul>
 <!---->
 <?php
 
@@ -87,7 +91,7 @@
                                     $question = $result['question'];
 
                                     foreach($question[1] as $key=>$val) {
-                                        $tags .= '<a href="/questions/all/category/' .$question[1][$key]['id_subcategory']  .'" class="greenCat">' .$question[1][$key]['stitle'] .'</a>';
+                                        $tags .= '<a href="/questions/category/' .$question[1][$key]['id_subcategory']  .'" class="greenCat">' .$question[1][$key]['stitle'] .'</a>';
                                         $countTags++;
                                     }
                                     ?>

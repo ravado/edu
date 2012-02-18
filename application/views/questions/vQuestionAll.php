@@ -24,26 +24,41 @@
     ?>
     <div class="spnTitle Page">Вопросы и ответы: все вопросы</div>
 
+    <!--  "Хлебные крошки"  -->
+    <ul class="breadcrumb">
     <?php
         if ($qtype == 'closed') {
-            echo '<p class="navigation"><a href="/questions">главная ВиО</a> => <a href="/questions/all">все вопросы</a> => закрытые</p>';
+            echo '<li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>';
+            echo '<li><a href="/questions/all/any">все вопросы</a><span class="divider">/</span></li>';
+            echo '<li class="active"><a href="#">закрытые</a></li>';
             $tblTitle = 'Закрытые';
         } elseif($qtype == 'opened') {
-            echo '<p class="navigation"><a href="/questions">главная ВиО</a> => <a href="/questions/all">все вопросы</a> => открытые</p>';
+            echo '<li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>';
+            echo '<li><a href="/questions/all/any">все вопросы</a><span class="divider">/</span></li>';
+            echo '<li class="active"><a href="#">открытые</a></li>';
             $tblTitle = 'Открытые';
-        } elseif($qtype == '') {
-            echo '<p class="navigation"><a href="/questions">главная ВиО</a> => все вопросы</p>';
+        } elseif($qtype == 'any') {
+            echo '<li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>';
+            echo '<li class="active"><a href="#">все вопросы</a></li>';
             $tblTitle = 'Все';
         } elseif($qtype == 'category') {
-            echo '<p class="navigation"><a href="/questions">главная ВиО</a> => <a href="/questions/all">все вопросы</a> => <a href="/questions/category">все категории</a>';
+            echo '<li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>';
+            echo '<li><a href="/questions/all/any">все вопросы</a><span class="divider">/</span></li>';
+            echo '<li><a href="/questions/category">все категории</a><span class="divider">/</span></li>';
             if (!empty($questions)) {
-                echo ' => ' .$questions[0]['stitle'] .'</p>';
+                echo '<li class="active"><a href="#">' .$questions[0]['stitle'] .'</a></li>';
                 $tblTitle = $questions[0]['stitle'];
             }
         }
-
     ?>
-
+    </ul>
+<!--    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#1" data-toggle="tab">Все</a></li>
+            <li><a href="#2" data-toggle="tab">Открытые</a></li>
+            <li><a href="#2" data-toggle="tab">Закрытые</a></li>
+        </ul>
+    </div>-->
 
     <?php
         if(empty($questions)) {
@@ -51,6 +66,7 @@
             die;
         }
     ?>
+
     <div class="" id="dvAllQuestions">
         <table class="shadowBlock" cellspacing="0" width="100%">
             <tr class="lenta">
@@ -86,7 +102,7 @@
 
                     // Вставляем категории
                     foreach($questions[$k][0] as $key => $val) {
-                        echo '<a href="/questions/all/category/' .$questions[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$questions[$k][0][$key]['stitle'] .'</a>';
+                        echo '<a href="/questions/category/' .$questions[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$questions[$k][0][$key]['stitle'] .'</a>';
                     }
 
                     echo '</span></td>
@@ -99,30 +115,35 @@
         </table>
 
         <!--Блок с пагинацией-->
-        <div id="dvPagination">
-
+        <div class="pagination">
+            <ul>
             <?php
-                for($i = 0; $i < ceil($qcount/3)+1; $i++) {
-                    $temp = $i+1;
-                    if ($qtype == 'category') {
-                        $lnk = '/questions/all/category/';
-                    } elseif ($qtype == 'opened') {
-                        $lnk = '/questions/all/opened/';
-                    } elseif ($qtype == 'closed') {
-                        $lnk = '/questions/all/closed/';
-                    } elseif ($qtype == '') {
-                        $lnk = '/questions/all/';
-                    }
-                    if($i == $page-1) {
-                        echo '<a href="'.$lnk .$temp .'" class="pagination selected">' .$temp .'</a>';
-                    } else {
-                        echo '<a href="' .$lnk .$temp .'" class="pagination">' .$temp .'</a>';
+                $page_count = ceil($qcount/$per_page);
+                if($page_count > 1) {
+                    for($i = 0; $i < $page_count; $i++) {
+                        $temp = $i+1;
+                        if ($qtype == 'category') {
+                            $lnk = '/questions/category/' .$cat_id .'/';
+                        } elseif ($qtype == 'opened') {
+                            $lnk = '/questions/all/opened/';
+                        } elseif ($qtype == 'closed') {
+                            $lnk = '/questions/all/closed/';
+                        } elseif ($qtype == 'any') {
+                            $lnk = '/questions/all/any/';
+                        }
+                        if($i == $page-1) {
+                            echo '<li class="active"><a href="'.$lnk .$temp .'">' .$temp .'</a></li>';
+                        } else {
+                            echo '<li><a href="'.$lnk .$temp .'">' .$temp .'</a></li>';
+                        }
                     }
                 }
-            ?>
-
+           ?>
+            </ul>
         </div>
     </div>
+
+
 
 
     <div class="shadowBlock" id="dvClosedQuestions" style="display: none;">

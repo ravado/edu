@@ -10,7 +10,7 @@ class Controller_Questions_Questions extends Controller_Base {
 
 		$this->template->title = "Вопросы и Ответы";
         $this->template->styles = array("stfile/css/questions.css" => "screen");
-        $this->template->scripts = array('stfile/js/questions.js');
+        $this->template->scripts = array("stfile/js/questions.js");
         $data['user_id'] = -1;
         /*Проверяем статус пользователя (Авторизирован или нет)*/
         $auth = Auth::instance();
@@ -39,7 +39,7 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['question'] = $_POST['question'];
 //
 //            // передаем в модель введенный вопрос и результат записываем в переменную
-//            $result = Model::factory('Mquestions')->askQuestion($questionData);
+
 //
 //            if ($result) {
 //                $data["result"] = $result;
@@ -49,6 +49,7 @@ class Controller_Questions_Questions extends Controller_Base {
         } else {
             $data['question'] = '';
         }
+        $data['categories'] = Model::factory('Mquestions')->getAllCategories('some');
         $this->template->content = View::factory('questions/vQuestionsAsk',$data);
 	}
 
@@ -135,6 +136,7 @@ class Controller_Questions_Questions extends Controller_Base {
             }
 
             $data['result'] = Model::factory('Mquestions')->getOneQuestion($data);
+            $data['similar'] = Model::factory('Mquestions')->getSimiliarQuestions($data);
             $this->template->title = "ВиО: " .$data['result']['question'][0]['title'];
             $this->template->content = View::factory('questions/vQuestionOne',$data);
         } else {
@@ -145,9 +147,29 @@ class Controller_Questions_Questions extends Controller_Base {
     public function action_category () {
         $this->template->styles = array("stfile/css/questions.css" => "screen");
         $this->template->scripts = array('stfile/js/questions.js');
-        $data['result'] = Model::factory('Mquestions')->getAllCategories('sss');
-        $this->template->title = "ВиО: ";
-        $this->template->content = View::factory('questions/vQuestionCategory',$data);
+        $data['cat_id'] = $this->request->param('qtype');
+        $data['page'] = (int)$this->request->param('page');
+        $data['per_page'] = 3;
+        $data['user_id'] = -1;
+        /*Проверяем статус пользователя (Авторизирован или нет)*/
+        $auth = Auth::instance();
+        if($auth->logged_in()){
+            $data['userAuth'] = TRUE;
+            $data['userName'] = $auth->get_user()->username;
+            $data['user_id'] = $auth->get_user()->id;
+        }else{
+            $data['userAuth'] = FALSE;
+        }
+        if(!empty($data['cat_id'])) {
+            $data['qtype'] = 'category';
+            $data['result'] = Model::factory('Mquestions')->getAllQuestions($data);
+            $this->template->content = View::factory('questions/vQuestionAll',$data);
+        } else {
+            $data['result'] = Model::factory('Mquestions')->getAllCategories('sss');
+            $this->template->title = "ВиО: ";
+            $this->template->content = View::factory('questions/vQuestionCategory',$data);
+        };
+
     }
 
     public function action_all() {
@@ -155,7 +177,7 @@ class Controller_Questions_Questions extends Controller_Base {
         $this->template->scripts = array('stfile/js/questions.js');
         $data['page'] = (int)$this->request->param('page');
         $data['qtype'] = (string)$this->request->param('qtype');
-
+        $data['per_page'] = 3;
         $data['user_id'] = -1;
         /*Проверяем статус пользователя (Авторизирован или нет)*/
         $auth = Auth::instance();
