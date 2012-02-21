@@ -134,11 +134,19 @@ class Controller_Questions_Questions extends Controller_Base {
             }else{
                 $data['userAuth'] = FALSE;
             }
-
             $data['result'] = Model::factory('Mquestions')->getOneQuestion($data);
-            $data['similar'] = Model::factory('Mquestions')->getSimiliarQuestions($data);
-            $this->template->title = "ВиО: " .$data['result']['question'][0]['title'];
-            $this->template->content = View::factory('questions/vQuestionOne',$data);
+            if ($data['result']) {
+                $question_id = $data['question_id'];
+                $subcategory_id = $data['result']['question'][1][0]['id_subcategory'];
+                $data['similar'] = Model::factory('Mquestions')->getSimiliarQuestions($question_id, $subcategory_id);
+                $this->template->title = "ВиО: " .$data['result']['question'][0]['title'];
+                $this->template->content = View::factory('questions/vQuestionOne',$data);
+            } else {
+                //Надо вставить 404
+                $this->template->title = "404";
+                $this->template->content = "404 вопрос не найден";
+            }
+
         } else {
             $this->template->title = "ВиО: вопрос" ;
         }
@@ -194,4 +202,8 @@ class Controller_Questions_Questions extends Controller_Base {
         $this->template->content = View::factory('questions/vQuestionAll',$data);
     }
 
+
+    public function getQuestionById($questionId) {
+
+    }
 }

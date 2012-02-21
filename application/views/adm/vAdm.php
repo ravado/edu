@@ -23,11 +23,10 @@
                     <li><a href="/adm/news/fix">Править новость</a></li>
                 </ul>
             </li>
-            <li><a class="btnSilver btnLeftMenu">Что то еще</a>
+            <li><a class="btnSilver btnLeftMenu">Вопросы и ответы</a>
                 <ul>
-                    <li><a href="#0">Колбаса</a></li>
-                    <li><a href="#0">Сосиски и сардельки</a></li>
-                    <li><a href="#0">Деликатесы</a></li>
+                    <li><a href="/adm/vio/delquestion">Удалить вопрос</a></li>
+                    <li><a href="/adm/vio/delanswer">Удалить комментарии</a></li>
                 </ul>
             </li>
         </ul>

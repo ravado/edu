@@ -669,7 +669,7 @@
 /* ================================================================================================================== */
 
     .dvQuestionAndAnswers {
-        width: 750px;
+        width: 700px;
      }
 
     .dvQuestionAndAnswers .itemInfo {
@@ -769,7 +769,7 @@
         /*background-color: #f5deb3;*/
         max-width: 695px;
         mim-width: 695px;
-        width: 695px;
+        width: 643px;
     }
 .dvAllAnswers .btnSilver {
     float: right;

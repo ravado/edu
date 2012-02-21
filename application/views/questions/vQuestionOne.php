@@ -22,13 +22,22 @@
         }
     }
 
-/*    foreach($result['question'] as $k=>$v) {
-        print_r($result['question'][$k]);
-    }*/
+//    foreach($similar as $k=>$v) {
+//        print_r($similar[$k]);
+//    }
 ?>
 
 
-    <div class="dvSimilarQuestions shadowBlock"><h4 class="lenta">тут будет нечто</h4></div>
+    <div class="dvSimilarQuestions shadowBlock"><h4 class="lenta">Похожие вопросы</h4>
+        <?php
+            if(!empty($similar)) {
+                foreach($similar as $k=>$v) {
+                    echo '<table style="width: 290px;">';
+                    echo '<tr><td><a href="/questions/question/' .$similar[$k]['id_question'] .'">' .$similar[$k]['title'] .'</a></td></tr></table>';
+                }
+            }
+        ?>
+    </div>
 
     <div class="dvQuestionAndAnswers">
 

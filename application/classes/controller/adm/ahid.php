@@ -42,4 +42,49 @@ class Controller_Adm_Ahid extends Controller{
             echo json_encode($result);
         }
    }
+
+    public function  action_getQuestionById() {
+        if(!empty($_POST)) {
+            $questionId = Arr::get($_POST,'question_id','');
+            $result = Model::factory('Mquestions')->getQuestionById($questionId);
+        } else {
+            $result = false;
+        }
+
+        echo json_encode($result);
+    }
+
+    public function  action_getQuestionAllById() {
+        if(!empty($_POST)) {
+            $questionId = Arr::get($_POST,'question_id','');
+            $result = Model::factory('Mquestions')->getQuestionAllById($questionId);
+        } else {
+            $result = false;
+        }
+
+        echo json_encode($result);
+    }
+
+    public function  action_delQuestionById() {
+        if(!empty($_POST)) {
+            $questionId = Arr::get($_POST,'question_id','');
+            $result = Model::factory('Mquestions')->delQuestionById($questionId);
+        } else {
+            $result = false;
+        }
+
+        echo json_encode($result);
+    }
+
+    public function action_delAnswersById() {
+        if(!empty($_POST)) {
+            $temp = Arr::get($_POST,'answers_id','');
+            $answers_id = explode(',', $temp);
+            $result = Model::factory('Mquestions')->delAnswersById($answers_id);
+        } else {
+            $result = false;
+        }
+
+        echo json_encode($result);
+    }
 }

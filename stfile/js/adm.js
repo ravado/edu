@@ -351,6 +351,128 @@ $('#ulAdmMenu ul').each(function(index) {
         $("input[name=id]").val($("#inpNewsDel").val());
        $("form[name=frmNewsFix]").submit();
     });
+
+    // Вывод вопроса по его id
+    $("#btnShowQuestion").click(function() {
+        var inp_question_id = $("#inpQuestionId"),
+            question_id,
+            hquestion_id = $("#hQuestionId"),
+            question_title = $("#dvQuestionTitle"),
+            question_full = $("#dvQuestionFull");
+
+        hquestion_id.val('');
+        question_title.text('');
+        question_full.text('');
+        if(inp_question_id.val() != '') {
+            question_id = inp_question_id.val();
+            $.ajax({type:"POST", data: "question_id="+question_id,url:"/adm/ahid/getquestionbyid",dataType:"json",
+                success: function(data) {
+                    if (!data) {
+                        hints('error','Нет такого вопроса в базе');
+                    }
+                    else {
+                        hquestion_id.val(data[0]['id_question']);
+                        question_title.text(data[0]['title']);
+                        question_full.text(data[0]['full']);
+                    }
+                },
+                error: function(){
+                    alert('error in ajax query when try to get question by id');
+                }
+            });
+        }
+    });
+
+    //Удаление вопроса
+    $("#btnDelQuestion").click(function() {
+        var question_id = $("#hQuestionId").val();
+        $.ajax({type:"POST", data: "question_id="+question_id,url:"/adm/ahid/delquestionbyid",dataType:"json",
+            success: function(data) {
+                if (!data) {
+                    hints('error','Не удалось удалить вопрос');
+                }
+                else {
+                    hints('success','вопрос удален');
+                    $("#dvQuestionTitle").text('');
+                    $("#dvQuestionFull").text('');
+                    $("#inpQuestionId").val('');
+                    question_id.val('');
+
+                }
+            },
+            error: function(){
+                alert('error in ajax query when try to delete question');
+            }
+        });
+    });
+
+    // Вывод вопроса и его ответов по id вопроса
+    $("#btnQuestionAll").click(function() {
+        var question_id = $("#inpQuestionId");
+        $("#dvAllAnswers").html('');
+        $.ajax({type:"POST", data: "question_id="+question_id.val(),url:"/adm/ahid/getquestionallbyid",dataType:"json",
+            success: function(data) {
+                if (!data) {
+                    hints('error','Не удалось удалить вопрос');
+                }
+                else {
+                    $("#dvQuestionTitle").html(data['question'][0]['title'] + '<br />' + data['question'][0]['full']);
+                    $("#hQuestionId").val(data['question'][0]['id_question']);
+                    if(data['answers']) {
+                        var complete_table = '';
+                        complete_table += '<table class="table table-bordered table-condensed">' +
+                            '<thead><tr><th>id</th><th>Ответы</th><th>User</th><th>Дата</th><th>Удалить</th></tr></thead><tbody>';
+                        for( var x = 0; x < data['answers'].length; x++ ) {
+                            complete_table += '<tr><td>' + data['answers'][x]['id_answer'] + '</td>' +
+                                '<td>' + data['answers'][x]['answer_text'] + '</td>' +
+                                '<td>' + data['answers'][x]['username'] + '</td>' +
+                                '<td>' + data['answers'][x]['public_date'] + '</td>' +
+                                '<td><input type="checkbox" class="idAnswer" value="' + data['answers'][x]['id_answer'] + '"></td></tr>';
+                        }
+                        complete_table += '</tbody></table>';
+                        $("#dvAllAnswers").append(complete_table);
+                    }
+                }
+            },
+            error: function(){
+                alert('error in ajax query when try to get question all');
+            }
+        });
+    });
+
+    // Удаление отмеченных ответов
+    $("#btnDelAnswers").click(function() {
+        var checked_answers = $(".idAnswer:checked"),
+            id_answers_to_del = '';
+        if(checked_answers.length > 0) {
+            checked_answers.each(function(index, element){
+                if(index+1 == checked_answers.length) {
+                    id_answers_to_del += $(this).val();
+                } else {
+                    id_answers_to_del += $(this).val()+',';
+                }
+            });
+
+
+            // Посылаем запрос на удаление ответов
+            $.ajax({type:"POST", data: "answers_id="+id_answers_to_del,url:"/adm/ahid/delanswersbyid",dataType:"json",
+                success: function(data) {
+                    if (!data) {
+                        hints('error','Не удалось удалить ответы');
+                    }
+                    else {
+                        hints('success','ответы удалены');
+                        $("#inpQuestionId").val('');
+                        $("#dvQuestionTitle").html('');
+                        checked_answers.parent('td').parent('tr').remove();
+                    }
+                },
+                error: function(){
+                    alert('error in ajax query when try to delete answers');
+                }
+            });
+        }
+    });
 //--------------------------------------------------------------------------------------------------------------------//
 
     /*Инициализация редактора новостей*/

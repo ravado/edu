@@ -192,6 +192,8 @@ class Model_Mquestions extends Model_Database{
                     ->join('subcategory')->on('subcategory.id_subcategory','=','questions_cat.id_subcategory')->execute()->as_array();
                 array_push($queryQuestion,$temp);
                 $result['question'] = $queryQuestion;
+            } else {
+                return false;
             }
 
             $queryAnswers = DB::select('answers.id_answer',
@@ -211,8 +213,6 @@ class Model_Mquestions extends Model_Database{
             if (!empty($queryAnswers)) {
                 $result['answers'] = $queryAnswers;
             }
-
-
                 return $result;
 
         }
@@ -595,5 +595,156 @@ class Model_Mquestions extends Model_Database{
 
     }
 
+    // Поиск схожих вопросов (поиск по тегам)
+    function getSimiliarQuestions($question_id, $subcategory_id) {
+        $similiar = DB::select('questions_cat.id_question',
+            'questions.title',
+            'questions.closed',
+            'questions.id_question',
+            'questions_cat.id_question',
+            'questions_cat.id_subcategory')->
+            from('questions')->
+            where('closed','=','0')->join('questions_cat')->
+            on('questions_cat.id_subcategory','=',DB::expr($subcategory_id))->
+            on('questions_cat.id_question','!=',DB::expr($question_id))->
+            limit(5)->order_by(DB::expr('RAND()'))->execute()->as_array();
+        if(count($similiar) > 0) {
+            return $similiar;
+        } else {
+            $similiar = DB::select('questions.title',
+                'questions.closed',
+                'questions.id_question')->
+                from('questions')->
+                where('closed','=','0')->
+                limit(5)->order_by(DB::expr('RAND()'))->execute()->as_array();
+            return $similiar;
+        }
+    }
+
+    public function getQuestionById($question_id) {
+        $question = DB::select('questions.title',
+            'questions.closed',
+            'questions.id_question',
+            'questions.full')->
+            from('questions')->
+            where('id_question','=',DB::expr($question_id))->
+            execute()->as_array();
+        if(count($question) > 0) {
+            return $question;
+        } else {
+            return false;
+        }
+    }
+
+    public function delQuestionById($question_id) {
+        DB::delete('questions')->
+            where('id_question','=',DB::expr($question_id))->
+            execute();
+        $qa = DB::select('id_questions_and_answers',
+                'id_answers')->
+            from('questions_and_answers')->
+            where('id_questions','=',DB::expr($question_id))->
+            execute()->as_array();
+        DB::delete('questions_and_answers')->
+            where('id_questions','=',DB::expr($question_id))->
+            execute();
+        DB::delete('questions_cat')->
+            where('id_question','=',DB::expr($question_id))->
+            execute();
+        foreach($qa as $k=>$v) {
+            DB::delete('vote')->
+                where('id_qa','=',DB::expr($qa[$k]['id_questions_and_answers']))->
+                execute();
+            if($qa[$k]['id_answers'] != null) {
+                DB::delete('answers')->
+                    where('id_answer','=',DB::expr($qa[$k]['id_answers']))->
+                    execute();
+            }
+        }
+        DB::delete('qfavorite')->
+            where('id_question','=',DB::expr($question_id))->
+            execute();
+
+        return true;
+    }
+    public function getQuestionAllById($question_id) {
+        $result = array();
+        $result['question'] = DB::select('questions.title',
+            'questions.closed',
+            'questions.id_question',
+            'questions.full')->
+            from('questions')->
+            where('id_question','=',DB::expr($question_id))->
+            execute()->as_array();
+        if(count($result['question']) > 0) {
+            $result['answers'] = DB::select('questions_and_answers.id_questions',
+                'questions_and_answers.id_answers',
+                'answers.id_answer',
+                'answers.id_user',
+                'answers.answer_text',
+                'answers.best',
+                'answers.public_date',
+                'users.id',
+                'users.username')->
+                from('questions_and_answers')->
+                where('questions_and_answers.id_questions','=',DB::expr($question_id))->
+                where('questions_and_answers.id_answers','!=',null)->
+                join('answers')->
+                on('answers.id_answer','=','questions_and_answers.id_answers')->
+                join('users')->
+                on('users.id','=','answers.id_user')->
+                execute()->as_array();
+            if(count($result['answers']) == 0) {
+                $result['answers'] = false;
+            }
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    // Удаление ответов по id
+    public function delAnswersById($answers_id) {
+        foreach($answers_id as $k=>$v) {
+
+            $answer = DB::select('answers.id_answer',
+                'answers.best')->
+                from('answers')->
+                where('id_answer','=',DB::expr($answers_id[$k]))->
+                execute()->
+                as_array();
+
+
+            DB::delete('answers')->
+                where('id_answer','=',DB::expr($answers_id[$k]))->
+                execute();
+
+            $qa = DB::select('id_questions_and_answers',
+                'id_answers',
+                'id_questions')->
+                from('questions_and_answers')->
+                where('id_answers','=',DB::expr($answers_id[$k]))->
+                execute()->as_array();
+
+            if($answer[0]['best']) {
+                DB::update('questions')->set(array('closed' => '0'))->
+                    where('id_question','=',DB::expr($qa[0]['id_questions']))->execute();
+            }
+            
+            DB::delete('questions_and_answers')->
+                where('id_answers','=',DB::expr($qa[0]['id_questions_and_answers']))->
+                execute();
+
+            DB::delete('vote')->
+                where('id_qa','=',DB::expr($qa[0]['id_questions_and_answers']))->
+                execute();
+
+
+            DB::update('questions')->set(array('answers_count' => new Database_Expression('answers_count-1')))->
+                where('id_question','=',DB::expr($qa[0]['id_questions']))->execute();
+        }
+
+        return true;
+    }
 }
 
