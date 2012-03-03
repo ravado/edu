@@ -1,0 +1,18 @@
+
+                                /************************************************/
+                                /************** Стили для тестов ****************/
+                                /************************************************/
+    .dvTestAdding {
+        width: 700px;
+    }
+    .tdCorrect {
+        text-align: center !important;
+    }
+
+    .table td{
+        vertical-align: middle;
+    }
+
+    .dvTestAdding .table input {
+        margin-bottom: 0;
+    }

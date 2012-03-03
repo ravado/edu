@@ -115,6 +115,13 @@ Cookie::$salt = 'a234aflk234jbdf';
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
+/*Роут тестов*/
+Route::set('tests', 'tests(/<action>)')
+    ->defaults(array(
+    'directory'  => 'tests',
+    'controller' => 'tests',
+    'action'     => 'index',
+));
 
 /*роут для аяксов в ВиО*/
 Route::set('hide_question', 'questions/qhid/(<action>)')
@@ -123,6 +130,7 @@ Route::set('hide_question', 'questions/qhid/(<action>)')
     'controller' => 'qhid',
     'action'     => 'getOneNews',
 ));
+/*роут отдельного вопроса*/
 
 /*роут отдельного вопроса*/
 Route::set('one_question', 'questions/question(/<id>)')

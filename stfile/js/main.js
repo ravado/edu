@@ -312,6 +312,14 @@ function getRegex (jQueryObj,type){
                 return currRagex.test(jQueryObj.val());
             }                        
         }
+        case ('number'):{
+            if(jQueryObj.val() == '') {
+                return false;
+            } else {
+                currRagex = new RegExp(/^\d+$/);
+                return currRagex.test(jQueryObj.val());
+            }
+        }
         default:{
             return false;
         }

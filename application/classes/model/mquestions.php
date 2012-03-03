@@ -730,7 +730,7 @@ class Model_Mquestions extends Model_Database{
                 DB::update('questions')->set(array('closed' => '0'))->
                     where('id_question','=',DB::expr($qa[0]['id_questions']))->execute();
             }
-            
+
             DB::delete('questions_and_answers')->
                 where('id_answers','=',DB::expr($qa[0]['id_questions_and_answers']))->
                 execute();
