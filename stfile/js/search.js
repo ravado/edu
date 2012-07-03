@@ -19,8 +19,8 @@ google.setOnLoadCallback(function() {
     imageSearchOptions['layout'] = google.search.ImageSearch.LAYOUT_CLASSIC;
     customSearchOptions['enableImageSearch'] = true;
     customSearchOptions['imageSearchOptions'] = imageSearchOptions;  var customSearchControl = new google.search.CustomSearchControl(
-        '017974249376903738753:hixcuhvwd_4', customSearchOptions);
-    customSearchControl.setResultSetSize(google.search.Search.LARGE_RESULTSET);
+        '017974249376903738753:v_aupzl_ryi', customSearchOptions);
+    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
     customSearchControl.draw('dv-site-search');
 }, true);
 
