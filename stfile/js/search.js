@@ -46,7 +46,6 @@ function switchSearchDirection(direction) {
     search_query = active_search_block.find('.gsc-input input').val();
     active_tab = active_search_block.find('.gsc-tabHeader.gsc-tabhActive');
     active_tab_index = active_tab.index();
-    alert(active_tab_index);
     switch(direction) {
         case 'site': { current_search_block = site_search_block; break; }
         case 'web': { current_search_block = web_search_block; break; }
@@ -72,6 +71,14 @@ function switchSearchDirection(direction) {
 
 $(document).ready(function(){
 
+    $(".gscb_a").live('click',function() {
+        $(".gsc-tabsArea").addClass('gsc-tabsAreaInvisible').removeClass('gsc-tabsArea');
+        $(".gsc-refinementsArea").addClass('gsc-refinementsAreaInvisible').removeClass('gsc-tabsArea');
+        $(".gsc-above-wrapper-area").addClass('gsc-above-wrapper-area-invisible').removeClass('gsc-above-wrapper-area');
+        $(".gsc-adBlock").addClass('gsc-adBlockInvisible').removeClass('gsc-adBlock');
+        $(".gsc-resultsbox-visible").addClass('gsc-resultsbox-invisible').removeClass('gsc-resultsbox-visible');
+
+    });
 
     // Выбор вида поиска (по сайту, в интернете)
     $(".search-way a").click(function() {
