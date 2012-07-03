@@ -2,7 +2,7 @@
  * Скрипты админки
  */
 
-var redactorPre, redactorFull;
+var redactorPre, redactorFull, REDACTOR_QUESTION, REDACTOR_VARIANTS;
 // Проверка наличия новости по ID в качестве параметра передаем jQuery обьект в который будет вводиться айдишник
 function checkNewsbyID (jQueryObj) {
     var exist;
@@ -21,7 +21,265 @@ function checkNewsbyID (jQueryObj) {
 
 var currUsername = null;
 
-$(document).ready(function(){
+// Очищаем содержимое редактора и таблицы с вариантами
+function clearQuestionVar() {
+    $("#tblVariants").addClass('hide');
+    $("#tblVariants tbody").html('');
+    $(".sendQuestion").addClass('disabled');
+    REDACTOR_QUESTION.setCodeEditor('<p></p>');
+    REDACTOR_VARIANTS.setCodeEditor('<p></p>');
+}
+
+// Создаем новый тест
+function createNewTest(trigger_btn) {
+
+    $("#tstCreating").removeClass('hide');
+    // Посылаем аякс запросом данные для записи теста в базу
+    $.ajax({type:"POST", data: $("#frmAdmCreateTest").serialize(),url:"/adm/ahid/createtest",dataType:"json",
+        success: function(result) {
+            console.log(result);
+            $("input[name='tst_title']").attr('disabled','disabled');
+            $(".hTstId").val(result.id_test);
+            $("#dvSecondPart").slideDown();
+            trigger_btn.attr('disabled','disabled)');
+            $("#btnAdmCreateNewTest").removeClass('hide');
+            $("#tstCreating").addClass('hide');
+        },
+        error: function(result){
+            console.log(result);
+            hints('error','Что то пошло не так');
+        }
+    });
+}
+
+$(document).ready(function() {
+
+    //Удаление теста по иду
+    $("#btnTstDel").click(function() {
+        var id = $("#idTestToDel").val();
+        $.ajax({type:"POST", data: "test_id="+id,url:"/adm/ahid/deltest",dataType:"json",
+            success: function(result) {
+                console.log(result);
+                hints('success','Тест удален');
+            },
+            error: function(result){
+                console.log(result);
+                hints('error','Тест не удален');
+            }
+        });
+    });
+
+    // Пока нужно для того что бы редакторы не сворачивались с классом hide
+    $("#dvSecondPart").slideUp(1);
+
+
+    $("#btnAdmCreateNewTest").click(function() {
+        $("#dvSecondPart").slideUp();
+        $("input[name=tst_title]").removeAttr('disabled');
+        $("#frmAdmCreateTest")[0].reset();
+        $("#btnAdmCreateTest").removeAttr('disabled');
+        $("input[name=tst_title]").focus();
+        $(this).addClass('hide');
+//        $("#createdQuestions").find('table').addClass('hide');
+        $("#createdQuestions").find('tbody').html('');
+    });
+
+    $(".admVarIsText").live('click', function() {
+        if($(".admVarIsText").hasClass('isChecked')) {
+            $('.chkIsText').removeAttr('checked');
+            $(".admVarIsText").removeClass('isChecked');
+            $(".hQuestionIsText").val('0');
+        } else {
+            $('.chkIsText').attr('checked','checked');
+            $(".admVarIsText").addClass('isChecked');
+            $(".hQuestionIsText").val('1');
+        }
+    });
+
+    // Нажимаем на кнопку удаления всех вариантов ответа
+    $(".varDelAll").click(function() {
+        $(".btnRemoveVariant").click();
+    });
+
+    // Нажимаем на кнопку удаления одного варианта ответа
+    $(".btnRemoveVariant").live('click', function() {
+        if($(this).closest('tbody').find('tr').length == 1) {
+            $(".sendQuestion").addClass('disabled');
+            $("#tblVariants").addClass('hide');
+        }
+        $(this).closest('tr').remove();
+
+    });
+
+
+    // Нажатие на кнопку отправки вопроса и его вариантов ответа
+    $(".sendQuestion").click(function() {
+
+        // Включаем изображение процесса выполнения
+        $("#questionCreating").removeClass('hide');
+
+        if(!$(this).hasClass('disabled')) {
+            // Забираем с редактора вопроса весь текст
+            var curr_question = REDACTOR_QUESTION.getCodeTextarea();
+
+            // И записываем его в скрытое поле для того что бы при сабмите формы отправить текст вопроса
+            $(".hQuestionTitle").val(curr_question);
+
+            // Отправка аякс запроса с сериализированой формой
+            $.ajax({type:"POST", data: $("#frmAdmAddQuestion").serialize(),url:"/adm/ahid/tstaddquestvar",dataType:"json",
+                // В случае удачной отправки запроса
+                success: function(data) {
+                    console.group('Sending Questions and Variants');
+                    console.info(data.message);
+                    console.log(data);
+                    console.groupEnd();
+                    // Если на сервере все удачно записалось...
+                    if(data.status == 'ok') {
+                        hints('success','Данные успешно записаны');
+                        var additional_html = '', additional_status = '', check_as_correct = '';
+                        if(data.question.ball) { additional_status = data.question.ball; }
+
+                        // Генерируем верстку под записаный в базу вопрос
+                        additional_html += '<tr class="trCreatedQuestion">' +
+                            '<td colspan="2">' + data.question.title + '<input type="hidden" name="idQuestVar" value="' + data.question.id_tst_question + '"></td>' +
+                            '<td class="admStatus">' + additional_status + '</td>' +
+                            '<td class="admVarDel"><a class="delWritedItem"><img src="/stfile/img/tests/icon-delete.png"></a></td>' +
+                        '</tr>';
+
+                        // А затем для каждого варианта ответа
+                        for(var i = 0; i < data.variants.length; i++) {
+                            console.log(data.variants[i].title);
+                            additional_status = '';
+                            if(data.variants[i].ball > 0) {
+                                additional_status = '<span class="pull-left spnCreatedBalls" title="Баллы">' + data.variants[i].ball + '</span>';
+                            }
+                            if(data.variants[i].is_text) {
+                                additional_status += '<img class="pull-right questVarStatus" src="/stfile/img/tests/icon-input.png" title="Ответ нужно вводить с клавиатуры" ' +
+                                    'data-original-title="Ответ нужно вводить с клавиатуры">';
+                            }
+
+                            if(data.variants[i].correct == '1') {
+                                check_as_correct += '<img src="/stfile/img/tests/check.png">';
+                            } else {
+                                check_as_correct = '';
+                            }
+
+                            additional_html += '<tr>' +
+                                '<td class="admCorrect">' + check_as_correct + '</td>' +
+                                '<td class="tdCreatedVariantd">' + data.variants[i].title + '<input type="hidden" name="idQuestVar" value="' + data.variants[i].id_tst_answer + '"></td>' +
+                                '<td class="admStatus">' + additional_status + '</td>' +
+                                '<td class="admVarDel"><a class="delWritedItem"><img src="/stfile/img/tests/icon-delete.png"></a></td>' +
+                            '</tr>';
+                        }
+                        clearQuestionVar();
+                        // Выводим сгенерированную верстку в специальный блок
+                        $("#createdQuestions").append('<table class="table"><thead></thead><tbody>' + additional_html + '</tbody></table>');
+
+                    // Если на сервере произошел сбой то выводим сообщение об этом
+                    } else if(data.status == 'bad') {
+                        hints('error','Что то пошло не так');
+                    }
+
+                    // Выключаем изображение процесса выполнения
+                    $("#questionCreating").addClass('hide');
+                },
+
+                // Если запрос не выполнился
+                error: function(data){
+                    console.group('Sending Questions and Variants');
+                    console.warn('error in ajax query when try to send question and variants');
+                    if (typeof data.message != 'undefined') {
+                        console.warn(data.message);
+                    }
+                    console.groupEnd();
+                    hints('error', 'Не удалось отправить аякс запрос');
+
+                    // Выключаем изображение процесса выполнения
+                    $("#questionCreating").addClass('hide');
+                }
+            });
+        }
+
+    });
+
+    $(".tstSettings").click(function() {
+        $('.dvTstTools').slideToggle(200);
+
+    });
+
+    $("#btnAdmCreateTest").click(function() {
+       createNewTest($(this));
+
+    });
+
+    $(".addVariant").click(function(){
+        var new_row, curr_variant,  rand, is_text_checked = '', curr_attr;
+        curr_variant = REDACTOR_VARIANTS.getCodeTextarea();
+        rand = Math.ceil(Math.random()*1000000);
+        console.log(curr_variant);
+
+        // Если кнопка отправить запрос была неактивной, то теперь стоит сделать ее активной
+        if($(".sendQuestion").hasClass('disabled')) {
+            $(".sendQuestion").removeClass('disabled');
+        }
+
+        // Проверяем если таблица с вариантами ответа была спрятана значит в нее еще ничего не записывали
+        if($("#tblVariants").hasClass('hide')) {
+            $("#tblVariants").removeClass('hide');
+            $("#tblVariants").slideDown();
+        }
+
+        // Если уже было выбрано что варианты ответов будут текстовыми то нужно и новому чекбоксу добавить checked
+        if($(".admVarIsText").hasClass('isChecked')) {
+            is_text_checked = 'checked="checked"';
+        } else { is_text_checked = ''; }
+
+        new_row = "<tr>" +
+            "<td class='admVarText'>" + curr_variant + "<input type='hidden' name='tst_variant["+ rand +"]["+"title"+ "]' value='"+ curr_variant +"'></td>" +
+            "<td class='admVarBall'><input type='text' class='span1' name='tst_variant["+ rand +"]["+"ball"+ "]'></td>" +
+            "<td class='admVarCorr'><input type='checkbox' name='tst_variant["+ rand +"]["+"correct"+ "]'></td>" +
+            "<td class='admVarIsText'><input type='checkbox' class='chkIsText' name='tst_variant["+ rand +"]["+"is_text"+ "]' " + is_text_checked + " ></td>" +
+            "<td class='admVarDel'><a class='btn btn-danger btnRemoveVariant'><i class='icon-trash icon-white'></i></a></td></tr>";
+        $("#tblVariants tbody").append(new_row);
+    });
+//================================== Юлина админка ===================================================================//
+
+    //Добавляем факт в список
+    $("#btnAddFact").click(function() {
+        if($("#txtFact").val() != '') {
+            var curr_tbody = $("#tblAddedFacts").children('tbody'),
+                curr_val = $("#txtFact").val(),
+                hidden_info = '<input type="hidden" name="facts[]" value="' + curr_val + '">';
+
+            curr_tbody.append('<tr><td>' + curr_val + hidden_info + '</td><td><a class="btn btn-danger delFact" ><i class="icon-trash icon-white"></i></a></td></tr>');
+            $("#txtFact").val('');
+        } else {
+            hints('warning','Нужно заполнить поле фактом');
+        }
+    });
+
+    // Удаляем факт из списка
+    $(".delFact").live('click', function() {
+        $(this).closest('tr').remove();
+    });
+
+    // Передаем на сервер данные для записи в бд
+    $("#btnWriteFacts").click(function() {
+        $.ajax({type:"POST", data: $("#frmFacts").serialize(),url:"/adm/ahid/addfact",dataType:"json",
+            success: function(data) {
+                console.log(data);
+
+                hints('success','Данные успешно записаны');
+                $("#tblAddedFacts").find('tbody').html('');
+            },
+            error: function(){
+                alert('error in ajax query when try to delete question');
+            }
+        });
+    });
+
+//---------------------------------- Юлина админка -------------------------------------------------------------------//
+
 
 //======================================Слайдер боковой менюшки (справа)==============================================//
 $('#ulAdmMenu ul').each(function(index) {
@@ -126,10 +384,10 @@ $('#ulAdmMenu ul').each(function(index) {
                         $("input[name=lastName]").val(data['userInfo'][0]['last_name']);
 
                         if (data['userInfo'][0]['sex'] == 0) {
-                            $("input[name=sex][value=0]").attr('checked','checked');
+                            $("input[name=sex][value='0']").attr('checked','checked');
                         }
                         if (data['userInfo'][0]['sex'] == 1) {
-                            $("input[name=sex][value=1]").attr('checked','checked');
+                            $("input[name=sex][value='1']").attr('checked','checked');
                         }
 
                         if (data['userInfo'][0]['role'] == 1) {
@@ -475,9 +733,16 @@ $('#ulAdmMenu ul').each(function(index) {
     });
 //--------------------------------------------------------------------------------------------------------------------//
 
+
+
     /*Инициализация редактора новостей*/
-    redactorPre = $('#txtNewsPre').redactor({ image_upload: '/news/nhid/loadimages' });
-    redactorFull = $('#txtNewsFull').redactor({ image_upload: '/news/nhid/loadimages' });
+    redactorPre = $('#txtNewsPre').redactor({ imageUpload: '/news/nhid/loadimages' });
+
+    redactorFull = $('#txtNewsFull').redactor({ imageUpload: '/news/nhid/loadimages' });
+// Редактор для тестов
+    REDACTOR_QUESTION = $('#tstQuestions').redactor({ imageUpload: '/news/nhid/loadimages' });
+    REDACTOR_VARIANTS = $("#tstVariants").redactor({ imageUpload: '/news/nhid/loadimages'});
+
 });
 
 

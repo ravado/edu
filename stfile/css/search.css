@@ -12,8 +12,8 @@
 
 /*Переопределение поля ввода*/
 #dvSearch .inpColor{
-    width: 520px;
-    height: 20px;
+    width: 575px;
+
 
 }
 /*Переопределение кнопки для поиска*/
@@ -22,6 +22,6 @@
 }
 /*Блок для результатов поиска*/
 #dvForResults{
-    width: 600px;
-    margin-left: 50px;
+    width: 650px;
+
 }

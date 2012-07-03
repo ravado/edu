@@ -13,30 +13,12 @@
             <a href="/"><img src="../../../stfile/img/logo.png" alt="logo"/></a>
             <nav>
                 <ul>
-                    <li><a href="/news">Новости</a></li>
-                    <li><a href="">Тесты</a></li>
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/tests">Тесты</a></li>
                     <li><a href="/search">Поиск</a></li>
                     <li><a href="/questions">Вопросы и Ответы</a></li>
-                    <li><a href="#">Библиотека</a></li>
-                    <li><a href="#">Магазин</a></li>
-                    <li>
-                        <div class="products">
-                            <a href="#" id="silo_products">еще</a>
-                            <div id="menu_more">
-                                <div class="accent"></div>
-                                <ul>
-                                    <li class="evernote"><a href="/evernote/"><span class="evn_prod"> Пункт 1</span> некое описание </a></li>
-                                    <li class="skitch"><a href="/skitch/"><span class="evn_prod">Пункт 2</span> некое описание</a></li>
-                                    <li class="hello"><a href="/hello/"><span class="evn_prod">Пункт 3</span> Rнекое описание</a></li>
-                                    <li class="food"><a href="/food/"><span class="evn_prod">Пункт 4</span> некое описание</a></li>
-                                    <li class="clearly"><a href="/clearly/"><span class="evn_prod">Пункт 5</span>  некое описание</a></li>
-
-                                </ul>
-                            </div><!-- /mega_drop -->
-                        </div>
 
 
-                    </li>
                 </ul>
             </nav>
         </header>

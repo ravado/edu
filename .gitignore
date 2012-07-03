@@ -1,13 +1,2 @@
 .idea/
-system/
-application/logs/
-application/cache/
-application/messages/
-index.php
-application/config/database.php
-
-.DS_Store
-
-application/config/database.php
-
-application/config/database.php
+uploads/

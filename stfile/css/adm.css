@@ -7,6 +7,12 @@
     width: 200px;
 }
 
+#dvAdmMenu ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
 /*Блок с контроллами управления текущей страницы*/
 #dvAdmPanel{
     margin-bottom: 15px;
@@ -17,7 +23,7 @@
 /*Левое боковое меню Админки*/
 .ulLeftSidebar ul{
     width: 120%;
-    margin-left: 10px;
+    margin-left: 5px !important;
     display: none;
 }
 .ulLeftSidebar ul li{
@@ -96,4 +102,120 @@
 .btnSilver.News{
     margin-top: 20px;
     margin-left: 500px;
+}
+
+/*Блок с кнопками управления для создания тестов*/
+.dvQstTools {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+.dvTstTools {
+    padding: 10px;
+
+}
+.tstQuestions{
+    height: 100px;
+}
+.dvTstTools td {
+    padding: 5px;
+    width: 220px;
+}
+.admVarDel {
+    width: 30px;
+    text-align: center;
+}
+.admVarIsText {
+    width: 30px;
+    text-align: center;
+}
+
+.admVarCorr {
+    width: 30px;
+    text-align: center;
+}
+.admVarBall {
+    width: 30px;
+    text-align: center;
+}
+#tstVariants {
+ margin-bottom: 100px;
+}
+#dvRdctQuestion {
+    padding-bottom: 10px;
+}
+#dvRdctVariant {
+    padding-bottom: 10px;
+}
+#dvAdmTstCreateContent table, #dvAdmTstCreateContent table{
+    text-align: left !important;
+}
+#tblVariants th{
+    padding: 5px;
+}
+.set-pointer {
+    cursor: pointer;
+}
+#tblVariants input[type=text] {
+    margin: 0;
+}
+.admVarText {
+    width: 500px;
+}
+.dvTstTools .radio {
+    font-size: 10px;
+}
+.tstToolTitle {
+    color: #15689D;
+    display: block;
+}
+
+.trCreatedQuestion {
+    font-weight: bolder !important;
+    background-color: #FFDE89;
+}
+.green {
+    /*background-color: #c5e6c5;*/
+    /*border: 3px solid #c5e6c5;*/
+}
+.spnCreatedBalls {
+    border-bottom: 2px solid #eee;
+    color: #15689D;
+    cursor: help;
+}
+.admStatus {
+    width: 60px;
+}
+
+.tdCreatedVariantd {
+
+}
+label:hover {
+    cursor: pointer;
+}
+
+.tstSettings {
+    border-bottom: 1px dotted #08C;
+    text-decoration: none !important;
+    font-weight: normal;
+}
+
+#dvTstInput {
+    margin-top: 5px;
+}
+
+/*Изображение выполнения операции*/
+.imgLoading {
+    vertical-align: middle;
+    padding-bottom: 5px;
+}
+
+/*Изображения дополнительного статуса вопросов и вариантов*/
+.questVarStatus {
+    margin-top: -2px;
+    cursor: help;
+}
+
+/*Столбец для отметки правильных вариантов ответа*/
+.admCorrect {
+    width: 20px;
 }

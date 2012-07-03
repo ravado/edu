@@ -7,7 +7,6 @@ class Controller_Search_Search extends Controller_Base {
 
     /*Показываем главную страницу Поиска */
 	public function action_index(){
-
 		$this->template->title = "Поиск";
         $this->template->styles = array("stfile/css/search.css" => "screen");
         $this->template->scripts = array('stfile/js/search.js');
@@ -20,7 +19,6 @@ class Controller_Search_Search extends Controller_Base {
         }else{
             $data['userAuth'] = FALSE;
         }
-
         $this->template->content = View::factory('search/vSearch',$data);
 	}
 }

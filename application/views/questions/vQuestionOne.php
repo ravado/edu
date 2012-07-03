@@ -27,7 +27,6 @@
 //    }
 ?>
 
-
     <div class="dvSimilarQuestions shadowBlock"><h4 class="lenta">Похожие вопросы</h4>
         <?php
             if(!empty($similar)) {
@@ -48,7 +47,7 @@
                         <table class="tblQuestionTitle">
                             <tr>
                                 <td class="favorite-icon">
-                                    <span class="favorite <?php if ($result['favorite']) echo 'favoriteChecked' ?>"></span>
+                                    <span class="favorite  <?php if ($result['favorite']) echo 'favoriteChecked' ?>"></span>
                                     <input type="hidden" id="hQuestionId" value="<?php echo $result['question'][0]['id_question']; ?>" >
                                 </td>
                                 <td>
@@ -77,7 +76,7 @@
                                 <td class="tdVote">
                                     <div class="dvVote">
                                         <a class="voteUp-off <?php echo $voteClassUp; ?>"></a>
-                                        <span class="spnVotesCount"><?php echo $result['question'][0]['rating'] ?></span>
+                                        <div class="spnVotesCount dvCount"><div class="numCount"><?php echo $result['question'][0]['rating'] ?></div></div>
                                         <a class="voteDown-off <?php echo $voteClassDown; ?>"></a>
                                     </div>
                                 </td>
@@ -120,8 +119,8 @@
                                                     <tr>
                                                         <td>
                                                             <div>
-                                                                <a class="btnSilver postAnswer">Добавить ответ</a>
-                                                                <a class="btnSilver cancelAnswer">Отмена</a>
+                                                                <a class="btn btn-large postAnswer">Добавить ответ</a>
+                                                                <a class="btn btn-large cancelAnswer">Отмена</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -139,25 +138,24 @@
 
 <!--            asdad-->
         </div>
+        <?php
+        if($userAuth && $result['question'][0]['closed'] == false && $result['question'][0]['id_user'] != $user_id) {
+            echo '<a class="btn" id="btnGiveAnswer">Добавить ответ</a>';
+        } elseif(!$userAuth) {
+            if ($result['question'][0]['closed']) {
+                echo '<a class="btn hide" id="btnGiveAnswerNotAuth">Добавить ответ</a>';
+
+            } else {
+                echo '<a class="btn" id="btnGiveAnswerNotAuth">Добавить ответ</a>';
+            }
+
+        } elseif ($result['question'][0]['closed'] || $result['question'][0]['id_user'] == $user_id) {
+            echo '<a class="btn hide" id="btnGiveAnswerNotAuth">Добавить ответ</a>';
+
+        }
+        ?>
         <div class="dvAllAnswers">
 <!--            <h4 class="lenta ">Ответы</h4>-->
-            <?php
-                if($userAuth && $result['question'][0]['closed'] == false && $result['question'][0]['id_user'] != $user_id) {
-                    echo '<a class="btnSilver" id="btnGiveAnswer">Ответить</a>';
-                } elseif(!$userAuth) {
-                    if ($result['question'][0]['closed']) {
-                        echo '<a class="btnSilver" style="visibility: hidden;" id="btnGiveAnswerNotAuth">Ответить</a>';
-
-                    } else {
-                        echo '<a class="btnSilver" id="btnGiveAnswerNotAuth">Ответить</a>';
-                    }
-
-                } elseif ($result['question'][0]['closed'] || $result['question'][0]['id_user'] == $user_id) {
-                    echo '<a class="btnSilver" style="visibility: hidden;" id="btnGiveAnswerNotAuth">Ответить</a>';
-
-                }
-            ?>
-            <br />
 
             <table class="tblAnswers">
                 <?php
@@ -165,7 +163,7 @@
                     echo '<p class="searchTitle"> Увы ответов на даный вопрос пока нет, станьте первым </p>';
                 } else if($count > 0) {
                     $bestExist = false;
-                    echo '<hr>';
+                    echo '<div class="ansCount"><h4>Ответов: ' .$count .'</h4></div>';
 
 
 
@@ -208,7 +206,7 @@
                                                             <td class="tdVote">
                                                                 <div class="dvVote">
                                                                     <a class="voteUp-off ' .$voteClassUp .' "></a>
-                                                                    <span class="spnVotesCount">' .$result['answers'][$k]['rating'] .'</span>
+                                                                    <div class="spnVotesCount dvCount"><div class="numCount">' .$result['answers'][$k]['rating'] .'</div></div>
                                                                     <a class="voteDown-off ' .$voteClassDown .' "></a>
                                                                 </div>
                                                             </td>
@@ -269,7 +267,7 @@
 
                     </td>
                     <td>
-                        <div class="shadowBlock ">
+                        <div class="lineBlock ">
                             <table cellspacing="0" '.$isBadRating .'>
                                 <tr>
                                     <td>
@@ -288,7 +286,7 @@
                                                 <td class="tdVote">
                                                     <div class="dvVote">
                                                         <a class="voteUp-off ' .$voteClassUp .' "></a>
-                                                        <span class="spnVotesCount">' .$result['answers'][$k]['rating'] .'</span>
+                                                        <div class="spnVotesCount dvCount"><div class="numCount">' .$result['answers'][$k]['rating'] .'</div></div>
                                                         <a class="voteDown-off ' .$voteClassDown .' "></a>
                                                     </div>
                                                 </td>

@@ -4,7 +4,7 @@ function addQuestion() {
         return false;
     }
 
-    if($("div.label").length == 0) {
+    if($("div.label-tags").length == 0) {
         hints('warning','Выберите хотя бы одну категорию своему вопросу');
         return false;
     }
@@ -13,7 +13,7 @@ function addQuestion() {
 }
 
 function isTagsComplete() {
-    if ($(".label").length > 4) {
+    if ($(".label-tags").length > 4) {
         $("input[type=checkbox]").not("input:checked").attr("disabled","disabled");
         $("#txtCategory").attr("disabled","disabled");
         $("#addNewCategory").attr("disabled","disabled");
@@ -29,7 +29,7 @@ function isTagsComplete() {
 function isSimilar(string) {
     var count = false;
     if (string != '') {
-    $(".label").each(function() {
+    $(".label-tags").each(function() {
         if ($(this).children('p').text() == string) {
             count = true;
         }
@@ -38,14 +38,68 @@ function isSimilar(string) {
     return count;
 }
 
+function createCounter(jqueryObj) {
+    var curr_parent = jqueryObj.parent(),
+        temp_clone = jqueryObj.clone(),
+        curr_height = jqueryObj.outerHeight();
+
+    curr_parent.prepend(temp_clone.clone().css('margin-top',-curr_height));
+    curr_parent.append(temp_clone.clone());
+    curr_parent.addClass('countered');
+    jqueryObj.addClass('showed');
+}
+
+function countDown(jqueryObj, number) {
+    var first_el = jqueryObj.children(':first'),
+        curr_heigth = first_el.outerHeight(),
+        curr_top = parseInt(first_el.css('margin-top')),
+        curr_showed = jqueryObj.children('.showed');
+    jqueryObj.children().not('.showed').text(number);
+    curr_showed.prev('.numCount').addClass('showed');
+    curr_showed.removeClass('showed');
+    first_el.animate({'margin-top':(curr_heigth + curr_top)+'px'}, 200);
+}
+
+function countUp(jqueryObj, number) {
+    var first_el = jqueryObj.children(':first'),
+        curr_height = first_el.outerHeight(),
+        curr_top = parseInt(first_el.css('margin-top')),
+        curr_showed = jqueryObj.children('.showed');
+    jqueryObj.children().not('.showed').text(number);
+    curr_showed.next('.numCount').addClass('showed');
+    curr_showed.removeClass('showed');
+    first_el.animate({'margin-top': (curr_top - curr_height)+'px'}, 200);
+}
 
 $(document).ready(function(){
+
+
+    //Всплывающая подсказка при наводе курсора на звездочку
+    $(".favorite").popover({position: 10,
+                            placement: 'left',
+                            title: 'Избранное',
+                            trigger: 'hover',
+                            content: 'Вы можете добавить этот вопрос в Избранное',
+                            delay: {show: 800, hide: 10}});
 
     //Отслеживаем нажатие Enter для входа
     $("textarea[name=answer_text]").keypress(function(e){
         if(e.keyCode == 13){
             $(".postAnswer").click();
         }
+    });
+
+    //Отслеживаем ввод запятой для добавления категории
+    $("#txtCategory").keyup(function(e) {
+        var curr_value = $(this).val();
+        if(getRegex($(this),'comma')) {
+            console.log('key is comma');
+            $(this).val(curr_value.replace(",", ""));
+            $("#addNewCategory").click();
+        } else {
+            console.log('not comma');
+        }
+
     });
 
     // При загрузке страницы снимем все галочки, а то некоторые (не будем показывать на ФФ) их сохраняют при перезагрузке
@@ -55,10 +109,10 @@ $(document).ready(function(){
         var str = $("#txtCategory").val().toLowerCase(), rand;
         var arr;// = str.split(/[,;\s]/);
         var tempstring;
-        tempstring = str.replace(/[^A-Za-zА-Яа-яЁё0-9]/g,',');
+        tempstring = str.replace(/[^A-Za-zА-Яа-яЁё0-9\s]/g,',');
         arr = tempstring.split(',');
 //        alert(arr);
-        var tagsCount = $(".label").length;
+        var tagsCount = $(".label-tags").length;
         var i,j;
         for (i = tagsCount, j = 0; i < 6, j < arr.length; i++, j++) {
             if (i < 5 ) {
@@ -67,7 +121,8 @@ $(document).ready(function(){
 //                    alert('is similar');
                 } else {
                     rand = Math.random();
-                    $(".dvCategoryLabel").append("<div class='label' id='"+rand+"'><p>"+arr[j]+"<span class='removeTag'></span></p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
+                    $(".dvCategoryLabel").append("<div class='label-tags' id='"+rand+"'><p>"+arr[j]+
+                        "<span class='removeTag icon-remove'></span></p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
 //                    alert(arr[j]);
                 }
             } else {
@@ -96,12 +151,12 @@ $(document).ready(function(){
         if (!$(this).is(":checked")) {
             var curr_name;
             curr_name = $(this).attr("id");
-            $(".label#"+curr_name).remove();
+            $(".label-tags#"+curr_name).remove();
             isTagsComplete();
 
 
         } else {
-            $(".dvCategoryLabel").append("<div class='label' id='"+$(this).attr('id')+"'><p>"+$(this).parent('').text()+"<span class='removeTag'></span></p></div>");
+            $(".dvCategoryLabel").append("<div class='label-tags' id='"+$(this).attr('id')+"'><p>"+$(this).parent('').text()+"<span class='removeTag'></span></p></div>");
        isTagsComplete();
         }
     });
@@ -121,7 +176,7 @@ $(document).ready(function(){
     });
 
     // При нажатии на лейбл тега удаляем его самого а также снимаем галочку с соответствующего ему чекбокса
-    $(".label p").live('click',function(){
+    $(".label-tags p").live('click',function(){
         var curr_div = $(this).parent('div');
         $("input#"+curr_div.attr('id')).removeAttr("checked");
         curr_div.remove();
@@ -146,7 +201,7 @@ $(document).ready(function(){
     //  фокус поля ввода пользовательских категорий
     $("#txtCategory").focus(function() {
         $(".dvRightHelp div").html("<p>Если вы не нашли из списка подходящих вашему вопросу категорий - добавьте свои. " +
-            "Вводите их через запятую. Символы пробела будут игнорироваться.</p>");
+            "Вводите их через запятую.</p>");
     });
 
 
@@ -250,78 +305,97 @@ $(document).ready(function(){
     });
 
     //Голосование за вопрос или ответ
-    $(".voteDown-off , .voteUp-off").click(function() {
+    $(".voteDown-off , .voteUp-off").live('click', function() {
 
         var curr_id = $(this).parent().parent().parent().parent().find($(".hQAid")),
-            curr_span = $(this).parent('div').children('span'),
-            curr_span_text = parseInt(curr_span.text()),
-            cuur_item = $(this);
-        if ($(this).hasClass('voteUp-off')) {
+            curr_span = $(this).parent('div').children('.spnVotesCount'),
+            curr_span_text,
+            cuur_item = $(this),
+            curr_showed = cuur_item.closest('.dvVote').find('.numCount');
+        if(!curr_showed.closest('.dvCount').hasClass('countered')) {
+            createCounter(curr_showed);
+        }
+        curr_span_text = parseInt(curr_span.find('.showed').text());
+        if (!$(this).hasClass('voteUp-off')) {
+            if (cuur_item.hasClass('voteDown-off')) {
+
+                // Отдаем  отрицательный голос
+                $.ajax({type:"POST", async:true, data:"qa_id=" + curr_id.val(), url:"/questions/qhid/voteDown", dataType:"json",
+                    success:function (data) {
+                        switch (data) {
+                            case 'voted down' :
+                            {
+                                countDown(curr_showed.closest('.dvCount'), parseInt(curr_span_text - 1));
+//                                curr_span.text(curr_span_text - 1);
+                                cuur_item.addClass('voteDown');
+                                cuur_item.parent('div').children($(".voteUp-off")).removeClass('voteUp');
+                                break;
+                            }
+                            case 'changed to -2' :
+                            {
+                                countDown(curr_showed.closest('.dvCount'), parseInt(curr_span_text - 2));
+//                                curr_span.text(curr_span_text - 2);
+                                cuur_item.addClass('voteDown');
+                                cuur_item.parent('div').children($(".voteUp-off")).removeClass('voteUp');
+                                break;
+                            }
+                            case 'empty data' :
+                            {
+                                break;
+                            }
+                            case 'not auth' :
+                            {
+                                hints('info', 'Что бы голосовать необходимо <a href="/">авторизироваться</a>')
+                                break;
+                            }
+                        }
+                    },
+                    error:function () {
+                        alert('error in ajax query, when vote down :(');
+                    }
+                });
+            }
+        } else {
 
             // Отдаем положительный голос
-            $.ajax({type:"POST", async:true, data: "qa_id="+curr_id.val(), url: "/questions/qhid/voteUp", dataType:"json",
-                success:function(data){
+            $.ajax({type:"POST", async:true, data:"qa_id=" + curr_id.val(), url:"/questions/qhid/voteUp", dataType:"json",
+                success:function (data) {
+
                     switch (data) {
-                        case 'voted up' : {
-                            curr_span.text(curr_span_text+1);
+                        case 'voted up' :
+                        {
+                            countUp(curr_showed.closest('.dvCount'), parseInt(curr_span_text + 1));
+//                            curr_span.text(curr_span_text + 1);
                             cuur_item.addClass('voteUp');
                             cuur_item.parent('div').children($(".voteDown-off")).removeClass('voteDown');
                             break;
                         }
-                        case 'changed to +2' : {
-                            curr_span.text(curr_span_text+2);
+                        case 'changed to +2' :
+                        {
+                            countUp(curr_showed.closest('.dvCount'), parseInt(curr_span_text + 2));
+//                            curr_span.text(curr_span_text + 2);
                             cuur_item.addClass('voteUp');
                             cuur_item.parent('div').children($(".voteDown-off")).removeClass('voteDown');
                             break;
                         }
-                        case 'empty data' : {
+                        case 'empty data' :
+                        {
 
                             break;
                         }
-                        case 'not auth' : {
-                            hints('info','Что бы голосовать необходимо <a href="/">авторизироваться</a>')
+                        case 'not auth' :
+                        {
+                            hints('info', 'Что бы голосовать необходимо <a href="/">авторизироваться</a>')
                             break;
                         }
                     }
                 },
-                error:function(){
+                error:function () {
                     alert('error in ajax query, when vote up :(');
                 }
             });
 
 
-        } else if(cuur_item.hasClass('voteDown-off')) {
-
-            // Отдаем  отрицательный голос
-            $.ajax({type:"POST", async:true, data: "qa_id="+curr_id.val(), url: "/questions/qhid/voteDown", dataType:"json",
-                success:function(data){
-                    switch (data) {
-                        case 'voted down' : {
-                            curr_span.text(curr_span_text-1);
-                            cuur_item.addClass('voteDown');
-                            cuur_item.parent('div').children($(".voteUp-off")).removeClass('voteUp');
-                            break;
-                        }
-                        case 'changed to -2' : {
-                            curr_span.text(curr_span_text-2);
-                            cuur_item.addClass('voteDown');
-                            cuur_item.parent('div').children($(".voteUp-off")).removeClass('voteUp');
-                            break;
-                        }
-                        case 'empty data' : {
-
-                            break;
-                        }
-                        case 'not auth' : {
-                            hints('info','Что бы голосовать необходимо <a href="/">авторизироваться</a>')
-                            break;
-                        }
-                    }
-                },
-                error:function(){
-                    alert('error in ajax query, when vote down :(');
-                }
-            });
         }
     });
 
@@ -345,7 +419,9 @@ $(document).ready(function(){
         curr_textarea = $(".frmAddAnswer textarea");
         if (curr_textarea.val() != '') {
 
-            var arr = [''],some;
+            var arr = [''],some, ans_count, curr_count_block = $(".ansCount").find('h4');
+            ans_count = curr_count_block.text().substr(9);
+            console.log('ans count - ' + ans_count);
             arr['id_question'] = $("#inpQuestionID").val();
             arr['answer_text'] = $(".frmAddAnswer textarea").val();
             some = $(".frmAddAnswer").serialize();
@@ -356,14 +432,15 @@ $(document).ready(function(){
 
                         if ($(".searchTitle").length) {
                             $(".searchTitle").remove();
-                            $(".tblAnswers").before("<hr>");
                         }
 
+                        curr_count_block.text('Ответов: ' + (parseInt(ans_count) + 1));
                         $(".tblAnswers").append('<tr><td class="bestAnswer-icon"></td>' +
-                            '<td><div class="shadowBlock "><table cellspacing="0"><tr>' +
+                            '<td><div class="lineBlock"><table cellspacing="0"><tr>' +
                             '<td><table><tr><td colspan="2" class="itemInfo"><a href="" class="username">' + data.username + ' </a>' +
-                            '<span class="time">' + data.public_date + '</span></td></tr>' +
-                            '<tr><td class="tdVote"><div class="dvVote"><a class="voteUp-off"></a><span class="spnVotesCount">0</span>' +
+                            '<span class="time">' + data.public_date + '</span>' +
+                            '<input type="hidden" class="hQAid" value="'+ data.id_qa +'"></td></tr>' +
+                            '<tr><td class="tdVote"><div class="dvVote"><a class="voteUp-off"></a><div class="spnVotesCount dvCount"><div class="numCount">0</div></div>' +
                             '<a class="voteDown-off"></a></div></td><td><p>' + curr_textarea.val() + '</p>' +
                             '</td></tr></table></td></tr></table></div></td></tr>');
 

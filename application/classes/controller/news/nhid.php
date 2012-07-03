@@ -48,7 +48,11 @@ class Controller_News_Nhid extends Controller{
             // даем файлу загадочное имя и копируем
             copy($_FILES['file']['tmp_name'], $dir.md5(date('YmdHis')).'.jpg');
 
-            echo '/uploads/imagesnews/'.md5(date('YmdHis')).'.jpg';
+            echo '<img src="/uploads/imagesnews/'.md5(date('YmdHis')).'.jpg" />';
         }
     }
+
+
+
+
 }

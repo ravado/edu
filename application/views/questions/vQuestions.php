@@ -14,7 +14,7 @@
         <div class="dvUser shadowBlock">
             <h4 class="lenta">Профиль</h4>
             <form action="" name="frmUserAuth">
-                <a href="#" class="btnColor">Авторизироваться</a>
+                <a href="/" class="btnColor">Авторизироваться</a>
             </form>
         </div>
         <div class="dvCategory shadowBlock">
@@ -49,20 +49,20 @@
         <div class="dvSearch">
             <form action="/questions/ask" class="frmQuestion" name="frmQuestion" method="POST" onsubmit="$('[name=btnSearch]').click(); return false;">
                 <input type="text" name="question" maxlength="300" id="search" placeholder="Введите свой вопрос" required>
-                <input type="button" name="btnSearch" value="Найти" class="submit">
-                <input type="button" name="btnAsk" value="Спросить" onclick="form.submit()" class="submit">
+                <input type="button" name="btnSearch" value="Найти" class="btn btn-large btn-success">
+                <input type="button" name="btnAsk" value="Спросить" onclick="form.submit()" class="btn btn-large btn-success">
             </form>
         </div>
 
-        <div id="searchResult"></div>
+        <div id="searchResult" ></div>
         <!--   Блок с топом вопросов     -->
         <div class="dvTop shadowBlock">
             <table cellspacing="0" width="100%">
                 <tr class="lenta">
                     <th colspan="2" class="lenta">Самые популярные</th>
-                    <th align="center" class="icons "><img src="../../../stfile/img/questions/user-icon.png"></th>
-                    <th align="center" class="icons "><img src="../../../stfile/img/questions/comment-icon.png"></th>
-                    <th align="center" class="icons "><img src="../../../stfile/img/questions/clock-icon.png"></th>
+                    <th align="center" class="icons "><img src="/stfile/img/questions/user-icon.png"></th>
+                    <th align="center" class="icons "><img src="/stfile/img/questions/comment-icon.png"></th>
+                    <th align="center" class="icons "><img src="/stfile/img/questions/clock-icon.png"></th>
                 </tr>
 
                 <?php

@@ -2,17 +2,431 @@
                                 /************************************************/
                                 /************** Стили для тестов ****************/
                                 /************************************************/
-    .dvTestAdding {
+
+
+
+
+/*==============================================Создание теста=======================================================*/
+    /*Блок с основным наполнением*/
+    .dvMainPart {
         width: 700px;
+        float: left;
     }
+
+    .tstHints h3{
+        padding-bottom: 5px;
+    }
+    .setGreen {
+        border-bottom: 3px solid #00ba09;
+    }
+
+
+    /*Ячейка таблицы с правильным вариантом*/
     .tdCorrect {
         text-align: center !important;
     }
 
-    .table td{
+    .tdImg {
+        max-width: 100px;
+    }
+
+    .tdImg div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 3px;
+    }
+
+    .thImg {
+        max-width: 100px;
+    }
+
+    /*ячейки в таблице с вариантами ответа*/
+    .tblVariants td{
         vertical-align: middle;
     }
 
     .dvTestAdding .table input {
         margin-bottom: 0;
     }
+
+    .creatingTestNavigate {
+        border-top: 1px #d3d3d3 solid;
+        padding-top: 10px;
+    }
+
+
+    .dvTestFinalize, .dvTestAdding {
+        display: none;
+    }
+
+    /*Маленькая кнопочка для получения информации по тому или иному полю при созданиии теста*/
+    .getInfo {
+        top: 2px !important;
+    }
+
+    textarea{
+        resize: vertical;
+    }
+
+    .questionTitle {
+        height: 50px;
+    }
+    /* ============================= Тесты создан тест ============================================================== */
+    .dvTstCreated {
+        width: 700px;
+        height: 600px;
+        margin: auto;
+    }
+
+    .dvTstCreated > img{
+        text-align: center;
+        display: inline;
+    }
+    /* -------------------------------- Тесты создан тест ----------------------------------------------------------- */
+
+    /* ===================================== Тесты Все ============================================================== */
+    /*Блок с фильтрами тестов*/
+    .tstSidebar {
+        float: left;
+        width: 245px;
+    }
+
+    .tstContent {
+        padding: 5px;
+        /*width: 725px;*/
+        /*float: right;*/
+        border: 1px solid #eee;
+    }
+    .icons {
+        text-align: center;
+        width: 35px;
+        padding-right: 5px;
+        padding-left: 5px;
+        vertical-align: middle;
+    }
+
+    .icons img {
+        width: 22px;
+        height: 22px;
+    }
+    .tblTstList {
+        text-align: left;
+        width: 100%;
+    }
+    .tblTstList td, .tblTstList th {
+        vertical-align: middle;
+    }
+    .widgetTitle{
+        margin-top: 5px;
+        margin-bottom: 5px;
+        background-color: #E8F4FC;
+        padding: 5px;
+        color: #11547F;
+        font-size: 15px;
+        font-weight: bolder;
+    }
+
+    .widgetBlock {
+        border: 1px solid #eee;
+        min-height: 100px;
+        margin-bottom: 10px;
+    }
+
+    .widgetInner {
+        padding: 5px;
+    }
+
+    .tblTstList td, .tblTstList th {
+        padding: 5px;
+    }
+
+    .tblTstList {
+        color: #777;
+    }
+
+    .tblTstList tr:nth-child(2n+3) {
+        background-color: #f6f6f6;
+    }
+
+
+    .icons:hover {
+        cursor: help;
+    }
+
+    .tstContent .tst-locked {
+        width: 8px;
+        opacity: 0.7;
+    }
+
+    .tstContent .tst-locked:hover {
+        opacity: 1;
+    }
+
+    .locked-icon {
+        width: 13px;
+        height: 13px;
+        display: block;
+        background-image: url("/stfile/img/tests/lock-1.png");
+        background-repeat: no-repeat;
+        background-size: 13px;
+    }
+    .locked-icon.hide{
+        display: none;
+    }
+
+    .tstSidebar .accordion, .tstSidebar .accordion-heading, .tstSidebar .accordion-group, .tstSidebar .accordion-inner {
+        border: none;
+    }
+
+    .tstSidebar .accordion-inner {
+        margin-left: 5px;
+
+    }
+    .tstSidebar .accordion-toggle {
+        /*padding-bottom: 0;*/
+        background-image: url("/stfile/img/tests/right-icon.png");
+        background-repeat: no-repeat;
+        background-size: 12px;
+        background-position: 0;
+        padding-left: 15px;
+        margin-left: 10px;
+        color: #3c3c3c;
+        text-decoration: none;
+    }
+
+    .tstSidebar .accordion-heading:hover {
+        background-color: #FFDE89;
+    }
+
+    .tstSidebar .accordion-heading {
+        background-color: #f6f6f6;
+    }
+    
+    .tstSidebar .checkbox:hover {
+        background-color: #edf5fc;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .tstSidebar .checkbox {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 0;
+    }
+    .tstSidebar input[type="checkbox"] {
+        margin-left: -12px;
+        margin-right: 5px;
+    }
+
+
+
+
+
+
+
+
+    /* ------------------------------------- Тесты Все -------------------------------------------------------------- */
+    /* ============================= Тесты главная страница ========================================================= */
+    .dvTstZno {
+        margin-bottom: 40px;
+        float: left;
+
+    }
+    .znoTitle:hover {
+        opacity: 1;
+    }
+
+    .znoRunTest {
+        display: block;
+    }
+    .znoFooter {
+        /*background-color: #d9edfa;*/
+        margin-top: -5px;
+        padding: 0px;
+        font-size: 14px;
+        font-weight: bolder;
+        text-align: center;
+    }
+
+    .znoRunTest.btn {
+        border-radius: 0 0 4px 4px;
+    }
+    .imgWhyTests{
+        width: 300px;
+        height: 200px;
+    }
+    .znoFooter:hover {
+        /*background-color: #00262f;*/
+    }
+    .znoTitle {
+        opacity: 0.9;
+        padding: 5px;
+        float: left;
+    }
+    .znoTitle:hover {
+        cursor: pointer;
+        opacity: 1;
+    }
+    .znoTitle img {
+        width: 189px;
+        height: 110px;
+    }
+
+    .znoHeader {
+        border-radius: 4px 4px 0 0;
+        color: #ffffff;
+        background-color: #d9edfa;
+        padding: 5px;
+    }
+
+    .znoHeader h4{
+        color: #444;
+    }
+
+    /* ----------------------------- Тесты главная страница --------------------------------------------------------- */
+    /* ================================== Страница одного теста ===================================================== */
+    .tstQuestionBlock {
+        color: #ffffff;
+        padding: 5px;
+        min-height: 50px;
+        background-color: #388bcf;
+    }
+    .tstQuestionBlock h3 {
+        color: #ffffff;
+    }
+
+    .tstOneTestBlock p {
+        margin: 0 !important;
+    }
+
+    .tstTableVars {
+        margin: 0 !important;
+    }
+
+    .tstTableVars .tdCheck {
+        width: 25px;
+
+    }
+
+    .tstTableVars .tdVariants {
+
+
+    }
+
+
+
+    .tstVariantsBlock {
+
+        background-color: #c6dff3;
+    }
+    .tstNavBlock {
+        min-height: 50px;
+
+        background-color: #388bcf;
+    }
+    .tstNavBlock .btn {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+    .tstDone {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #858485;
+    }
+    .dvCountAnswers {
+        min-height: 200px;
+
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #5a5a5a;
+        margin-top: 100px;
+        vertical-align: middle;
+    }
+    .dvTstDoneTitle {
+        padding-top: 100px;
+    }
+    .dvTstDone {
+        text-align: center;
+    }
+    .count {
+        font-size: 88px;
+        font-weight: bold;
+        color: green;
+        vertical-align: middle;
+    }
+    .gray {
+        color: #bbb;
+    }
+
+    /* ---------------------------------- Страница одного теста ----------------------------------------------------- */
+
+
+    /*Хлебные крошки для отображения прогресса создания теста*/
+                                .steps {
+                                    list-style: none;
+                                    overflow: hidden;
+                                    font: 18px Helvetica, Arial, Sans-Serif;
+                                    margin: 0 0 10px 0 !important;
+                                }
+                                .steps li {
+                                    float: left;
+                                }
+                                .steps li a {
+                                    color: white;
+                                    text-decoration: none;
+                                    padding: 10px 0 10px 75px;
+                                    background: #d9e0e4;                   /* fallback color */
+                                    /*background: hsla(34,85%,35%,1);*/
+                                    position: relative;
+                                    display: block;
+                                    float: left;
+                                }
+                                .steps li a:after {
+                                    content: " ";
+                                    display: block;
+                                    width: 0;
+                                    height: 0;
+                                    border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+                                    border-bottom: 50px solid transparent;
+                                    border-left: 50px solid #d9e0e4;
+                                    position: absolute;
+                                    top: 50%;
+                                    margin-top: -50px;
+                                    left: 100%;
+                                    z-index: 2;
+                                }
+                                .steps li a:before {
+                                    content: " ";
+                                    display: block;
+                                    width: 0;
+                                    height: 0;
+                                    border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+                                    border-bottom: 50px solid transparent;
+                                    border-left: 50px solid white;
+                                    position: absolute;
+                                    top: 50%;
+                                    margin-top: -50px;
+                                    margin-left: 1px;
+                                    left: 100%;
+                                    z-index: 1;
+                                }
+                                .steps li:first-child a {
+                                    padding-left: 20px;
+                                }
+                                .steps .selected a{
+                                    background-color: #7ec77e;
+                                }
+                                .steps .selected a:after {
+                                    border-left: 50px solid  #7ec77e;
+                                }
+                                .steps a:hover {
+                                    cursor: default;
+                                }
+
+                                /*.steps li a:hover { background: hsla(34,85%,25%,1); }*/
+                                /*.steps li a:hover:after { border-left-color: hsla(34,85%,25%,1) !important; }*/
+    /*-------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------*/
+
+

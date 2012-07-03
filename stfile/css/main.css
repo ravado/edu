@@ -46,7 +46,7 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
 /*Выдавленый текст (заголовки второстепенных страниц, слоган на главной)*/
 .spnTitle{text-shadow: -1px -1px #15689d, 1px 1px #15689d;color: #FFF;font-weight: bold;}
     /*Тот же выдавленный но, в качестве заголовка второстепенных страниц*/
-    .spnTitle.Page{margin-bottom: 10px;padding: 10px;font-size: 24px;background: url("../img/bg_blu_small.png");border-radius: 5px;}
+    .spnTitle.Page{margin-bottom: 10px;padding: 10px;font-size: 22px;background: url("../img/bg_blu_small.png");border-radius: 5px;}
 
 /*Контейнер контента для второстепенных страниц*/
 #dvContent{}
@@ -65,6 +65,7 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
 /*Верхние хинты*/
         .hint
         {
+            z-index: 9999;
             -webkit-background-size: 40px 40px;
             -moz-background-size: 40px 40px;
             background-size: 40px 40px;
@@ -278,7 +279,7 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
     /* ===== Пагинаци для поиска ==== */
 
     /* Блок с номерами страниц */
-    #dvPagination {height: 40px;}
+    /*#dvPagination {height: 40px;}*/
 
     /*кнопка с номером страницы*//*
     .pagination {
@@ -300,9 +301,9 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
     }*/
 
     /* Текущая страница */
-    .selected {
-        background-color: #2c74a6;
-    }
+    /*.selected {*/
+        /*background-color: #2c74a6;*/
+    /*}*/
     /* ------------------------------ */
 
     /* ===== Результаты поиска ====== */
@@ -462,7 +463,12 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
     padding-bottom: 20px;
 }
 
-
+/*Класс для запрета выделения текста*/
+.unselectable {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+}
 /*#center_links {*//* See related rule in: /about/intl/media/css/global.css */
     /*position: absolute;*/
     /*bottom: 29px;*/
@@ -470,3 +476,4 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
     /*width: 475px;*/
     /*text-align: center;*/
 /*}*/
+

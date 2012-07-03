@@ -37,15 +37,7 @@ class Controller_Questions_Questions extends Controller_Base {
         // Проверяем было ли что то передано формой //
         if (!empty($_POST)) {
             $data['question'] = $_POST['question'];
-//
-//            // передаем в модель введенный вопрос и результат записываем в переменную
 
-//
-//            if ($result) {
-//                $data["result"] = $result;
-//            } else {
-//                $data["result"] = '';
-//            }
         } else {
             $data['question'] = '';
         }
@@ -185,7 +177,7 @@ class Controller_Questions_Questions extends Controller_Base {
         $this->template->scripts = array('stfile/js/questions.js');
         $data['page'] = (int)$this->request->param('page');
         $data['qtype'] = (string)$this->request->param('qtype');
-        $data['per_page'] = 3;
+        $data['per_page'] = 10;
         $data['user_id'] = -1;
         /*Проверяем статус пользователя (Авторизирован или нет)*/
         $auth = Auth::instance();
@@ -202,8 +194,4 @@ class Controller_Questions_Questions extends Controller_Base {
         $this->template->content = View::factory('questions/vQuestionAll',$data);
     }
 
-
-    public function getQuestionById($questionId) {
-
-    }
 }

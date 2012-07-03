@@ -115,8 +115,16 @@ Cookie::$salt = 'a234aflk234jbdf';
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
+/*Роут тесторм*/
+Route::set('testorm', 'testorm(/<action>)')
+    ->defaults(array(
+    'directory'  => 'testorm',
+    'controller' => 'testorm',
+    'action'     => 'index',
+));
+
 /*Роут тестов*/
-Route::set('tests', 'tests(/<action>)')
+Route::set('tests', 'tests(/<action>(/<id_test>(/<question_number>)))')
     ->defaults(array(
     'directory'  => 'tests',
     'controller' => 'tests',
@@ -212,3 +220,5 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 		'controller' => 'home',
 		'action'     => 'index',
 	));
+
+set_exception_handler(array('Exceptionhandler', 'handle'));

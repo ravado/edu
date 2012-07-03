@@ -25,19 +25,19 @@ body{background: url("../img/bg_blu.png") repeat-x;}
 #dvHomeUBlocks div{border-radius: 10px;box-shadow: 0px 3px 10px rgba(9, 44, 68, 0.4);font-size: 12px;}
 
 /*Блок авторизации*/
-#dvHomeAuth{padding: 20px;width: 340px;height: 160px;float: right;background: #e8f4fc;color: #135e8e;}
+#dvHomeAuth{padding: 20px;width: 340px;height: 160px;float: right;background: #ffffff;color: #135e8e;}
 
     /*Поля ввода формы авторизации*/
     #dvHomeAuth input{width: 330px;margin-top: 10px;font-size: 15px;}
 
 /*Блок создания сайта (загрузки ПО)*/
-#dvHomeSystem{width: 500px;height: 200px;background: url("../img/home/system.png") #e8f4fc;text-align: center;}
+#dvHomeSystem{width: 500px;height: 200px;background-color: #ffffff;text-align: center;}
 
     /*Кнопка создания сайта*/
     .btnColor.Create{font-size: 20px;margin: 85px 0 8px 0;}
 
 /*Кнопка авторизации*/
-.btnColor.Auth{margin-top: 10px;padding: 18px 23px 19px;font-size: 20px;float: right;}
+.btnColor.Auth{padding: 18px 23px 19px;font-size: 20px;float: right;}
 
 /*Кнопка регистрации*/
 .btnColor.Register{margin-top: 10px;padding: 10px 15px 11px;font-size: 18px;}

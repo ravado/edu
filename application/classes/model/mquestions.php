@@ -249,6 +249,7 @@ class Model_Mquestions extends Model_Database{
                     $result['public_date'] = $date;
                     $result['id_answer'] = $resultLast[0]['id_answer'];
                     $result['username'] = $data['username'];
+                    $result['id_qa'] = $temp[0];
                     return $result;
                 } else {
                     return false;
@@ -493,6 +494,13 @@ class Model_Mquestions extends Model_Database{
                 ->limit($per_page)
                 ->order_by('questions.public_date','DESC')->execute()->as_array();
         } elseif($data['qtype'] == 'closed') {
+            DB::select('news_cat.news_id',
+                        'news_cat.cat_id',
+                        'news.id',
+                        'cat.id')->from('news_cat')->where('news_cat.news_id','=','id новости')
+                ->join('news')->on('news.id','=','news_cat.news_id')
+                ->join('cat')->on('cat.id','=','news_cat.cat_id');
+
             $allOpenedQuestions = DB::select('questions.id_question',
                 'questions.title',
                 'qfavorite.id_qfavorite',

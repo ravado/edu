@@ -5,6 +5,11 @@
 /* ================================================================================================================== */
 /* ========================================== Главная страница ВиО ================================================== */
 /* ================================================================================================================== */
+.dvCount{
+    overflow: hidden;
+    height: 18px;
+}
+
 
     /*Меню слева*/
     .dvMenu{width: 190px;min-height: 200px;padding: 5px;float: left;}
@@ -26,7 +31,7 @@
         }
 
         .catLinks {
-            color: #698fda;
+            color: #08C;
             text-decoration: none;
             font-weight: bolder;
             font-size: 12px;
@@ -58,10 +63,11 @@
         /*Поле ввода поисковой строки*/
         #search
         {
-            height: 25px;
+            margin-right: 5px;
+            height: 27px;
             padding-left: 5px;
             padding-right: 5px;
-            width: 520px;
+            width: 580px;
             border: 1px solid #a4c3ca;
             font: normal 13px 'trebuchet MS', arial, helvetica;
             background: #f1f1f1;
@@ -70,6 +76,9 @@
             -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 1);
             -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 1);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 1);
+        }
+        .frmQuestion .btn {
+            margin-bottom: 0;
         }
 
         /*Кнопка поиска вопросов*/
@@ -530,17 +539,17 @@
     /* ------------------------------------------------------ */
 
     /* ============ Ярлычки выбранных категорий ============= */
-        .label {
+        .label-tags {
             float: right;
             text-align: center;
-            margin-left: 30px;
+            margin-left: 10px;
             position: relative;
             min-width: 20px;
-            height: 21px;
-            border-radius: 0 4px 4px 0;
-            border: 1px solid #ccc;
+            height: 20px;
+            border-radius: 4px;
             box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-            background-color: #ff6d22;
+            background-color: #7EC77E;
+            padding-left: 5px;
             /*background-image: url("../../stfile/img/1loading.gif");*/
             /*background-position: -10px;*/
             /*padding-left: 5px;*/
@@ -549,37 +558,19 @@
         }
 
         /* текст внутри меток */
-        .label p {
-            padding: 3px;
+        .label-tags p {
+            padding: 2px;
             font-size: 9px;
             font-weight: bold;
             text-transform: lowercase;
-            color: #333;
-            margin-left: -5px;
+            color: #404040;
         }
-        .label p:hover{
+        .label-tags p:hover{
             cursor: pointer;
-            color: #000000;
+            /*color: #000000;*/
         }
 
-        /* уголок метки */
-        .label:before, .label:after {
-            content: "";
-            position: absolute;
-            z-index: 1000;
-            top: 0px;
-            left: 51px;
-            width: 20px;
-            margin-left: -84px;
-            border-right: 13px solid #ff6d22;
-            border-bottom: 12px solid transparent;
-            border-top: 12px solid transparent;
-            border-left: 0;
 
-        }
-
-        /* сдвигаем один уголок влева для эффекта бордера */
-        .label:before {border-right-color: #ccc;left: 50px;}
 
     /* ------------------------------------------------------ */
 
@@ -619,7 +610,7 @@
     }
 
     #dvAddingCategory .inpColor {
-        width: 446px;
+        width: 488px;
         margin: 0;
         height:15px;
         /*display: none;*/
@@ -645,12 +636,16 @@
     .removeTag {
         background-image: url("../../stfile/img/questions/tags-remove.png");
         background-repeat: no-repeat;
-        background-position: 1px 2px;
+        background-position: 0px 1px;
         display: block;
         float: right;
         height: 15px;
         width: 10px;
+        opacity: 0.3;
         padding-left: 3px;
+    }
+    .removeTag:hover {
+        opacity: 1;
     }
 
     /*Текст выбраных категорий*/
@@ -708,8 +703,8 @@
     }
 
     .dvOneQuestion.shadowBlock {
-        border: 2px solid #D0E4F7;
-        margin-bottom: 0;
+        border: 1px solid #D0E4F7;
+        /*margin-bottom: 0;*/
     }
 
     .bestAnswer-icon{
@@ -720,11 +715,11 @@
 
     .dvBestAnswer {
         background: #fff;
-        background: -webkit-gradient(linear, 0% 2%, 0% 2%, from(#dbffdb), to(#fff), color-stop(.9,#fff));
+        background: -webkit-gradient(linear, 0% 2%, 0% 2%, from(#fcfefb), to(#fff), color-stop(.9,#fff));
         background: -moz-linear-gradient(1pt 1pt 270deg, #dbffdb, #fff 200%, #fff);
         background: -o-linear-gradient(#dbffdb 100%, #fff 10%, #dbffdb 51%);
         background: -ms-linear-gradient(#dbffdb 100%, #fff 10%, #dbffdb 51%);
-        border: 1px solid #98ff9d;
+        border: 1px solid #cbffcd;
     }
 
     .badRating {
@@ -743,21 +738,21 @@
     }
 
     .bestAnswerLabel {
-        background-image: url("../../stfile/img/questions/best-answer.png");
+        background-image: url("../../stfile/img/badge.png");
         /*background-position: 30 30;*/
         background-repeat: no-repeat;
-        width: 55px;
+        width: 40px;
         height: 64px;
 
         margin: 0 auto;
-        margin-left: -25px;
+        margin-left: 5px;
 
         display: block;
     }
 
     .tblAnswers {
-
-
+        width: 700px;
+        margin-top: 10px;
         border-collapse: collapse;
     }
 
@@ -769,9 +764,9 @@
         /*background-color: #f5deb3;*/
         max-width: 695px;
         mim-width: 695px;
-        width: 643px;
+        width: 640px;
     }
-.dvAllAnswers .btnSilver {
+.dvAllAnswers .btn {
     float: right;
 }
 
@@ -783,10 +778,12 @@
     .frmAddAnswer {
         display: none;
         padding-top: 10px;
+        margin-bottom: 5px;
     }
 
     .frmAddAnswer textarea {
-        width: 690px;
+        width: 655px;
+        resize: vertical;
         height: 100px;
     }
 
@@ -803,6 +800,18 @@
         opacity: 0.6;
     }
 
+    .ansCount {
+        color: #b3b3b3;
+        float: right;
+        width: 635px;
+        padding: 5px;
+        /*border-bottom: 2px solid #b3b3b3;*/
+    }
+
+    .ansCount h4 {
+        color: #b3b3b3;
+        float: right;
+    }
     .favorite {
         background-image: url("../../stfile/img/questions/star_off.png");
         background-repeat: no-repeat;
@@ -825,7 +834,7 @@
         width: 50px;
         text-align: center;
         float: left;
-
+        font-weight: bolder;
     }
 
     .voteUp-off {
@@ -844,6 +853,10 @@
     .voteUp {
         background-image: url("../../stfile/img/questions/voteup.png");
     }
+    .voteUp-off:active {
+        opacity: 0.7;
+        background-position: 0 -2px;
+    }
 
     .voteDown-off {
         background-image: url("../../stfile/img/questions/votedownoff.png");
@@ -857,6 +870,10 @@
 
     .voteDown-off:hover {
         background-image: url("../../stfile/img/questions/votedown.png");
+    }
+    .voteDown-off:active {
+        opacity: 0.7;
+        background-position: 0 2px;
     }
 
     .voteDown {
@@ -873,6 +890,7 @@
         min-height: 100px;
         min-width: 235px;
         float: right;
+        width: 280px;
     }
 
     .tdVote {
@@ -883,13 +901,25 @@
     .checkAsBest {
         padding-right: 5px;
         font-size: 12px;
+        color: #b7b7b7;
         float: right;
+        border-bottom: 1px solid #b7b7b7;
+    }
+
+    .checkAsBest:hover {
+        color: #08C;
+        border-bottom: 1px solid #08C;
+        text-decoration: none;
     }
 
     .tdAnswerText {
         max-width: 300px;
     }
 
+    .lineBlock {
+        background: url("/stfile/img/post_bg_line.gif") repeat-x 0 0;
+
+    }
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* ------------------------------------- Страница одного вопроса ---------------------------------------------------- */

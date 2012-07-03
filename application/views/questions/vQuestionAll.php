@@ -71,9 +71,9 @@
         <table class="shadowBlock" cellspacing="0" width="100%">
             <tr class="lenta">
                 <th class="lenta" colspan="3"><?php echo $tblTitle ?></th>
-                <th align="center" class="icons"><img src="../../../stfile/img/questions/user-icon.png"></th>
-                <th align="center" class="icons"><img src="../../../stfile/img/questions/comment-icon.png"></th>
-                <th align="center" class="icons"><img src="../../../stfile/img/questions/clock-icon.png"></th>
+                <th align="center" class="icons"><img src="/stfile/img/questions/user-icon.png"></th>
+                <th align="center" class="icons"><img src="/stfile/img/questions/comment-icon.png"></th>
+                <th align="center" class="icons"><img src="/stfile/img/questions/clock-icon.png"></th>
             </tr>
             <?php
                 //Выводим короткие записи вопросов
@@ -118,24 +118,100 @@
         <div class="pagination">
             <ul>
             <?php
+                /*$per_page = 'СКОЛЬКО НА СТРАНИЦУ ВЫВОДИТЬ НОВОСТЕЙ (INT)';
+                $qcount = 'СКОЛЬКО ВСЕГО НОВОСТЕЙ (INT)';
+                $curr_page = 'КАКАЯ ТЕКУЩАЯ СТРАНИЦА (INT)';
+                $lnk = 'ССЫЛКА К КОТОРОЙ ПОТОМ БУДЕТ ПРИБАВЛЯТЬСЯ ЧИСЛО (STRING) НАПРИМЕР: /questions/all/closed/page-';
                 $page_count = ceil($qcount/$per_page);
+                if (($curr_page + 4) < $page_count) {
+                    if ($curr_page <= 4) {
+                        $page_end_border = 9;
+                    } else {
+                        $page_end_border = $curr_page + 4;
+                    }
+                } else {
+                    $page_end_border = $page_count;
+                }
+                if ($curr_page > 4) {
+                    if (($page_count - $curr_page) < 5 ) {
+                        $page_start_border = $page_count - 9;
+                    } else {
+                        $page_start_border = $curr_page - 5;
+                    }
+                } else {
+                    $page_start_border = 0;
+                }
+
                 if($page_count > 1) {
-                    for($i = 0; $i < $page_count; $i++) {
+                    if($curr_page > 1) {
+                        $some = $curr_page-1;
+                        echo '<li><a href="'.$lnk .$some .'">«</a></li>';
+                    }
+                    for($i = $page_start_border; $i < $page_end_border; $i++) {
                         $temp = $i+1;
-                        if ($qtype == 'category') {
-                            $lnk = '/questions/category/' .$cat_id .'/';
-                        } elseif ($qtype == 'opened') {
-                            $lnk = '/questions/all/opened/';
-                        } elseif ($qtype == 'closed') {
-                            $lnk = '/questions/all/closed/';
-                        } elseif ($qtype == 'any') {
-                            $lnk = '/questions/all/any/';
-                        }
                         if($i == $page-1) {
                             echo '<li class="active"><a href="'.$lnk .$temp .'">' .$temp .'</a></li>';
                         } else {
                             echo '<li><a href="'.$lnk .$temp .'">' .$temp .'</a></li>';
                         }
+                    }
+                    if($curr_page < $page_count) {
+                        $some = $curr_page+1;
+                        echo '<li><a href="'.$lnk .$some .'">»</a></li>';
+                    }
+                }*/
+
+                $per_page = $per_page;
+                $page_count = ceil($qcount/$per_page);
+                $curr_page = $page;
+                if (($curr_page + 4) < $page_count) {
+                    if ($curr_page <= 4) {
+                        $page_end_border = 9;
+                    } else {
+                        $page_end_border = $curr_page + 4;
+                    }
+                } else {
+                    $page_end_border = $page_count;
+                }
+                if ($curr_page > 4) {
+                    if (($page_count - $curr_page) < 5 ) {
+                        $page_start_border = $page_count - 9;
+                    } else {
+                        $page_start_border = $curr_page - 5;
+                    }
+                } else {
+                    $page_start_border = 0;
+                }
+
+                if ($qtype == 'category') {
+                    $lnk = '/questions/category/' .$cat_id .'/';
+                } elseif ($qtype == 'opened') {
+                    $lnk = '/questions/all/opened/';
+                } elseif ($qtype == 'closed') {
+                    $lnk = '/questions/all/closed/';
+                } elseif ($qtype == 'any') {
+                    $lnk = '/questions/all/any/';
+                }
+                if($page_count > 1) {
+                    if($curr_page > 1) {
+                        $some = $curr_page-1;
+                        echo '<li><a href="'.$lnk .$some .'">«</a></li>';
+                    } else {
+                        echo '<li><a>«</a></li>';
+                    }
+                    for($i = $page_start_border; $i < $page_end_border; $i++) {
+                        $temp = $i+1;
+                        if($i == $page-1) {
+                            echo '<li class="active"><a>' .$temp .'</a></li>';
+                        } else {
+                            echo '<li><a href="'.$lnk .$temp .'">' .$temp .'</a></li>';
+                        }
+                    }
+                    if($curr_page < $page_count) {
+                        $some = $curr_page+1;
+                        echo '<li><a href="'.$lnk .$some .'">»</a></li>';
+                    } else {
+                        echo '<li><a>»</a></li>';
                     }
                 }
            ?>

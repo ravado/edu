@@ -79,7 +79,7 @@ function googleSearch(resultObj, valueObj, settings) {
 
     //Создаем блок для пагинации если его еще нет
     if (!$("#dvPagination").length) {
-        resultObj.after("<div id='dvPagination'></div>");
+        resultObj.after("<div id='dvPagination' class='pagination'></div>");
     }
     // Если передали адресс сайта по которому искать
     if (settings != null && settings.siteURL != null) {
@@ -153,15 +153,18 @@ function googleSearch(resultObj, valueObj, settings) {
 
             if (!settings.append) {
                 $("#dvPagination").empty();
+                var pagination = '<ul>';
                 for ( i = bound_start ; i <= bound_stop ; i++ ) {
                     if (bound_stop > 1) {
                         if(i == 1) {
-                            $("#dvPagination").append("<div class='pagination selected'>"+i+"</div>");
+                            pagination += "<li class='active'><a href='#'>" + i + "</a></li>";
                         } else {
-                            $("#dvPagination").append("<div class='pagination'>"+i+"</div>");
+                            pagination += "<li><a href='#'>" + i + "</a></li>";
                         }
                     }
                 }
+                pagination += '</ul>';
+                $("#dvPagination").append(pagination);
                 // Добавляем знак Powered by Google
                 $("#dvPagination").append("<img src='../../stfile/img/questions/powered_by_google.gif' style='float: right; padding-top: 10px;'>");
             }
@@ -175,9 +178,9 @@ function googleSearch(resultObj, valueObj, settings) {
     });
 
     //событие клика по кнопке с номером страници (динамическое!)
-    $(".pagination").live('click',function() {
-        $(this).addClass("selected");
-        $(".pagination").not($(this)).removeClass("selected");
+    $(".pagination li").live('click',function() {
+        $(this).addClass("active");
+        $(".pagination li").not($(this)).removeClass("active");
 
         settings.page = parseInt($(this).text())-1;
         settings.append = true;
@@ -317,6 +320,14 @@ function getRegex (jQueryObj,type){
                 return false;
             } else {
                 currRagex = new RegExp(/^\d+$/);
+                return currRagex.test(jQueryObj.val());
+            }
+        }
+        case ('comma'):{
+            if(jQueryObj.val() == '') {
+                return false;
+            } else {
+                currRagex = new RegExp(/,/m);
                 return currRagex.test(jQueryObj.val());
             }
         }
