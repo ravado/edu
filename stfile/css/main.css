@@ -469,11 +469,59 @@ footer{clear: both;margin-top: 20px;background: #e2e2e2;}
     -khtml-user-select: none;
     -webkit-user-select: none;
 }
-/*#center_links {*//* See related rule in: /about/intl/media/css/global.css */
-    /*position: absolute;*/
-    /*bottom: 29px;*/
-    /*right: 220px;*/
-    /*width: 475px;*/
-    /*text-align: center;*/
-/*}*/
+/* =========================================== Форма поиска в главном меню ========================================== */
+.search-bar {
+    float: right;
+    margin-top: -3px;
+    /*height: @menu_height;*/
+}
 
+.search-bar fieldset {
+    height: 25px;
+    width: 150px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    padding-left: 5px;
+}
+#frm-search {
+    margin: 0;
+}
+.search-bar input {
+    border: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 25px;
+    font-size: 14px;
+}
+
+.search-bar .search-input{
+    width: 120px;
+    padding: 0 0 0 5px ;
+}
+
+.search-bar .search-input:focus{
+    box-shadow: none;
+    border: none;
+}
+
+fieldset:focus{
+    padding: 100px;
+}
+
+.search-bar .btn-search {
+    width: 20px;
+    box-shadow: none;
+    background-color: #ffffff;
+    background: url("/stfile/img/sprite.png") no-repeat;
+    text-indent: -9999px;
+    background-position: 0px 0px;
+}
+.search-bar .btn-search:hover {
+    background: url("/stfile/img/sprite.png") no-repeat;
+    background-position: -23px 0px;
+    cursor: pointer;
+}
+
+.search-bar .btn-search:active {
+    opacity: 0.8;
+}

@@ -19,6 +19,10 @@ class Controller_Search_Search extends Controller_Base {
         }else{
             $data['userAuth'] = FALSE;
         }
+        if(isset($_POST['search_query'])) {
+            $data['search_query'] = $_POST['search_query'];
+        }
         $this->template->content = View::factory('search/vSearch',$data);
+
 	}
 }

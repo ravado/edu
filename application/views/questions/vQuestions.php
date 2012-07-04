@@ -1,13 +1,14 @@
 <div id="dvContent">
-    <div class="spnTitle Page">Вопросы и ответы</div>
-
-    <?php
-/*        foreach ($categories as $k=>$v) {
-            echo $k .'<br>';
-            print_r($categories[$k]);
-            echo '<br><br>';
-        }*/
-    ?>
+    <div class="spnTitle Page">Вопросы и ответы
+        <div class="search-bar">
+            <form action="/search" method="post" id="frm-search">
+                <fieldset>
+                    <input type="text" placeholder="Поиск" class="search-input" name="search_query">
+                    <input type="submit" value="ss " class="btn-search">
+                </fieldset>
+            </form>
+        </div>
+    </div>
 
     <!-- Блок меню слева   -->
     <div class="dvMenu">

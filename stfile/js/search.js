@@ -1,3 +1,14 @@
+var timer_id;
+function some() {
+    $(".search-block.active input.gsc-input").focus();
+    $(".search-block.active input.gsc-input").attr('placeholder','Введиде поисковую фразу');
+    var search_query = $(".search-query").val();
+    if(search_query != '') {
+        $(".gsc-input input").val(search_query);
+        $(".search-block.active input.gsc-search-button").click();
+    }
+    clearInterval(timer_id);
+}
 // Настройка поиска по всему интернету
 google.load('search', '1', {language : 'ru', style : google.loader.themes.V2_DEFAULT});
 google.setOnLoadCallback(function() {
@@ -9,6 +20,11 @@ google.setOnLoadCallback(function() {
         '017974249376903738753:hixcuhvwd_4', customSearchOptions);
     customSearchControl.setResultSetSize(google.search.Search.LARGE_RESULTSET);
     customSearchControl.draw('dv-web-search');
+
+
+    timer_id = setInterval('some()', 10);
+
+
 }, true);
 
 // Настройка поиска по сайту
@@ -24,13 +40,6 @@ google.setOnLoadCallback(function() {
     customSearchControl.draw('dv-site-search');
 }, true);
 
-
-function searchIt(){
-
-    googleSearch($("#searchResult"),$("#txtSearch"),{append:false});
-    $("#dvSearch").animate({marginLeft:"0px", marginTop:"10px", marginBottom:"10px"},500, "swing");
-
-}
 
 
 /* Переключение между блоками поиска (по сайту/в интернете) @direction - 'site', 'web' */
@@ -71,6 +80,20 @@ function switchSearchDirection(direction) {
 
 $(document).ready(function(){
 
+    $(".gsc-search-button").live('click',function() {
+        if($(".search-block.active input.gsc-input").val() != '') {
+            $(".search-logo").animate({paddingTop:"0", opacity: "0"},800, "swing");
+        }
+    });
+
+    $("input.gsc-input").live('keyup',function(e) {
+        if(e.keyCode == 13){
+            if($(".search-block.active input.gsc-input").val() != '') {
+                $(".search-logo").animate({paddingTop:"0", opacity: "0"},800, "swing");
+            }
+        }
+    });
+
     $(".gscb_a").live('click',function() {
         $(".gsc-tabsArea").addClass('gsc-tabsAreaInvisible').removeClass('gsc-tabsArea');
         $(".gsc-refinementsArea").addClass('gsc-refinementsAreaInvisible').removeClass('gsc-tabsArea');
@@ -101,16 +124,4 @@ $(document).ready(function(){
 
 
 
-
-
-    $("#txtSearch").keypress(function(e){
-        if(e.keyCode == 13){
-            searchIt();
-        }
-    });
-
-
-    $("#submitSearch").click(function(){
-        searchIt();
-    });
 });
