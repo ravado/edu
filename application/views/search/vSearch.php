@@ -1,7 +1,7 @@
 <div id="dvContent">
 
     <div class="search-logo <?php if(isset($search_query)) {echo 'hide'; } ?> ">
- 
+
     </div>
     <div class="search-way">
         <a class="by-site active">По сайту</a>
