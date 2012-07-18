@@ -44,5 +44,23 @@ class Controller_Adm_Vio extends Controller_Base{
         $this->template->content = View::factory('adm/vAdm',$data);
     }
 
+    /* Показываем страницу создания вопросов */
+    public function action_addQuestion() {
+        $this->template->title = "Добавить вопрос";
+        $this->template->styles = array("stfile/js/redactor/css/redactor.css" => "screen",
+            "stfile/css/adm.css" => "screen");
+
+        $this->template->scripts = array(
+            '/stfile/js/adm.js',
+            '/stfile/js/redactor/redactor.js',
+            '/stfile/js/bootstrap-timepicker.js',
+            '/stfile/js/bootstrap-datepicker.js');
+
+        $data['categories'] = Model::factory('Mquestions')->getCategoryList('admin');
+        $data['page'] = View::factory('adm/vAdmVioQuestionAdd',$data);
+        $data['pageFlag'] = ': Добавление вопроса';
+        $this->template->content = View::factory('adm/vAdm',$data);
+    }
+
 
 }

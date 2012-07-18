@@ -434,7 +434,31 @@ function hints(hintKind, htmlValue){
 }
 
 //--------------------------------------------------------------------------------------------------------------------//
+function isTagsComplete() {
+    if ($(".label-tags").length > 4) {
+        $("input[type=checkbox]").not("input:checked").attr("disabled","disabled");
+        $("#txtCategory").attr("disabled","disabled");
+        $("#addNewCategory").attr("disabled","disabled");
+        return true;
+    } else {
+        $("input[type=checkbox]").removeAttr('disabled');
+        $("#txtCategory").removeAttr('disabled');
+        $("#addNewCategory").removeAttr('disabled');
+        return false;
+    }
+}
 
+function isSimilar(string) {
+    var count = false;
+    if (string != '') {
+        $(".label-tags").each(function() {
+            if ($(this).children('p').text() == string) {
+                count = true;
+            }
+        })
+    } else {count = true;}
+    return count;
+}
 
 //**************************************************начало ready******************************************************//
 $(document).ready(function(){
@@ -485,6 +509,111 @@ $(document).ready(function(){
                 $(".more").css("display","none");
              }
         }
+    });
+//-------------------------------------------------------------------//
+
+//=================  Клик по кнопке екстра меню =====================//
+    $(".btnExtra").click(function() {
+        var extra_content = $(this).closest($('.extraConfig')).find($('.extraContent'));
+        extra_content.slideToggle(200);
+    });
+//-------------------------------------------------------------------//
+
+
+
+//========  Выбор и добавление категорий при создании вопроса ======//
+    //Отслеживаем ввод запятой для добавления категории
+    $("#txtCategory").keyup(function(e) {
+        var curr_value = $(this).val();
+        if(getRegex($(this),'comma')) {
+            console.log('key is comma');
+            $(this).val(curr_value.replace(",", ""));
+            $("#addNewCategory").click();
+        } else {
+            console.log('not comma');
+        }
+
+    });
+
+    // При загрузке страницы снимем все галочки, а то некоторые (не будем показывать на ФФ) их сохраняют при перезагрузке
+    $(":checkbox").removeAttr("checked");
+
+    $("#addNewCategory").click(function(){
+        var str = $("#txtCategory").val().toLowerCase(), rand;
+        var arr;// = str.split(/[,;\s]/);
+        var tempstring;
+        tempstring = str.replace(/[^A-Za-zА-Яа-яЁё0-9\s]/g,',');
+        arr = tempstring.split(',');
+//        alert(arr);
+        var tagsCount = $(".label-tags").length;
+        var i,j;
+        for (i = tagsCount, j = 0; i < 6, j < arr.length; i++, j++) {
+            if (i < 5 ) {
+                if(isSimilar(arr[j])) {
+                    i--;
+//                    alert('is similar');
+                } else {
+                    rand = Math.random();
+                    $(".dvCategoryLabel").append("<div class='label-tags' id='"+rand+"'><p>"+arr[j]+
+                        "<span class='removeTag icon-remove'></span></p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
+//                    alert(arr[j]);
+                }
+            } else {
+//                alert('to much!');
+                isTagsComplete();
+                break;
+            }
+        }
+        isTagsComplete();
+        $("#txtCategory").val('');
+    });
+
+    // Нажатие на пункт категории
+    $(".dvQuestCategory p").not("input[type=checkbox]").click(function() {
+        var curr_checkbox, curr_div, temp;
+        curr_checkbox = $(this).children('');
+        temp = curr_checkbox.attr("class");
+        curr_div = $(".dvSeparateCategory."+temp);
+        $(this).removeClass("silver").addClass("white");
+        $(".dvQuestCategory p").not($(this)).removeClass("white").addClass("silver");
+        curr_div.css("display","block");
+        $(".dvSeparateCategory").not(curr_div).css("display","none");
+    });
+
+    $("input[type=checkbox]").click(function(){
+        if (!$(this).is(":checked")) {
+            var curr_name;
+            curr_name = $(this).attr("id");
+            $(".label-tags#"+curr_name).remove();
+            isTagsComplete();
+
+
+        } else {
+            $(".dvCategoryLabel").append("<div class='label-tags' id='"+$(this).attr('id')+"'><p>"+$(this).parent('').text()+"<span class='removeTag'></span></p></div>");
+            isTagsComplete();
+        }
+    });
+
+    // Добавление своих категорий
+    $("#btnAskAddCategory").click(function(){
+        var input = $("#dvAddingCategory");
+        if($(this).hasClass("catCollapsed")) {
+            $(this).removeClass("catCollapsed").text("добавить свою");
+            input.hide();
+            $(this).css("background-image","url('../../stfile/img/questions/plus1.png')");
+        } else {
+            $(this).addClass('catCollapsed').text('скрыть');
+            $(this).css("background-image","url('../../stfile/img/questions/minus.png')");
+            input.show();
+        }
+    });
+
+    // При нажатии на лейбл тега удаляем его самого а также снимаем галочку с соответствующего ему чекбокса
+    $(".label-tags p").live('click',function(){
+        var curr_div = $(this).parent('div');
+        $("input#"+curr_div.attr('id')).removeAttr("checked");
+        curr_div.remove();
+        isTagsComplete();
     });
 //-------------------------------------------------------------------//
 

@@ -3,7 +3,7 @@
 class Model_OrmViOcategory extends ORM{
 
     protected $_table_name = 'vio_categories';
-    protected $_primary_key = 'id_vio_category';
+    protected $_primary_key = 'id_category';
 
     // Связь с другой таблицей через id текущей
     protected $_has_many = array(

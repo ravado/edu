@@ -189,7 +189,7 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['userAuth'] = FALSE;
         }
 
-        $data['result'] = Model::factory('Mquestions')->getAllQuestions($data);
+        $data['questions'] = Model::factory('Mquestions')->getQuestionsList();
 
         $this->template->content = View::factory('questions/vQuestionAll',$data);
     }

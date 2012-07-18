@@ -754,5 +754,22 @@ class Model_Mquestions extends Model_Database{
 
         return true;
     }
+
+    public function getQuestionsList() {
+        $limit = 10;
+        $questions = ORM::factory('ormvioquestion')->find_all($limit);
+        return $questions;
+    }
+
+    public function getCategoryList($kind) {
+        if($kind == 'admin') {
+            $categories = ORM::factory('ormviocategory')->order_by('id_category','desc')->find_all();
+        } elseif ($kind == 'user') {
+            $categories = ORM::factory('ormviocategory')->where('title','!=','usercategory')->find_all();
+        }
+
+        return $categories;
+    }
+
 }
 

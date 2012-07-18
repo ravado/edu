@@ -3,7 +3,7 @@
 class Model_OrmViOsubcategory extends ORM{
 
     protected $_table_name = 'vio_subcategories';
-    protected $_primary_key = 'id_vio_subcategory';
+    protected $_primary_key = 'id_subcategory';
 
     //  Связь с другой таблицей через ее id
     protected $_belongs_to = array(

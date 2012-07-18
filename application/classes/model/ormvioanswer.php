@@ -3,7 +3,7 @@
 class Model_OrmViOanswer extends ORM{
 
     protected $_table_name = 'vio_answers';
-    protected $_primary_key = 'id_vio_answer';
+    protected $_primary_key = 'id_answer';
 
     //  Связь с другой таблицей через ее id
     protected $_belongs_to = array(

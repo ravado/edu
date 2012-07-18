@@ -2,7 +2,7 @@
  * Скрипты админки
  */
 
-var redactorPre, redactorFull, REDACTOR_QUESTION, REDACTOR_VARIANTS;
+var redactorPre, redactorFull, REDACTOR_TSTQUESTION, REDACTOR_TSTVARIANTS, REDACTOR_QUESTION;
 // Проверка наличия новости по ID в качестве параметра передаем jQuery обьект в который будет вводиться айдишник
 function checkNewsbyID (jQueryObj) {
     var exist;
@@ -26,8 +26,8 @@ function clearQuestionVar() {
     $("#tblVariants").addClass('hide');
     $("#tblVariants tbody").html('');
     $(".sendQuestion").addClass('disabled');
-    REDACTOR_QUESTION.setCodeEditor('<p></p>');
-    REDACTOR_VARIANTS.setCodeEditor('<p></p>');
+    REDACTOR_TSTQUESTION.setCodeEditor('<p></p>');
+    REDACTOR_TSTVARIANTS.setCodeEditor('<p></p>');
 }
 
 // Создаем новый тест
@@ -120,7 +120,7 @@ $(document).ready(function() {
 
         if(!$(this).hasClass('disabled')) {
             // Забираем с редактора вопроса весь текст
-            var curr_question = REDACTOR_QUESTION.getCodeTextarea();
+            var curr_question = REDACTOR_TSTQUESTION.getCodeTextarea();
 
             // И записываем его в скрытое поле для того что бы при сабмите формы отправить текст вопроса
             $(".hQuestionTitle").val(curr_question);
@@ -214,7 +214,7 @@ $(document).ready(function() {
 
     $(".addVariant").click(function(){
         var new_row, curr_variant,  rand, is_text_checked = '', curr_attr;
-        curr_variant = REDACTOR_VARIANTS.getCodeTextarea();
+        curr_variant = REDACTOR_TSTVARIANTS.getCodeTextarea();
         rand = Math.ceil(Math.random()*1000000);
         console.log(curr_variant);
 
@@ -736,13 +736,18 @@ $('#ulAdmMenu ul').each(function(index) {
 
 
     /*Инициализация редактора новостей*/
-    redactorPre = $('#txtNewsPre').redactor({ imageUpload: '/news/nhid/loadimages' });
+//    redactorPre = $('#txtNewsPre').redactor({ imageUpload: '/news/nhid/loadimages' });
 
-    redactorFull = $('#txtNewsFull').redactor({ imageUpload: '/news/nhid/loadimages' });
-// Редактор для тестов
-    REDACTOR_QUESTION = $('#tstQuestions').redactor({ imageUpload: '/news/nhid/loadimages' });
-    REDACTOR_VARIANTS = $("#tstVariants").redactor({ imageUpload: '/news/nhid/loadimages'});
+//    redactorFull = $('#txtNewsFull').redactor({ imageUpload: '/news/nhid/loadimages' });
+    // Редактор для тестов
+//    REDACTOR_TSTQUESTION = $('#tstQuestions').redactor({ imageUpload: '/news/nhid/loadimages' });
+//    REDACTOR_TSTVARIANTS = $("#tstVariants").redactor({ imageUpload: '/news/nhid/loadimages'});
 
+    //Редактор для вопросов в админке
+    REDACTOR_QUESTION = $("#question").redactor({ imageUpload: '/news/nhid/loadimages'});
+
+    $(".dropdown-timepicker").timepicker();
+    $("#dp1").datepicker();
 });
 
 

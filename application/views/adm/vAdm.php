@@ -8,33 +8,25 @@
     <div class="spnTitle Page">Панель администрирования <?php if(isset($pageFlag)){echo$pageFlag;}?></div>
     <div id="dvAdmPanel"><?=$page;?></div>
     <div id="dvAdmMenu">
-        <ul class="ulLeftSidebar" id="ulAdmMenu">
-            <li><a class="btnSilver">Пользователь</a>
-                <ul>
-                    <li><a href="/adm/user/add">Добавить пользователя</a></li>
-                    <li><a href="/adm/user/del">Удалить пользователя</a></li>
-                    <li><a href="/adm/user/fix">Править пользователя</a></li>
-                </ul>
-            </li>
-            <li><a class="btnSilver btnLeftMenu">Новости</a>
-                <ul>
-                    <li><a href="/adm/news/add">Добавить новость</a></li>
-                    <li><a href="/adm/news/del">Удалить новость</a></li>
-                    <li><a href="/adm/news/fix">Править новость</a></li>
-                </ul>
-            </li>
-            <li><a class="btnSilver btnLeftMenu">Вопросы и ответы</a>
-                <ul>
-                    <li><a href="/adm/vio/delquestion">Удалить вопрос</a></li>
-                    <li><a href="/adm/vio/delanswer">Удалить комментарии</a></li>
-                </ul>
-            </li>
-            <li><a class="btnSilver btnLeftMenu">Тесты</a>
-                <ul>
-                    <li><a href="/adm/tests/create">Создание Тестов</a></li>
-                    <li><a href="/adm/tests/del">Удаление Тестов</a></li>
-                </ul>
-            </li>
+        <div class="well">
+        <ul class="nav nav-list">
+            <li class="nav-header">Пользователь</li>
+            <li class=""><a href="/adm/user/add">Добавить пользователя</a></li>
+            <li><a href="/adm/user/del">Удалить пользователя</a></li>
+            <li><a href="/adm/user/fix">Править пользователя</a></li>
+            <li class="nav-header">Новости</li>
+            <li><a href="/adm/news/add">Добавить новость</a></li>
+            <li><a href="/adm/news/del">Удалить новость</a></li>
+            <li><a href="/adm/news/fix">Править новость</a></li>
+            <li class="nav-header">Вопросы и ответы</li>
+            <li><a href="/adm/vio/addquestion">Добавить вопрос</a></li>
+            <li><a href="/adm/vio/delquestion">Удалить вопрос</a></li>
+            <li><a href="/adm/vio/delanswer">Удалить комментарии</a></li>
+            <li class="nav-header">Тесты</li>
+            <li><a href="/adm/tests/create">Создание Тестов</a></li>
+            <li><a href="/adm/tests/del">Удаление Тестов</a></li>
+
         </ul>
+        </div>
     </div>
 </div>

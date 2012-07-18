@@ -3,7 +3,7 @@
 class Model_OrmViOvote extends ORM{
 
     protected $_table_name = 'vio_votes';
-    protected $_primary_key = 'id_vio_vote';
+    protected $_primary_key = 'id_vote';
 
     //  Связь с другой таблицей через ее id
     protected $_belongs_to = array(

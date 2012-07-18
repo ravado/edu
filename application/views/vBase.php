@@ -37,5 +37,6 @@
         <div class="hint info"></div>
         <div class="hint warning"></div>
         <div class="hint success"></div>
+    <?php ProfilerToolbar::render(true); ?>
 </body>
 </html>

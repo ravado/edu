@@ -1,11 +1,33 @@
 <div id="dvContent">
+<?php
+    foreach($questions as $question) {
+        echo 'вопрос - ' .$question->title .'<br>';
+        echo 'пользователь - ' .$question->user->username .'<br>';
+        foreach($question->favorites->find_all() as $favorite) {
+            if($user_id == $favorite->user_id) {
+                echo '{favorite}<br>';
+            }
+        }
+        echo '----------------------------------------------<br>';
+        foreach($question->subcategories->find_all() as $subcategory) {
+            echo '-подкатегория - ' .$subcategory->title .'<br>';
+        }
+        echo '----------------------------------------------<br>';
+        foreach($question->answers->find_all() as $answer) {
+            echo  $answer->text .'<br>';
+        }
+        echo '----------------------------------------------<br>';
+
+    }
+?>
+
     <?php
         $questions = array();
         $page = 1;
         $qcount = 0;
-        if(!empty($result['questions'])) {
+        /*if(!empty($result['questions'])) {
             $questions = $result['questions'];
-        }
+        }*/
 
         if(!empty($result['qcount'])) {
             $qcount = $result['qcount'];
