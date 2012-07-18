@@ -202,7 +202,58 @@ class Controller_Adm_Ahid extends Controller{
             echo json_encode($json_return);
         }
     }
+// ----------------------------------------------- тесты ------------------------------------------------------------ //
 
+// ============================================ Вопросы и ответы ==================================================== //
+
+    // Добавление нового вопроса
+    public function action_addQuestion() {
+        $auth = Auth::instance();
+        $user_id = $auth->get_user()->id;
+        $title = $_POST['question_title'];
+        $full = $_POST['question_full'];
+        $subcats = $_POST['tags'];
+        $is_closed = $_POST['is_closed'];
+        $rating = $_POST['rating'];
+        $time = $_POST['time'];
+        $date = $_POST['date'];
+        $public_date = date('Y-m-d H:i', strtotime($date .$time));
+        $question = ORM::factory('ormvioquestion');
+        $question->user_id = $user_id;
+        $question->title = $title;
+        $question->full = $full;
+        $question->public_date = $public_date;
+        $question->rating = $rating;
+        $question->is_closed = $is_closed;
+        $question->save();
+
+        //Выбираем все записи с таблицы подкатегорий для сверки на существование добавленых подкатегорий
+        $subcategories = ORM::factory('ormviosubcategory')->find_all();
+        // Идем по всем подкатегорийм в базе данных
+        foreach($subcategories as $subcategory) {
+            // Идем по всем подкатегориям присланным через аякс запрос
+            foreach($subcats as $key => $value) {
+                // Если находим совадение, то записываем в таблицу вопросов текущую подкатегорию
+                if($subcategory->title == $value) {
+                    // Удаляем из присланных категорий те которые нашлись в БД
+                    unset($subcats[$key]);
+                    $question->add('subcategories',$subcategory);
+                }
+            }
+        }
+
+        // Оставшиеся новенькие подкатегории записываем в таблицу подкатегорий
+        foreach($subcats as $subcat) {
+            $subcategories = ORM::factory('ormviosubcategory');
+            $subcategories->title = $subcat;
+            $saved = $subcategories->save();
+            // И добавляем только что записанную подкатегорию к текущему вопросу
+            $question->add('subcategories',$saved);
+        }
+
+        echo json_encode(true);
+    }
+// -------------------------------------------- Вопросы и ответы ---------------------------------------------------- //
 
 
 }

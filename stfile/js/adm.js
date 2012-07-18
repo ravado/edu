@@ -19,6 +19,19 @@ function checkNewsbyID (jQueryObj) {
     return exist;
 }
 
+// Очистка формы создания вопроса в админке
+function clearAddQuestionForm() {
+    $(".label-tags p").click();
+    $(".is_closed").removeAttr('checked');
+    $(".not_closed").attr('checked','checked');
+    $("input[name=question_title]").val('');
+    $("input[name=rating]").val('0');
+    $(".dropdown-timepicker").val($(".current_time").val());
+    $("#date").val($(".current_date").val());
+    REDACTOR_QUESTION.setCodeEditor('<p><br></p>');
+
+}
+
 var currUsername = null;
 
 // Очищаем содержимое редактора и таблицы с вариантами
@@ -746,9 +759,45 @@ $('#ulAdmMenu ul').each(function(index) {
     //Редактор для вопросов в админке
     REDACTOR_QUESTION = $("#question").redactor({ imageUpload: '/news/nhid/loadimages'});
 
-    $(".dropdown-timepicker").timepicker();
-    $("#dp1").datepicker();
+    $(".dropdown-timepicker").timepicker({showMeridian:false,defaultTime:'current',showSeconds:true});
+    $("#date").datepicker({format:'dd-mm-yyyy'});
+
+
+
+
+
+// ================================== Нажатие на кнопку добавления вопроса ========================================== //
+    $(".addQuestion").click(function() {
+        if(($("input[name=question_title]").val() == '') || ($(".label-tags").length == 0)) {
+            hints('info','Для создания вопроса необходимао как минимуму ввести его заголовок, и выбрать одну категорию!');
+        } else {
+            // Переписываем текст с редактора в текстареа для дальнейшей серриализации данных формы
+            $("#question").val(REDACTOR_QUESTION.getCodeTextarea());
+            var form_data = $("#frmAddQuestion").serialize();
+            $.ajax({type:"POST", async:true, data: form_data, url: "/adm/ahid/addQuestion", dataType:"json",
+                success:function(data){
+                    if(data) {
+                        hints('success','Вопрос бы успешно задан');
+                        clearAddQuestionForm();
+                    } else {
+                        hints('error','Что то пошло не так');
+                        console.log('При создании вопроса возникла ошибка');
+                    }
+                },
+                error:function(){
+                    console.log('error in ajax query, when add answer :(');
+                }
+            });
+        }
+    });
+// ---------------------------------- Нажатие на кнопку добавления вопроса ------------------------------------------ //
+// ================================== Нажатие на кнопку очистки формы =============================================== //
+    $(".clearQuestionForm").click(function() {
+        clearAddQuestionForm();
+    });
+// ---------------------------------- Нажатие на кнопку очистки формы ----------------------------------------------- //
 });
+
 
 
 /*Добавление нового пользователя*/

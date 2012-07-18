@@ -551,7 +551,7 @@ fieldset:focus{
     display: none;
     margin-top: 10px;
 }
-.extraContent span {
+.extraContent .toolItem {
     float: left;
     margin-right: 10px;
 }
@@ -569,7 +569,7 @@ fieldset:focus{
 /* ============ Ярлычки выбранных категорий ============= */
 .label-tags {
     float: right;
-    text-align: center;
+    /*text-align: center;*/
     margin-left: 10px;
     position: relative;
     min-width: 20px;
@@ -584,7 +584,9 @@ fieldset:focus{
     /*background-repeat: no-repeat;*/
 
 }
-
+.label-tags span {
+    float: left;
+}
 /* текст внутри меток */
 .label-tags p {
     padding: 2px;
@@ -625,7 +627,15 @@ fieldset:focus{
     display: inline-block; margin-top: 0;color: #a9a9a9;
 }
 
-
+/* блочек с одной подкатегорией в списке доступных подкатегорий для вопроса */
+.subcatItem {
+    float: left;
+    width: 180px;
+}
+.innerTabPane {
+    width: 575px;
+    float:right;
+}
 
 
 

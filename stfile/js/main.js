@@ -554,8 +554,8 @@ $(document).ready(function(){
 //                    alert('is similar');
                 } else {
                     rand = Math.random();
-                    $(".dvCategoryLabel").append("<div class='label-tags' id='"+rand+"'><p>"+arr[j]+
-                        "<span class='removeTag icon-remove'></span></p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
+                    $(".dvCategoryLabel").append("<div class='label-tags' id='"+rand+"'><p><span>"+arr[j]+
+                        "</span><span class='removeTag'></span></p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
 //                    alert(arr[j]);
                 }
             } else {
@@ -589,7 +589,7 @@ $(document).ready(function(){
 
 
         } else {
-            $(".dvCategoryLabel").append("<div class='label-tags' id='"+$(this).attr('id')+"'><p>"+$(this).parent('').text()+"<span class='removeTag'></span></p></div>");
+            $(".dvCategoryLabel").append("<div class='label-tags' id='"+$(this).attr('id')+"'><p><span>"+$(this).parent('').text()+"</span><span class='removeTag'></span></p></div>");
             isTagsComplete();
         }
     });
