@@ -33,7 +33,7 @@
         <h4>Вопрос. <small> краткое название вопроса и полный текст.</small></h4>
     </div>
     <label>Заголовок
-        <input type="text" class="span9" maxlength="100"  placeholder="не более 100 символов" name="question_title">
+        <input type="text" class="span9" maxlength="100" id="title"  placeholder="не более 100 символов" name="question_title">
     </label>
     <label>Текст вопроса
         <textarea id="question" rows="5" cols="20" name="question_full"></textarea>

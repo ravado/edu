@@ -24,11 +24,11 @@
                 </span>
                 <span class="toolItem"><label>Состояние</label>
                     <label class="radio inline">
-                        <input type="radio" class="not_closed" name="is_closed" value="0" checked="checked">
+                        <input type="radio" class="not_closed qstatus" name="is_closed" value="0" checked="checked">
                         Открыт
                     </label>
                     <label class="radio inline">
-                        <input type="radio" class="is_closed" name="is_closed" value="1" >
+                        <input type="radio" class="is_closed qstatus" name="is_closed" value="1" >
                         Закрыт
                     </label>
                 </span>
@@ -52,21 +52,21 @@
         <!--  Блок с выбором категорий вопроса  -->
         <div class="tabbable tabs-left">
             <ul class="nav nav-tabs">
-                <?php $k = true; foreach ($categories as $category): ?>
+                <? $k = true; foreach ($categories as $category): ?>
                 <li class="<?php if($k) { echo 'active'; $k = false; } ?>">
-                    <a href="#<?php echo $category->id_category; ?>" data-toggle="tab"><?php echo $category->title; ?></a>
+                    <a href="#<?= $category->id_category; ?>" data-toggle="tab"><?= $category->title; ?></a>
                 </li>
-                <?php endforeach; ?>
+                <? endforeach; ?>
             </ul>
             <div class="tab-content">
                 <?php $k = true; foreach ($categories as $category): $counter = 0;?>
-                <div class="tab-pane <?php if($k) { echo 'active'; $k = false; } ?>" id="<? echo $category->id_category; ?>">
+                <div class="tab-pane <?php if($k) { echo 'active'; $k = false; } ?>" id="<?= $category->id_category; ?>">
                     <div class="innerTabPane">
                         <?php foreach($category->subcategories->find_all() as $subcategory): ?>
                         <div class="subcatItem">
                             <label class="checkbox">
-                                <input type="checkbox" value="<? echo $subcategory->title ?>" id="id<? echo $subcategory->id_subcategory ?>" name="tags[]">
-                                <? echo $subcategory->title; ?>
+                                <input type="checkbox" value="<?= $subcategory->title ?>" id="id<?= $subcategory->id_subcategory ?>" name="tags[]">
+                                <?= $subcategory->title; ?>
                             </label>
                         </div>
                         <? endforeach; ?>

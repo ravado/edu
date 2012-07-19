@@ -771,7 +771,7 @@ $('#ulAdmMenu ul').each(function(index) {
 
 // ================================== Нажатие на кнопку добавления вопроса ========================================== //
     $(".addQuestion").click(function() {
-        if(($("input[name=question_title]").val() == '') || ($(".label-tags").length == 0)) {
+        if(($("#title").val() == '') || ($(".label-tags").length == 0)) {
             hints('info','Для создания вопроса необходимао как минимуму ввести его заголовок, и выбрать одну категорию!');
         } else {
             // Переписываем текст с редактора в текстареа для дальнейшей серриализации данных формы
@@ -779,12 +779,22 @@ $('#ulAdmMenu ul').each(function(index) {
             var form_data = $("#frmAddQuestion").serialize();
             $.ajax({type:"POST", async:true, data: form_data, url: "/adm/ahid/addQuestion", dataType:"json",
                 success:function(data){
-                    if(data) {
+                    if(data.status == 'ok') {
                         hints('success','Вопрос бы успешно задан');
                         clearAddQuestionForm();
+                        var appended = '';
+                        for( var i = 0; i< data.count; i++ ) {
+                            appended += '' +
+                                '<div class="subcatItem">' +
+                                '<label class="checkbox">' +
+                                '<input type="checkbox" value="' + data.subcategories[i].title + '" id="id' + data.subcategories[i].id_subcategory + '" name="tags[]">' +
+                                data.subcategories[i].title + '</label>' +
+                                '</div>';
+                        }
+                        $(".tab-pane#0").find(".innerTabPane").append(appended);
                     } else {
-                        hints('error','Что то пошло не так');
-                        console.log('При создании вопроса возникла ошибка');
+                        hints('error','Что то пошло не так <small>( можно посмотреть логи )</small>');
+                        console.log(data.message);
                     }
                 },
                 error:function(){
@@ -810,7 +820,7 @@ $('#ulAdmMenu ul').each(function(index) {
         item_time = $("#time");
         item_rating = $("#rating");
         // Удаляем отметки из радиобокса при каждом выводе новых вопросов
-        $("input[name=is_closed]").removeAttr('checked');
+        $(".qstatus").removeAttr('checked');
         if( $("#qustionId").val() != '' ) {
             item_loading.show(); // Показываем блок с иконкой загрузки
             // Перед отправкой аякса очищаем форму для корректной подгрузки в форму даных
@@ -819,7 +829,6 @@ $('#ulAdmMenu ul').each(function(index) {
                 success:function(data) {
                     // Если на сервере все прошло успешно
                     if(data.status == 'ok') {
-                        hints('success','Вопрос найден');
                         $("#hQuestionId").val(data.id_question);
                         item_title.val(data.title);
                         item_rating.val(data.rating);
@@ -850,6 +859,9 @@ $('#ulAdmMenu ul').each(function(index) {
                     console.log('error in ajax query, when get question by id :(');
                 }
             });
+        } else {
+            hints('info','Введите id вопроса для редактирования');
+            $("#qustionId").focus();
         }
     });
 // ------------------------------ Нажатие на кнопку поиска вопроса по id -------------------------------------------- //
@@ -873,22 +885,25 @@ $('#ulAdmMenu ul').each(function(index) {
             var form_data = $("#frmAddQuestion").serialize();
             $.ajax({type:"POST", async:true, data: form_data, url: "/adm/ahid/updateQuestion", dataType:"json",
                 success:function(data){
-                    if(data) {
-                        hints('success','Вопрос бы успешно задан');
-                        var key = 0, appended = '';
+                    if(data.status == 'ok') {
+                        hints('success','Вопрос был обновлен');
+                        var appended = '';
                         for( var i = 0; i< data.count; i++ ) {
                             appended += '' +
                                 '<div class="subcatItem">' +
                                 '<label class="checkbox">' +
-                                '<input type="checkbox" value="' + data.update[i].title + '" id="id' + data.update[i].id_subcategory + '" name="tags[]">' +
-                                data.update[i].title + '</label>' +
+                                '<input type="checkbox" value="' + data.subcategories[i].title + '" id="id' + data.subcategories[i].id_subcategory + '" name="tags[]">' +
+                                data.subcategories[i].title + '</label>' +
                                 '</div>';
                         }
                         $(".tab-pane#0").find(".innerTabPane").append(appended);
                         clearAddQuestionForm();
+                        $(".hiddenQuestion").slideUp(300);
+                        $("#qustionId").val('').focus();
+
                     } else {
-                        hints('error','Что то пошло не так');
-                        console.log('При создании вопроса возникла ошибка');
+                        hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
+                        console.log(data.message);
                     }
                 },
                 error:function(){
