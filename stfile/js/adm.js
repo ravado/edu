@@ -764,7 +764,10 @@ $('#ulAdmMenu ul').each(function(index) {
 
 
 
-
+// =============================== Перевод фокуса ввода при загрузке страницы ======================================= //
+    $("#qustionId").focus();
+    $("input[name=question_title]").focus();
+// ------------------------------- Перевод фокуса ввода при загрузке страницы --------------------------------------- //
 
 // ================================== Нажатие на кнопку добавления вопроса ========================================== //
     $(".addQuestion").click(function() {
@@ -796,6 +799,114 @@ $('#ulAdmMenu ul').each(function(index) {
         clearAddQuestionForm();
     });
 // ---------------------------------- Нажатие на кнопку очистки формы ----------------------------------------------- //
+// ============================== Нажатие на кнопку поиска вопроса по id ============================================ //
+    $("#getQuestion").click(function() {
+        var item_title, item_date, item_time,item_rating, curr_check, item_loading,
+            item_status = {is_closed: $(".is_closed"), is_not_closed: $(".not_closed")};
+
+        item_loading = $(".iconLoading");
+        item_title = $("#title");
+        item_date = $("#date");
+        item_time = $("#time");
+        item_rating = $("#rating");
+        // Удаляем отметки из радиобокса при каждом выводе новых вопросов
+        $("input[name=is_closed]").removeAttr('checked');
+        if( $("#qustionId").val() != '' ) {
+            item_loading.show(); // Показываем блок с иконкой загрузки
+            // Перед отправкой аякса очищаем форму для корректной подгрузки в форму даных
+            clearAddQuestionForm();
+            $.ajax({type:"POST", async:true, data: "id_question="+$("#qustionId").val(), url: "/adm/ahid/getQuestion", dataType:"json",
+                success:function(data) {
+                    // Если на сервере все прошло успешно
+                    if(data.status == 'ok') {
+                        hints('success','Вопрос найден');
+                        $("#hQuestionId").val(data.id_question);
+                        item_title.val(data.title);
+                        item_rating.val(data.rating);
+                        item_date.val(data.date);
+                        item_time.val(data.time);
+                        REDACTOR_QUESTION.setCodeEditor(data.full);
+                        if (data.is_closed == 0) { item_status.is_not_closed.attr('checked','checked'); } else
+                        if (data.is_closed == 1) { item_status.is_closed.attr('checked','checked'); }
+
+                        // Проходим по каждой присланной категории и отмечаем их на форме
+                        for (var i = 0; i < data.count; i++) {
+                            curr_check = $("#id"+data.subcategories[i].id_subcategory);
+                            curr_check.click();
+                        }
+
+                        // Затем открвыаем форму для показа пользователю-админу
+                        $(".hiddenQuestion").slideDown(300);
+
+                    // Если же что то пошло не так выводим сообщение и пишем в логи что не так
+                    } else {
+                        hints('error','Что то пошло не так (можно посмотреть логи)');
+                        console.log(data.message);
+                    }
+                    item_loading.hide(); // Скрываем блок с анимацией загрузки
+                },
+                error:function(){
+                    item_loading.hide(); // Скрываем блок с анимацией загрузки
+                    console.log('error in ajax query, when get question by id :(');
+                }
+            });
+        }
+    });
+// ------------------------------ Нажатие на кнопку поиска вопроса по id -------------------------------------------- //
+
+// ============================== Нажатие на кнопку отмены изменения вопроса ======================================== //
+    $(".cancelQuestionFix").click(function() {
+        $(".hiddenQuestion").slideUp(300);
+        $("#qustionId").val('').focus();
+        $("#hQustionId").val('');
+    });
+// ------------------------------ Нажатие на кнопку отмены изменения вопроса ---------------------------------------- //
+
+// =================================== Нажатие на кнопку Изменения вопроса  ========================================= //
+    $(".fixQuestion").click(function() {
+        if(($("#title").val() == '') || ($(".label-tags").length == 0)) {
+            hints('info','Вы не сможете обновить вопрос если поле заголовка будет пустым, или не будет выбрана как минимум одна категория !');
+        } else {
+            // Переписываем текст с редактора в текстареа для дальнейшей серриализации данных формы
+            $("#question").val(REDACTOR_QUESTION.getCodeTextarea());
+
+            var form_data = $("#frmAddQuestion").serialize();
+            $.ajax({type:"POST", async:true, data: form_data, url: "/adm/ahid/updateQuestion", dataType:"json",
+                success:function(data){
+                    if(data) {
+                        hints('success','Вопрос бы успешно задан');
+                        var key = 0, appended = '';
+                        for( var i = 0; i< data.count; i++ ) {
+                            appended += '' +
+                                '<div class="subcatItem">' +
+                                '<label class="checkbox">' +
+                                '<input type="checkbox" value="' + data.update[i].title + '" id="id' + data.update[i].id_subcategory + '" name="tags[]">' +
+                                data.update[i].title + '</label>' +
+                                '</div>';
+                        }
+                        $(".tab-pane#0").find(".innerTabPane").append(appended);
+                        clearAddQuestionForm();
+                    } else {
+                        hints('error','Что то пошло не так');
+                        console.log('При создании вопроса возникла ошибка');
+                    }
+                },
+                error:function(){
+                    console.log('error in ajax query, when add answer :(');
+                }
+            });
+        }
+    });
+// ----------------------------------- Нажатие на кнопку Изменения вопроса ------------------------------------------ //
+
+// ================= Отслеживание нажатия на кнопку Enter при вводе id вопроса ====================================== //
+    $("#qustionId").keyup(function(e) {
+        if(e.keyCode == 13) {
+            $("#getQuestion").click();
+        }
+
+    });
+// ---------------- Отслеживание нажатия на кнопку Enter при вводе id вопроса---------------------------------------- //
 });
 
 

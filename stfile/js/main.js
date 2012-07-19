@@ -580,7 +580,7 @@ $(document).ready(function(){
         $(".dvSeparateCategory").not(curr_div).css("display","none");
     });
 
-    $("input[type=checkbox]").click(function(){
+    $("input[type=checkbox]").live('change', function(){
         if (!$(this).is(":checked")) {
             var curr_name;
             curr_name = $(this).attr("id");

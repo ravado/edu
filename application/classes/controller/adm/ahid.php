@@ -253,6 +253,109 @@ class Controller_Adm_Ahid extends Controller{
 
         echo json_encode(true);
     }
+
+    // Получение информации о вопросе по его id
+    function action_getQuestion() {
+        if(isset($_POST['id_question'])) {
+            $id_question = intval($_POST['id_question']);
+            try {
+                $question = ORM::factory('ormvioquestion')->where('id_question','=',$id_question)->find();
+                if($question->loaded()) {
+                    $result['id_question'] = $question->id_question;
+                    $result['title'] = $question->title;
+                    $result['full'] = $question->full;
+                    $result['user'] = $question->user->username;
+                    $result['id_user'] = $question->user->id;
+                    $result['public_date'] = explode(" ", $question->public_date);
+                    $result['time'] = $result['public_date'][1];
+                    $result['date'] = $result['public_date'][0];
+                    $result['rating'] = $question->rating;
+                    $result['is_closed'] = $question->is_closed;
+                    $result['answers_count'] = $question->answers_count;
+                    $result['message'] = 'everithing is ok';
+                    $result['status'] = 'ok';
+                    $subcategories = $question->subcategories->find_all();
+                    $result['count'] = 0;
+                    foreach ($subcategories as $k => $subcategory) {
+                        $result['subcategories'][$k]['id_subcategory'] = $subcategory->id_subcategory;
+                        $result['subcategories'][$k]['title'] = $subcategory->title;
+                        ++$result['count'];
+                    }
+                    echo json_encode($result);
+                } else {
+                    $result['message'] = 'orm object not loaded, maybe there is no such record';
+                    $result['status'] = 'bad';
+                    echo json_encode($result);
+                }
+            } catch (Exception $e) {
+                $result['message'] = 'something went wrong - '.$e;
+                $result['status'] = 'bad';
+                echo json_encode($result);
+            }
+        } else {
+            $result['message'] = 'POST was empty';
+            $result['status'] = 'bad';
+            echo json_encode($result);
+        }
+    }
+
+
+    // Изменение вопроса
+    public function action_updateQuestion() {
+        $id_question = $_POST['id_question'];
+        $title = $_POST['question_title'];
+        $full = $_POST['question_full'];
+        $subcats = $_POST['tags'];
+        $is_closed = $_POST['is_closed'];
+        $rating = $_POST['rating'];
+        $time = $_POST['time'];
+        $date = $_POST['date'];
+        $public_date = date('Y-m-d H:i', strtotime($date .$time));
+
+        $question = ORM::factory('ormvioquestion',$id_question);
+        $question->title = $title;
+        $question->full = $full;
+        $question->public_date = $public_date;
+        $question->rating = $rating;
+        $question->is_closed = $is_closed;
+
+        $question->save();
+        $subcategories = $question->subcategories->find_all();
+        foreach($subcategories as $subcategory) {
+            $question->remove('subcategories',$subcategory);
+        }
+
+        //Выбираем все записи с таблицы подкатегорий для сверки на существование добавленых подкатегорий
+        $subcategories = ORM::factory('ormviosubcategory')->find_all();
+        // Идем по всем подкатегорийм в базе данных
+        foreach($subcategories as $subcategory) {
+            // Идем по всем подкатегориям присланным через аякс запрос
+            foreach($subcats as $key => $value) {
+                // Если находим совадение, то записываем в таблицу вопросов текущую подкатегорию
+                if($subcategory->title == $value) {
+                    // Удаляем из присланных категорий те которые нашлись в БД
+                    unset($subcats[$key]);
+                    $question->add('subcategories',$subcategory);
+                }
+            }
+        }
+
+        $result['update'] = array();
+        $key = 0;
+        // Оставшиеся новенькие подкатегории записываем в таблицу подкатегорий
+        foreach($subcats as $subcat) {
+            $subcategories = ORM::factory('ormviosubcategory');
+            $subcategories->title = $subcat;
+            $saved = $subcategories->save();
+            $result['update'][$key]['id_subcategory'] = $saved->id_subcategory;
+            $result['update'][$key]['title'] = $saved->title;
+            // И добавляем только что записанную подкатегорию к текущему вопросу
+            $question->add('subcategories',$saved);
+            ++$key;
+        }
+        $result['count'] = $key;
+        echo json_encode($result);
+    }
 // -------------------------------------------- Вопросы и ответы ---------------------------------------------------- //
 
 

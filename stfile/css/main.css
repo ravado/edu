@@ -637,6 +637,14 @@ fieldset:focus{
     float:right;
 }
 
+/* Блок с прогрессом загрузки */
+.iconLoading {
+    width: 20px;
+    height: 20px;
+    display: none;
+    margin-left: 5px;
+}
+
 
 
 
