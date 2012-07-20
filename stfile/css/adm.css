@@ -16,7 +16,7 @@
 /*Блок с контроллами управления текущей страницы*/
 #dvAdmPanel{
     margin-bottom: 15px;
-    width: 700px;
+    width: 790px;
     float: right;
 }
 
@@ -218,4 +218,37 @@ label:hover {
 /*Столбец для отметки правильных вариантов ответа*/
 .admCorrect {
     width: 20px;
+}
+
+/* Кнопочка изменения подкатегории в админке */
+.changeCategory {
+    font-size: 10px;
+    margin-left: 10px;
+    opacity: 0;
+}
+.changeCategory:hover {
+    text-decoration: none;
+    /*border-bottom: 1px dashed #005580;*/
+    opacity: 1 !important;
+}
+
+/* Скрытый поначалу блок клторый содержит поля для изменения одной категории */
+.dvChangeCat {
+    width: 175px;
+    padding: 5px;
+}
+.dvChangeCat input {
+    width: 160px;
+    
+}
+
+/* Делаем ячейки таблицы со списком категорий одинакового размера */
+#tblCategoriesList td:nth-child(2n) {
+
+    width: 185px;
+}
+
+/* при наводе курсора на ячейку таблицы со списком категорий показываем кнопку редактирования */
+.tbCategory td:hover .changeCategory {
+    opacity: 0.5;
 }

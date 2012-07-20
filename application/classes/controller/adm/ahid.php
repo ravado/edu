@@ -8,6 +8,52 @@ class Controller_Adm_Ahid extends Controller{
  
     }
 
+    //
+    public function action_rusToLat($string) {
+        $converter = array(
+            'а' => 'a',   'б' => 'b',   'в' => 'v',
+            'г' => 'g',   'д' => 'd',   'е' => 'e',
+            'ё' => 'e',   'ж' => 'zh',  'з' => 'z',
+            'и' => 'i',   'й' => 'y',   'к' => 'k',
+            'л' => 'l',   'м' => 'm',   'н' => 'n',
+            'о' => 'o',   'п' => 'p',   'р' => 'r',
+            'с' => 's',   'т' => 't',   'у' => 'u',
+            'ф' => 'f',   'х' => 'h',   'ц' => 'c',
+            'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
+            'ь' => '\'',  'ы' => 'y',   'ъ' => '\'',
+            'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+
+            'А' => 'A',   'Б' => 'B',   'В' => 'V',
+            'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
+            'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
+            'И' => 'I',   'Й' => 'Y',   'К' => 'K',
+            'Л' => 'L',   'М' => 'M',   'Н' => 'N',
+            'О' => 'O',   'П' => 'P',   'Р' => 'R',
+            'С' => 'S',   'Т' => 'T',   'У' => 'U',
+            'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
+            'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
+            'Ь' => '\'',  'Ы' => 'Y',   'Ъ' => '\'',
+            'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
+        );
+        $str = strtr($string, $converter);
+        // в нижний регистр
+        $str = strtolower($str);
+        // заменям все ненужное нам на "-"
+        $str = preg_replace('~[^-a-z0-9_]+~u', '-', $str);
+        // удаляем начальные и конечные '-'
+        $str = trim($str, "-");
+
+        return $str;
+    }
+
+
+
+
+
+
+
+
+
     /*Возвращаем данные профиля пользователя по его имени*/
     public function action_getUserInfo(){
         $userName = Arr::get($_POST,'userToDelete','');
@@ -386,6 +432,121 @@ class Controller_Adm_Ahid extends Controller{
             }
 
         // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
+
+    // Добавление категории либо подкатегории
+    public function action_addCategory() {
+        if(!empty($_POST)) {
+            try {
+                // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                $title = $_POST['title'];
+                $label = $_POST['label'];
+
+                // Если метка не была задана, берем название категории и создаем транслит
+                if($label == '') {
+//                    $label = action_rusToLat($title);
+                    $label = $title;
+                // Если метка была задана переводим ее в нижний регистр
+                } else {
+                    $label = strtolower($label);
+                }
+                $parent_category_id = $_POST['parent_category'];
+
+                if($parent_category_id == 'none') {
+                    $category = ORM::factory('ormviocategory');
+                    $category->title = $title;
+                    $category->label = $label;
+                    $saved = $category->save();
+                    $result['id_category'] = $saved->id_category;
+                    $result['title'] = $saved->title;
+                    $result['is_category'] = true;
+                } else {
+                    $category_id = intval($parent_category_id);
+                    $subcategory = ORM::factory('ormviosubcategory');
+                    $subcategory->title = $title;
+                    $subcategory->label = $label;
+                    $subcategory->category_id = $category_id;
+                    $saved = $subcategory->save();
+                    $result['id_category'] = $category_id;
+                    $result['id_subcategory'] = $saved->id_subcategory;
+                    $result['title'] = $saved->title;
+                    $result['is_category'] = false;
+                }
+
+                $result['message'] = 'everithing is ok';
+                $result['status'] = 'ok';
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
+
+    // Изменение подкатегории
+    public function action_updateCategory() {
+        if(!empty($_POST)) {
+            try {
+                // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                $title = $_POST['title'];
+                $is_category = $_POST['is_parent'];
+                $label = $_POST['label'];
+
+                // Если метка не была задана, берем название категории и создаем транслит
+                if($label == '') {
+//                    $label = action_rusToLat($title);
+                    $label = $title;
+                // Если метка была задана переводим ее в нижний регистр
+                } else {
+                    $label = strtolower($label);
+                }
+                $category_id = intval($_POST['id_category']);
+                if($is_category === 'yes') {
+                    $category = ORM::factory('ormviocategory',$category_id);
+                    $category->title = $title;
+                    $category->label = $label;
+                    $saved = $category->save();
+                    $result['id_category'] = $saved->id_category;
+                    $result['title'] = $saved->title;
+                    $result['label'] = $saved->label;
+                    $result['is_category'] = true;
+                } else {
+                    $subcategory = ORM::factory('ormviosubcategory',$category_id);
+                    $subcategory->title = $title;
+                    $subcategory->label = $label;
+                    $saved = $subcategory->save();
+                    $result['id_category'] = $category_id;
+                    $result['title'] = $saved->title;
+                    $result['label'] = $saved->label;
+                    $result['is_category'] = false;
+                }
+
+                $result['message'] = 'everithing is ok';
+                $result['status'] = 'ok';
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
         } else {
             $result['message'] = 'POST is empty';
             $result['status'] = 'bad';

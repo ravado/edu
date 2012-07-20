@@ -755,12 +755,22 @@ class Model_Mquestions extends Model_Database{
         return true;
     }
 
+
+
+
+
+
+
+
+    // Получение списка вопросов
     public function getQuestionsList() {
         $limit = 10;
         $questions = ORM::factory('ormvioquestion')->find_all($limit);
         return $questions;
     }
 
+    // Выборка списка всех категорий,
+    // $kind: 'admin' - возвращает список всех категорий, 'user' - все кроме пользовательских
     public function getCategoryList($kind) {
         if($kind == 'admin') {
             $categories = ORM::factory('ormviocategory')->order_by('id_category','desc')->find_all();

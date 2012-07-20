@@ -80,5 +80,20 @@ class Controller_Adm_Vio extends Controller_Base{
         $this->template->content = View::factory('adm/vAdm',$data);
     }
 
+    /* Показываем страницу категорий вопросов */
+    public function action_category() {
+        $this->template->title = "Категории вопросов";
+        $this->template->styles = array("stfile/js/redactor/css/redactor.css" => "screen",
+            "stfile/css/adm.css" => "screen");
+
+        $this->template->scripts = array('/stfile/js/adm.js',
+            '/stfile/js/redactor/redactor.js');
+
+        $data['categories'] = Model::factory('Mquestions')->getCategoryList('admin');
+        $data['page'] = View::factory('adm/vAdmVioCategory',$data);
+        $data['pageFlag'] = ': Управление категориями вопросов';
+        $this->template->content = View::factory('adm/vAdm',$data);
+    }
+
 
 }
