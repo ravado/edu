@@ -645,15 +645,94 @@ fieldset:focus{
     margin-left: 5px;
 }
 
+/* span0 которого нет в бутстрапе */
+.span0 {
+    width: 20px;
+    float: none !important;
+}
+
+/* блок для иконки размером 24px */
+.icon24 {
+    display: block;
+    height: 24px;
+    width: 24px;
+    background-image: url("/stfile/img/sprite.png");
+}
+
+/* Иконки размером 24px */
+.icon24-clock {
+    background-position: 0 -24px;
+}
+.icon24-graph {
+    background-position: -48px -24px;
+}
+.icon24-lamp {
+    background-position: -24px -24px;
+}
+.icon24-check {
+    background-position: -72px -24px;
+}
 
 
+/* Ячейки в таблицах с определенной информацией */
+td.time {
+    font-size: smaller;
+    text-align: center !important;
+    color: #888;
+}
+td.rating {
+    font-size: smaller;
+    text-align: center !important;
+    color: #888;
+}
+td.answers {
+    font-size: smaller;
+    text-align: center !important;
+}
+
+/* Таблица со списком вопросов */
+.questionsList {
+    margin-left: 0 !important;
+}
+.questionsList td{
+    vertical-align: middle !important;
+}
+/* Иконка удаления вопроса */
+.delQuestion {
+    opacity: 0.2;
+}
+.delQuestion:hover {
+    opacity: 1;
+}
+
+/*Блок с тегами возле каждого вопроса*/
+.spnTags {
+    white-space: nowrap;
+}
+.spnTags a {
+    color: #ccc;
+    font-size: smaller;
+}
+.spnTags a:hover{
+    color: #888;
+    border-bottom: none !important;
+    text-decoration: none;
+}
 
 
+/* Сделаем наконец переопределение для ссылок и уберем text-decoration */
+a {
+    text-decoration: none !important;
+}
+a:hover {
+    text-decoration: none !important;
+}
+/*   ---------------------------------------------------------------   */
 
-
-
-
-
+/* Клас для центрирования по горизонтали */
+.centered {
+    margin: 0 auto !important;
+}
 
 
 

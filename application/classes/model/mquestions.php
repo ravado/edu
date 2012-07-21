@@ -763,9 +763,10 @@ class Model_Mquestions extends Model_Database{
 
 
     // Получение списка вопросов
-    public function getQuestionsList() {
-        $limit = 10;
-        $questions = ORM::factory('ormvioquestion')->find_all($limit);
+    public function getQuestionsList($limit = 10, $page = 3) {
+        $offset = ($page - 1) * $limit;
+        $questions = ORM::factory('ormvioquestion')
+            ->order_by('public_date','desc')->limit($limit)->offset($offset)->find_all();
         return $questions;
     }
 

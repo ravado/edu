@@ -268,12 +268,7 @@
             background: #ffffff;
         }
 
-        /*Блок с тегами возле каждого вопроса*/
-        .spnTags {
 
-            white-space: nowrap;
-            padding: 3px;
-        }
 
         /*Зелененикие подкатегории-теги*/
         .greenCat {

@@ -8,7 +8,7 @@
         </label>
         <label>Родительская категория
             <select name="parent_category" class="parentCategory">
-                <option value="none">------</option>
+                <option value="none">[ -- Нет родительской -- ]</option>
                 <? foreach($categories as $category) :?>
                 <option value="<?=$category->id_category?>"><?=$category->title?></option>
                 <? endforeach; ?>

@@ -248,12 +248,13 @@ label:hover {
     width: 185px;
 }
 
+/* Блок с категорией и ее подкатегориями в списке категорий */
 .tbCategory{
     border-top: none !important;
 }
 
+/* Выделяем строку с категорией */
 .tbCategory tr:first-child{
-    /*font-size: larger;*/
     font-weight: bolder;
     background-color: #ddf4ff;
 }

@@ -95,5 +95,20 @@ class Controller_Adm_Vio extends Controller_Base{
         $this->template->content = View::factory('adm/vAdm',$data);
     }
 
+    /* Показываем страницу вопросов */
+    public function action_questions() {
+        $this->template->title = "Вопросы";
+        $this->template->styles = array("stfile/js/redactor/css/redactor.css" => "screen",
+            "stfile/css/adm.css" => "screen");
+
+        $this->template->scripts = array('/stfile/js/adm.js',
+            '/stfile/js/redactor/redactor.js');
+
+        $data['questions'] = Model::factory('Mquestions')->getQuestionsList();
+        $data['page'] = View::factory('adm/vAdmVioQuestions',$data);
+        $data['pageFlag'] = ': Вопросы';
+        $this->template->content = View::factory('adm/vAdm',$data);
+    }
+
 
 }
