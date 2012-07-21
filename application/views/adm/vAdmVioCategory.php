@@ -6,9 +6,6 @@
         <label>Категория*
             <input type="text" placeholder="Название категории" id="newCatTitle" name="title">
         </label>
-        <label>Ярлык
-            <input type="text" placeholder="Метка для url" id="newCatLabel" name="label">
-        </label>
         <label>Родительская категория
             <select name="parent_category" class="parentCategory">
                 <option value="none">------</option>
@@ -43,7 +40,6 @@
                         <a class="changeCategory pull-right "><i class="icon-pencil"></i></a>
                     <div class="hide dvChangeCat">
                         <input type="text" class="catTitle" placeholder="Название" value="<?=$category->title;?>">
-                        <input type="text" class="catLabel" placeholder="Ярлык" value="<?=$category->label;?>">
                         <input type="hidden" class="catId" value="<?=$category->id_category;?>">
                         <a class="btn btn-primary btn-small updateCat isParentCat">Применить</a>
                         <span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>
@@ -53,12 +49,11 @@
             <tr>
             <? $counter = 0; $k = 0; $count = $category->subcategories->count_all();
             foreach($category->subcategories->find_all() as $subcategory): ?>
-                <td><input type="checkbox"></td>
+                <td><input type="checkbox" class="subCatCheckbox" value="<?=$subcategory->id_subcategory;?>"></td>
                 <td><span class="catTitle"><?=$subcategory->title;?></span>
                     <a class="changeCategory pull-right "><i class="icon-pencil"></i></a>
                     <div class="hide dvChangeCat">
                         <input type="text" class="catTitle" placeholder="Название" value="<?=$subcategory->title;?>">
-                        <input type="text" class="catLabel" placeholder="Ярлык" value="<?=$subcategory->label;?>">
                         <input type="hidden" class="catId" value="<?=$subcategory->id_subcategory;?>">
                         <a class="btn btn-primary btn-small updateCat">Применить</a>
                         <span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>
@@ -71,7 +66,9 @@
         </tbody>
         <? endforeach; ?>
     </table>
-    <input type="button" class="btn btn-danger pull-right" value="Удалить отмеченные" disabled="disabled">
-
+    <label>
+        <input type="button" class="btn btn-danger" value="Удалить отмеченные" id="btnDelSubcategories" disabled="disabled">
+        <span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>
+    </label>
 </div>
 

@@ -447,35 +447,26 @@ class Controller_Adm_Ahid extends Controller{
             try {
                 // Переганяем все необходимые данные с поста в более удобочитаемые переменные
                 $title = $_POST['title'];
-                $label = $_POST['label'];
+                $parent_category = $_POST['parent_category'];
 
-                // Если метка не была задана, берем название категории и создаем транслит
-                if($label == '') {
-//                    $label = action_rusToLat($title);
-                    $label = $title;
-                // Если метка была задана переводим ее в нижний регистр
-                } else {
-                    $label = strtolower($label);
-                }
-                $parent_category_id = $_POST['parent_category'];
-
-                if($parent_category_id == 'none') {
+                // Если добавляем категорию
+                if($parent_category == 'none') {
                     $category = ORM::factory('ormviocategory');
                     $category->title = $title;
-                    $category->label = $label;
                     $saved = $category->save();
                     $result['id_category'] = $saved->id_category;
                     $result['title'] = $saved->title;
                     $result['is_category'] = true;
+
+                // Если добавляем подкатегорию
                 } else {
-                    $category_id = intval($parent_category_id);
+                    $category_id = intval($parent_category);
                     $subcategory = ORM::factory('ormviosubcategory');
                     $subcategory->title = $title;
-                    $subcategory->label = $label;
                     $subcategory->category_id = $category_id;
                     $saved = $subcategory->save();
-                    $result['id_category'] = $category_id;
-                    $result['id_subcategory'] = $saved->id_subcategory;
+                    $result['id_parent_cat'] = $category_id;
+                    $result['id_category'] = $saved->id_subcategory;
                     $result['title'] = $saved->title;
                     $result['is_category'] = false;
                 }
@@ -506,34 +497,23 @@ class Controller_Adm_Ahid extends Controller{
                 // Переганяем все необходимые данные с поста в более удобочитаемые переменные
                 $title = $_POST['title'];
                 $is_category = $_POST['is_parent'];
-                $label = $_POST['label'];
-
-                // Если метка не была задана, берем название категории и создаем транслит
-                if($label == '') {
-//                    $label = action_rusToLat($title);
-                    $label = $title;
-                // Если метка была задана переводим ее в нижний регистр
-                } else {
-                    $label = strtolower($label);
-                }
                 $category_id = intval($_POST['id_category']);
+                $parent_cat_id = intval($_POST['parent_cat_id']);
                 if($is_category === 'yes') {
+//                    echo 'cat change';
                     $category = ORM::factory('ormviocategory',$category_id);
                     $category->title = $title;
-                    $category->label = $label;
                     $saved = $category->save();
                     $result['id_category'] = $saved->id_category;
                     $result['title'] = $saved->title;
-                    $result['label'] = $saved->label;
                     $result['is_category'] = true;
                 } else {
+//                    echo 'subcat change';
                     $subcategory = ORM::factory('ormviosubcategory',$category_id);
                     $subcategory->title = $title;
-                    $subcategory->label = $label;
                     $saved = $subcategory->save();
-                    $result['id_category'] = $category_id;
+                    $result['id_category'] = $saved->id_subcategory;
                     $result['title'] = $saved->title;
-                    $result['label'] = $saved->label;
                     $result['is_category'] = false;
                 }
 
@@ -554,6 +534,11 @@ class Controller_Adm_Ahid extends Controller{
 
         echo json_encode($result);
     }
+
+
+
+    // Удаление подкатегории
+    
 // -------------------------------------------- Вопросы и ответы ---------------------------------------------------- //
 
 

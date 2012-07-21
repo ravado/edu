@@ -944,54 +944,42 @@ $('#ulAdmMenu ul').each(function(index) {
                 success:function(data){
                     if(data.status == 'ok') {
                         hints('success','Категория добавлена');
-                        var tbody_cat, checkbox_ready, subcat_ready;
+                        var tbody_cat, checkbox_ready, subcat_ready, appended;
+                        appended = '<span class="catTitle">' + data.title + '</span>' +
+                            '<a class="changeCategory pull-right "><i class="icon-pencil"></i></a>' +
+                            '<div class="hide dvChangeCat">' +
+                            '<input type="text" class="catTitle" placeholder="Название" value="' + data.title + '">' +
+                            '<input type="hidden" class="catId" value="' + data.id_category + '">' +
+                            '<a class="btn btn-primary btn-small updateCat">Применить</a>' +
+                            '<span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span></div>';
+
                         //  Если была создана подкатегория какой то категории
                         if(!data.is_category) {
-                            tbody_cat = $("#catId"+data.id_category);
+                            tbody_cat = $("#catId"+data.id_parent_cat);
                             subcat_ready = tbody_cat.find(".subcatReady");
                             checkbox_ready = tbody_cat.find(".checkboxReady");
-                            // Если не в тбоди не существует вакантного места в таблице, то добавляем новую строку
+
+                            // Если в тбоди не существует вакантного места в таблице, то добавляем новую строку
                             if((checkbox_ready.length == 0) && (subcat_ready.length == 0)) {
                                 tbody_cat.append('<tr>' +
-                                    '<td><input type="checkbox"></td><td><span class="catTitle">' + data.title + '</span>' +
-                                    '<a class="changeCategory pull-right "><i class="icon-pencil"></i></a>' +
-                                    '<div class="hide dvChangeCat">' +
-                                    '<input type="text" class="catTitle" placeholder="Название" value="' + data.title + '">' +
-                                    '<input type="text" class="catLabel" placeholder="Ярлык" value="' + data.label + '">' +
-                                    '<input type="hidden" class="catId" value="' + data.id_category + '">' +
-                                    '<a class="btn btn-primary btn-small updateCat">Применить</a>' +
-                                    '<span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>' +
-                                    '</div></td>' +
+                                    '<td><input type="checkbox" class="subCatCheckbox" value="' + data.id_category + '">' +
+                                    '</td><td>' + appended + '</td>' +
                                     '<td class="checkboxReady"></td><td class="subcatReady"></td></tr>');
+
                             // Если же вакантное место имеется, то записываем данные в него
                             } else {
-                                subcat_ready.append('<span class="catTitle">' + data.title + '</span>' +
-                                '<a class="changeCategory pull-right "><i class="icon-pencil"></i></a>' +
-                                    '<div class="hide dvChangeCat">' +
-                                    '<input type="text" class="catTitle" placeholder="Название" value="' + data.title + '">' +
-                                    '<input type="text" class="catLabel" placeholder="Ярлык" value="' + data.label + '">' +
-                                    '<input type="hidden" class="catId" value="' + data.id_category + '">' +
-                                    '<a class="btn btn-primary btn-small updateCat">Применить</a>' +
-                                    '<span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>' +
-                                '</div>');
+                                subcat_ready.append(appended);
                                 checkbox_ready.append('<input type="checkbox">');
                                 subcat_ready.removeClass('subcatReady');
                                 checkbox_ready.removeClass('checkboxReady');
                             }
+
                         // Если создаеться категория
                         } else {
                             $("#tblCategoriesList").append('' +
-                                '<tbody class="tbCategory" id="catId' + data.id_category + '"><tr><td colspan="4" class="alert alert-info">' +
-                                '<span class="catTitle">'+ data.title +'</span>' +
-                                '<a class="changeCategory pull-right "><i class="icon-pencil"></i></a>' +
-                                '<div class="hide dvChangeCat">' +
-                                '<input type="text" class="catTitle" placeholder="Название" value="' + data.title + '">' +
-                                '<input type="text" class="catLabel" placeholder="Ярлык" value="' + data.label + '">' +
-                                '<input type="hidden" class="catId" value="' + data.id_category + '">' +
-                                '<a class="btn btn-primary btn-small updateCat isParentCat">Применить</a>' +
-                                '<span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>' +
-                                '</div></td></tr><tr></tr></tbody>');
-
+                                '<tbody class="tbCategory" id="catId' + data.id_category + '">' +
+                                '<tr><td colspan="4" class="alert alert-info">' + appended +'</td></tr><tr></tr></tbody>');
+                            $("#catId" + data.id_category).find('.updateCat').addClass('isParentCat');
                             // Добавляем в выпадающий список только что добавденную категорию
                             $("#frmAddNewCategory .parentCategory").append('<option value="' + data.id_category + '">' +
                                 data.title +'</option>');
@@ -1021,27 +1009,38 @@ $('#ulAdmMenu ul').each(function(index) {
     });
 // ------------------------------ Нажатие на кнопку редактирования категории ---------------------------------------- //
 
+// =================================== Выбор чекбокса напротив подкатегории ========================================= //
+    $(".subCatCheckbox").live('change',function() {
+        if($(".subCatCheckbox:checked").length > 0) {
+            // Делаем активной кнопку удаления подкатегорий
+            $("#btnDelSubcategories").removeAttr('disabled');
+        } else {
+            // Делаем неактивной кнопку удаления подкатегорий
+            $("#btnDelSubcategories").attr('disabled','disabled');
+        }
+    });
+// ----------------------------------- Выбор чекбокса напротив подкатегории ----------------------------------------- //
+
 // =================================== Нажатие на кнопку изменения категории ======================================== //
     $(".updateCat").live('click', function() {
-        var showed_title, hidden_block, icon_load, cat_id, cat_title, cat_label,
-            transfer_data = {title:'', label:'', id_category:'', is_parent:'no'};
+        var showed_title, hidden_block, icon_load, cat_id, cat_title,
+            transfer_data = {title:'', id_category:'', is_parent:'no', parent_cat_id:0};
 
         showed_title = $(this).closest('td').find('.catTitle'); // Название категории которое выводиться в списке категорий
         hidden_block = $(this).closest('.dvChangeCat');
         icon_load = $(this).closest('.dvChangeCat').find('.iconLoading');
         cat_id = $(this).closest('.dvChangeCat').find('.catId');
         cat_title = $(this).closest('.dvChangeCat').find('.catTitle');
-        cat_label = $(this).closest('.dvChangeCat').find('.catLabel');
         transfer_data.id_category = cat_id.val();
         transfer_data.title = cat_title.val();
-        transfer_data.label = cat_label.val();
 
         // Если изменяем категорию
         if($(this).hasClass('isParentCat')) {
-            transfer_data.is_parent = 'yes'
+            transfer_data.is_parent = 'yes';
         // Если изменяем подкатегорию
         } else {
-            transfer_data.is_parent = 'no'
+            transfer_data.is_parent = 'no';
+            transfer_data.parent_cat_id = $(this).closest('.tbCategory').attr('id').slice(5);
         }
 
         // Если поле с названием категории не пустое
@@ -1051,10 +1050,13 @@ $('#ulAdmMenu ul').each(function(index) {
                 success:function(data){
                     if(data.status == 'ok') {
                         hints('success','Категория обновлена');
+                        // Если изменяем категорию то нужно обновить еще список родительских категорий
+                        if(data.is_category) {
+                            $(".parentCategory [value=" + data.id_category + "]").text(data.title);
+                        }
                         // Перезаписываем все данные, но уже используя результаты выполнения от сервера
                         cat_id.val(data.id_category);
                         cat_title.val(data.title);
-                        cat_label.val(data.label);
                         showed_title.text(data.title);
                         // Скрываем выежающий блок
                         hidden_block.slideUp(300);
@@ -1072,7 +1074,37 @@ $('#ulAdmMenu ul').each(function(index) {
         }
 
     });
+
 // ----------------------------------- Нажатие на кнопку изменения категории ---------------------------------------- //
+
+// ================================== Нажатие на кнопку удаления подкатегорий ======================================= //
+    $("#btnDelSubcategories").click(function() {
+        var id_subcategories = [], icon_load;
+        $(".subCatCheckbox:checked").each(function(index) {
+            id_subcategories.push($(this).val());
+        });
+        icon_load = $(this).closest('label').find('.iconLoading');
+        icon_load.show(); // Показываем иконку загрузки
+        $.ajax({type:"POST", async:true, data: id_subcategories, url: "/adm/ahid/delSubcategory", dataType:"json",
+            success:function(data){
+                if(data.status == 'ok') {
+                    hints('success','Подкатегория удалена');
+
+                } else {
+                    hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
+                    console.log(data.message);
+                }
+                icon_load.hide(); // Прячем иконку статуса выполнения
+            },
+            error:function(){
+                console.log('error in ajax query, when delete subcategory :(');
+                icon_load.hide(); // Прячем иконку статуса выполнения
+            }
+        });
+
+    });
+// --------------------------------- Нажатие на кнопку удаления подкатегорий ----------------------------------------- //
+
 });
 
 
