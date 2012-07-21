@@ -74,6 +74,12 @@ function createNewTest(trigger_btn) {
 
 $(document).ready(function() {
 
+    $('body').click(function() {
+       getAlert();
+    });
+    function getAlert() {
+//        alert('some');
+    }
     //Удаление теста по иду
     $("#btnTstDel").click(function() {
         var id = $("#idTestToDel").val();
@@ -1073,6 +1079,9 @@ $('#ulAdmMenu ul').each(function(index) {
 
     });
 // ----------------------------------- Нажатие на кнопку изменения категории ---------------------------------------- //
+
+
+
 });
 
 

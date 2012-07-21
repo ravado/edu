@@ -95,5 +95,20 @@ class Controller_Adm_Vio extends Controller_Base{
         $this->template->content = View::factory('adm/vAdm',$data);
     }
 
+    /* ТЕСТ */
+    public function action_test() {
+        $this->template->title = "test";
+        $this->template->styles = array("stfile/js/redactor/css/redactor.css" => "screen",
+            "stfile/css/adm.css" => "screen");
+
+        $this->template->scripts = array('/stfile/js/adm.js',
+            '/stfile/js/redactor/redactor.js','/stfile/js/registery.js');
+
+        $data['categories'] = Model::factory('Mquestions')->getCategoryList('admin');
+        $data['page'] = View::factory('adm/vAdmVio',$data);
+        $data['pageFlag'] = ': Управление категориями вопросов';
+        $this->template->content = View::factory('adm/vAdm',$data);
+    }
+
 
 }
