@@ -538,7 +538,76 @@ class Controller_Adm_Ahid extends Controller{
 
 
     // Удаление подкатегории
-    
+    public function action_delSubcategory() {
+        if(!empty($_POST)) {
+            try {
+                // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                $id_categories = $_POST['id'];
+                $result['message'] = 'everithing is ok';
+                $result['status'] = 'ok';
+
+                // Удаляем подкатегории
+                $questions = ORM::factory('ormvioquestion');
+                foreach($id_categories as $id_category) {
+                    $subcategory = ORM::factory('ormviosubcategory',$id_category);
+
+                    // Удаляем записи из связаной таблицы между вопросами и подкатегориями
+                    $subcategory->remove('questions',$questions);
+                    $subcategory->delete($id_category);
+                }
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
+
+    // Удаление категории
+    public function action_delCategory() {
+        if(!empty($_POST)) {
+            try {
+                // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                $id_category = $_POST['id_category'];
+                $result['message'] = 'everithing is ok';
+                $result['status'] = 'ok';
+
+                // Удаляем подкатегории
+                $questions = ORM::factory('ormvioquestion');
+                $category = ORM::factory('ormviocategory',$id_category);
+                $subcategories = $category->subcategories->find_all();
+
+                // Удаляем записи из связаной таблицы между вопросами и подкатегориями
+                foreach($subcategories as $subcategory) {
+                    $subcategory->remove('questions',$questions);
+                    $subcategory->delete();
+                }
+                $category->delete();
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
 // -------------------------------------------- Вопросы и ответы ---------------------------------------------------- //
 
 

@@ -16,7 +16,7 @@ class Model_OrmViOsubcategory extends ORM{
         'questions' => array( /* Алиас по которому можно будет вытягивать записи со связаной таблицы */
             'model' => 'ormvioquestion', /* Удаленная модель ОРМ */
             'foreign_key' => 'subcategory_id', /* Внешний ключ промежуточной таблицы */
-            'through' => 'questions_subcategories', /* Имя промежуточной таблицы */
+            'through' => 'vio_questions_subcategories', /* Имя промежуточной таблицы */
             'far_key' => 'question_id')
     );
 

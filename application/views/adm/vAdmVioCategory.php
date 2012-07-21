@@ -16,7 +16,7 @@
         </label>
     </form>
     <input type="button" class="btn btn-success" id="addCategory" value="Добавить категорию">
-    <span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>
+    <span class="iconLoading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
 </div>
 
 <div class="pull-right span6">
@@ -35,9 +35,10 @@
         <? foreach($categories as $category) :?>
         <tbody class="tbCategory" id="catId<?=$category->id_category;?>">
             <tr>
-                <td colspan="4" class="alert alert-info">
+                <td colspan="4" class="">
                     <span class="catTitle"><?=$category->title;?></span>
                         <a class="changeCategory pull-right "><i class="icon-pencil"></i></a>
+                        <a class="delCategory pull-right "><i class="icon-trash"></i></a>
                     <div class="hide dvChangeCat">
                         <input type="text" class="catTitle" placeholder="Название" value="<?=$category->title;?>">
                         <input type="hidden" class="catId" value="<?=$category->id_category;?>">
@@ -68,7 +69,21 @@
     </table>
     <label>
         <input type="button" class="btn btn-danger" value="Удалить отмеченные" id="btnDelSubcategories" disabled="disabled">
-        <span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>
+        <span class="iconLoading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
     </label>
+</div>
+<div class="modal hide" id="modDelCategory">
+    <input type="hidden" id="idCategoryToDel" value="">
+    <div class="modal-header">
+        <h3>Удаление родительской категории</h3>
+    </div>
+    <div class="modal-body">
+        <p>Вы действительно хотите удалить родительскую категорию? Все ее подкатегории будут также удалены.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Отмена</a>
+        <a class="btn btn-primary" id="delCategory">Да удалить категорию</a>
+        <span class="iconLoading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
+    </div>
 </div>
 

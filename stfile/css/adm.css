@@ -221,12 +221,12 @@ label:hover {
 }
 
 /* Кнопочка изменения подкатегории в админке */
-.changeCategory {
+.changeCategory, .delCategory {
     font-size: 10px;
     margin-left: 10px;
     opacity: 0;
 }
-.changeCategory:hover {
+.changeCategory:hover , .delCategory:hover {
     text-decoration: none;
     /*border-bottom: 1px dashed #005580;*/
     opacity: 1 !important;
@@ -248,7 +248,17 @@ label:hover {
     width: 185px;
 }
 
+.tbCategory{
+    border-top: none !important;
+}
+
+.tbCategory tr:first-child{
+    /*font-size: larger;*/
+    font-weight: bolder;
+    background-color: #ddf4ff;
+}
+
 /* при наводе курсора на ячейку таблицы со списком категорий показываем кнопку редактирования */
-.tbCategory td:hover .changeCategory {
+.tbCategory td:hover .changeCategory, .tbCategory td:hover .delCategory{
     opacity: 0.5;
 }

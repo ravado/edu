@@ -956,8 +956,8 @@ $('#ulAdmMenu ul').each(function(index) {
                         //  Если была создана подкатегория какой то категории
                         if(!data.is_category) {
                             tbody_cat = $("#catId"+data.id_parent_cat);
-                            subcat_ready = tbody_cat.find(".subcatReady");
-                            checkbox_ready = tbody_cat.find(".checkboxReady");
+                            subcat_ready = tbody_cat.find(".subcatReady").first();
+                            checkbox_ready = tbody_cat.find(".checkboxReady").first();
 
                             // Если в тбоди не существует вакантного места в таблице, то добавляем новую строку
                             if((checkbox_ready.length == 0) && (subcat_ready.length == 0)) {
@@ -1021,6 +1021,14 @@ $('#ulAdmMenu ul').each(function(index) {
     });
 // ----------------------------------- Выбор чекбокса напротив подкатегории ----------------------------------------- //
 
+// ============================ Вызов окна подтверждения удаления категории ========================================= //
+    $(".delCategory").click(function() {
+        var id_cat_to_del = $(this).closest('tbody').attr('id').slice(5);
+        $("#modDelCategory").modal();
+        $("#idCategoryToDel").val(id_cat_to_del);
+    });
+// ---------------------------- Вызов окна подтверждения удаления категории ----------------------------------------- //
+
 // =================================== Нажатие на кнопку изменения категории ======================================== //
     $(".updateCat").live('click', function() {
         var showed_title, hidden_block, icon_load, cat_id, cat_title,
@@ -1079,9 +1087,10 @@ $('#ulAdmMenu ul').each(function(index) {
 
 // ================================== Нажатие на кнопку удаления подкатегорий ======================================= //
     $("#btnDelSubcategories").click(function() {
-        var id_subcategories = [], icon_load;
+        var id_subcategories = {id:[]}, icon_load, td_checkbox, td_data, tr_closest;
         $(".subCatCheckbox:checked").each(function(index) {
-            id_subcategories.push($(this).val());
+            $(this).addClass('toDel');
+            id_subcategories.id.push($(this).val());
         });
         icon_load = $(this).closest('label').find('.iconLoading');
         icon_load.show(); // Показываем иконку загрузки
@@ -1089,7 +1098,21 @@ $('#ulAdmMenu ul').each(function(index) {
             success:function(data){
                 if(data.status == 'ok') {
                     hints('success','Подкатегория удалена');
+                    $(".toDel").each(function(index) {
+                        tr_closest = $(this).closest('tr');
+                        td_checkbox = $(this).closest('td');
+                        td_data = tr_closest.find($(".catId[value=" + $(this).val() + "]")).closest('td');
 
+                        // Если в строке уже имееються вакантные места для вставки новых подкатегорий
+                        if(tr_closest.find('.checkboxReady').length > 0) {
+                            tr_closest.remove();
+
+                        // Если же вакантных мест еще нет то создаем таковое
+                        } else {
+                            td_checkbox.addClass('checkboxReady').text('');
+                            td_data.addClass('subcatReady').text('');
+                        }
+                    });
                 } else {
                     hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
                     console.log(data.message);
@@ -1105,6 +1128,35 @@ $('#ulAdmMenu ul').each(function(index) {
     });
 // --------------------------------- Нажатие на кнопку удаления подкатегорий ----------------------------------------- //
 
+// ============================ Вызов окна подтверждения удаления категории ========================================= //
+    $("#delCategory").click(function() {
+        var icon_load, id_category;
+        id_category = $("#idCategoryToDel").val();
+        icon_load = $(this).closest('.modal-footer').find('.iconLoading');
+        icon_load.show();
+        $.ajax({type:"POST", async:true, data: "id_category=" + id_category, url: "/adm/ahid/delCategory", dataType:"json",
+            success:function(data){
+                if(data.status == 'ok') {
+                    hints('success','Категория удалена');
+                    $("#idCategoryToDel").val('');
+                    $("#catId"+id_category).remove();
+                } else {
+                    hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
+                    console.log(data.message);
+                }
+                $("#modDelCategory").modal('hide');
+                icon_load.hide(); // Прячем иконку статуса выполнения
+                $(".parentCategory option[value=" + id_category + "]").remove();
+            },
+            error:function(){
+                console.log('error in ajax query, when delete category :(');
+                $("#modDelCategory").modal('hide');
+                icon_load.hide(); // Прячем иконку статуса выполнения
+
+            }
+        });
+    });
+// --------------------------------- Нажатие на кнопку удаления подкатегорий ----------------------------------------- //
 });
 
 
