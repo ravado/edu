@@ -259,7 +259,6 @@ $(document).ready(function() {
     //Всплывающая подсказка при наводе курсора на иконки в таблице со списком тестов
     $(".icons").tooltip({position: 10,
         placement: 'bottom',
-
         trigger: 'hover',
         delay: {show: 800, hide: 10}});
 

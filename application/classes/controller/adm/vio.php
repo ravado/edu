@@ -104,7 +104,27 @@ class Controller_Adm_Vio extends Controller_Base{
         $this->template->scripts = array('/stfile/js/adm.js',
             '/stfile/js/redactor/redactor.js');
 
-        $data['questions'] = Model::factory('Mquestions')->getQuestionsList();
+
+        if (isset($_GET['page']) || !empty($_GET['page'])) { $data['curr_page'] = $_GET['page']; }
+        else { $data['curr_page'] = 1; }
+
+        if (isset($_GET['limit']) || !empty($_GET['limit'])) { $data['limit'] = $_GET['limit']; }
+        else { $data['limit'] = null; }
+
+        if (isset($_GET['orderby']) || !empty($_GET['orderby'])) { $data['order_by'] = $_GET['orderby']; }
+        else {$data['order_by'] = null; }
+
+        if (isset($_GET['subcat']) || !empty($_GET['subcat'])) { $data['subcat'] = $_GET['subcat']; }
+        else { $data['subcat'] = null; }
+
+        if (isset($_GET['status']) || !empty($_GET['status'])) { $data['status'] = $_GET['status']; }
+        else { $data['status'] = null; }
+
+        $result = Model::factory('Mquestions')->getQuestionsList($data['curr_page'],$data['limit'],$data['order_by'],$data['subcat'], $data['status']);
+        $data['questions'] = $result['questions'];
+        $data['pages'] = $result['pages'];
+        $data['count'] = $result['count'];
+
         $data['page'] = View::factory('adm/vAdmVioQuestions',$data);
         $data['pageFlag'] = ': Вопросы';
         $this->template->content = View::factory('adm/vAdm',$data);

@@ -663,14 +663,26 @@ fieldset:focus{
 .icon24-clock {
     background-position: 0 -24px;
 }
+.icon24-clock.checked {
+    background-position: 0 -48px;
+}
 .icon24-graph {
     background-position: -48px -24px;
+}
+.icon24-graph.checked {
+    background-position: -48px -48px;
 }
 .icon24-lamp {
     background-position: -24px -24px;
 }
+.icon24-lamp.checked {
+    background-position: -24px -48px;
+}
 .icon24-check {
     background-position: -72px -24px;
+}
+.icon24-check.checked {
+    background-position: -72px -48px;
 }
 
 
@@ -697,6 +709,13 @@ td.answers {
 .questionsList td{
     vertical-align: middle !important;
 }
+.questionsList thead tr:hover{
+    background-color: #ffffff;
+}
+.questionsList tr:hover{
+    background-color: #f6f6f6;
+}
+
 /* Иконка удаления вопроса */
 .delQuestion {
     opacity: 0.2;
@@ -710,7 +729,7 @@ td.answers {
     white-space: nowrap;
 }
 .spnTags a {
-    color: #ccc;
+    color: #bbb;
     font-size: smaller;
 }
 .spnTags a:hover{
@@ -732,6 +751,14 @@ a:hover {
 /* Клас для центрирования по горизонтали */
 .centered {
     margin: 0 auto !important;
+}
+
+/* Ссылка для вопросов которые закрыты */
+.qClosed {
+    color: #f9244c;
+}
+.qClosed:hover {
+    color: #b30525;
 }
 
 

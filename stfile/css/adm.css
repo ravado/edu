@@ -263,3 +263,34 @@ label:hover {
 .tbCategory td:hover .changeCategory, .tbCategory td:hover .delCategory{
     opacity: 0.5;
 }
+
+/*  Строка с вопросом который нужно удалить */
+.toDel {
+    background-color: red !important;
+}
+
+/* Блок с инструментами на странице списка вопросов */
+.dvQuestionListTools a{
+}
+.dvQuestionListTools .toolDelQuestions, .dvQuestionListTools .toolKindList{
+    height: 20px;
+    display: block;
+}
+.dvQuestionListTools .toolKindList a:hover, .dvQuestionListTools .toolDelQuestions a:hover {
+    border-bottom: 1px dashed #ccc;
+    color: #08c;
+}
+.dvQuestionListTools small{
+    color: #ccc;
+    font-size: smaller;
+}
+.dvQuestionListTools .toolKindList {
+    margin-left: 20px;
+}
+.dvQuestionListTools a.checked {
+    color: #ccc;
+}
+.dvQuestionListTools a.checked:hover {
+    color: #ccc;
+    border-bottom: none;
+}

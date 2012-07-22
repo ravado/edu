@@ -72,6 +72,8 @@
         <span class="iconLoading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
     </label>
 </div>
+
+<!--   Модальное окно  -->
 <div class="modal hide" id="modDelCategory">
     <input type="hidden" id="idCategoryToDel" value="">
     <div class="modal-header">
@@ -82,7 +84,7 @@
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Отмена</a>
-        <a class="btn btn-primary" id="delCategory">Да удалить категорию</a>
+        <a class="btn btn-primary" id="delQuestions">Да удалить категорию</a>
         <span class="iconLoading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
     </div>
 </div>
