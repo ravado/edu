@@ -49,7 +49,7 @@
                 <span data-original-title="Отсортировать по рейтингу" class="tips icon24 icon24-graph <? if($order_by == 'rating') echo 'checked'; ?>"></span></a>
             </th>
             <th class="span0"><a href="?<?=$ext_limit .$ext_subcat. '&orderby=answers' ?>">
-                <span data-original-title="Отсортировать по количеству ответов" class="tips icon24 icon24-lamp <? if($order_by == 'answers') echo 'checked'; ?>"></span></a>
+                <span data-original-title="Отсортировать по количеству ответов" class="tips icon24 icon24-lamp-on <? if($order_by == 'answers') echo 'checked'; ?>"></span></a>
             </th>
             <th class="span0 "><a href="?<?=$ext_limit .$ext_subcat. '&orderby=date' ?>">
                 <span data-original-title="Отсортировать по дате добавления" class="tips icon24 icon24-clock centered <? if($order_by == 'date') echo 'checked'; ?>"></span></a>
@@ -80,7 +80,7 @@
                 </td>
                 <td><a class="delQuestion"><i class="icon-trash"></i></a></td>
                 <td class="rating"><?=$question->rating; ?></td>
-                <td class="answers"><a><?=$question->answers->count_all(); ?></a></td>
+                <td class="answers"><a href="/adm/vio/answers/<?=$question->id_question; ?>"><?=$question->answers->count_all(); ?></a></td>
                 <td class="time"><?= date('H:i y/m/d',strtotime($question->public_date)); ?></td>
             </tr>
         <? endforeach; ?>

@@ -22,7 +22,7 @@
             <li><a href="/adm/vio/questions">Список вопросов</a></li>
             <li><a href="/adm/vio/addquestion">Добавить вопрос</a></li>
             <li><a href="/adm/vio/category">Категории</a></li>
-<!--            <li><a href="/adm/vio/delanswer">Удалить комментарии</a></li>-->
+            <li><a href="/adm/vio/answers">Ответы</a></li>
             <li class="nav-header">Тесты</li>
             <li><a href="/adm/tests/create">Создание Тестов</a></li>
             <li><a href="/adm/tests/del">Удаление Тестов</a></li>

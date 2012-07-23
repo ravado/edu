@@ -652,6 +652,69 @@ class Controller_Adm_Ahid extends Controller{
         echo json_encode($result);
     }
 
+
+    // Добавление ответа
+    public function action_addAnswer() {
+        if(!empty($_POST)) {
+            try {
+                // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                $auth = Auth::instance();
+                $id_user = $auth->get_user()->id;
+                $id_question = (int)$_POST['id_question'];
+                $time = $_POST['time'];
+                $date = $_POST['date'];
+                $public_date = date('Y-m-d H:i', strtotime($date .$time));
+                $is_best = (int)$_POST['is_best'];
+                $rating = (int)$_POST['rating'];
+                $text = addslashes($_POST['answer']);
+
+                $result['message'] = 'everithing is ok';
+                $result['status'] = 'ok';
+
+                $question = ORM::factory('ormvioquestion', $id_question);
+
+                if($is_best) {
+                    $best_answers = $question->answers->where('is_best','=','1')->find_all();
+                    foreach($best_answers as $best_answer) {
+                        $best_answer->is_best = 0;
+                        $best_answer->save();
+                    }
+                }
+
+                $answer = ORM::factory('ormvioanswer');
+                $answer->user_id = $id_user;
+                $answer->text = $text;
+                $answer->rating = $rating;
+                $answer->is_best = $is_best;
+                $answer->public_date = $public_date;
+                $saved = $answer->save();
+                $answer->add('questions',$question);
+
+                $result['id_user'] = $saved->user_id;
+                $result['id_answer'] = $saved->id_answer;
+                $result['id_question'] = $id_question;
+                $result['text'] = $saved->text;
+                $result['public_date'] = $saved->public_date;
+                $result['username'] = $saved->user->username;
+                $result['rating'] = $saved->rating;
+                $result['is_best'] = $saved->is_best;
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
+
 // -------------------------------------------- Вопросы и ответы ---------------------------------------------------- //
 
 

@@ -551,7 +551,7 @@ fieldset:focus{
     display: none;
     margin-top: 10px;
 }
-.extraContent .toolItem {
+.toolItem {
     float: left;
     margin-right: 10px;
 }
@@ -678,11 +678,29 @@ fieldset:focus{
 .icon24-lamp.checked {
     background-position: -24px -48px;
 }
+.icon24-lamp-on {
+    background-position: -96px -24px;
+}
+.icon24-lamp-on.checked {
+    background-position: -96px -48px;
+}
 .icon24-check {
     background-position: -72px -24px;
 }
 .icon24-check.checked {
     background-position: -72px -48px;
+}
+.icon24-man {
+    background-position: -120px -24px;
+}
+.icon24-man.checked {
+    background-position: -72px -48px;
+}
+.icon24-done {
+    background-position: -168px -24px;
+}
+.icon24-done.checked {
+    background-position: -168px -48px;
 }
 
 
@@ -698,6 +716,10 @@ td.rating {
     color: #888;
 }
 td.answers {
+    font-size: smaller;
+    text-align: center !important;
+}
+td.username {
     font-size: smaller;
     text-align: center !important;
 }
@@ -721,6 +743,12 @@ td.answers {
     opacity: 0.2;
 }
 .delQuestion:hover {
+    opacity: 1;
+}
+.hovered {
+    opacity: 0.2;
+}
+.hovered:hover {
     opacity: 1;
 }
 
@@ -761,8 +789,16 @@ a:hover {
     color: #b30525;
 }
 
+.block {
+    display: block !important;
+}
 
-
+.green-block {
+    background-color: #5BB75B !important;
+}
+.light-green-block {
+    background-color: #c5e6c5 !important;
+}
 
 
 

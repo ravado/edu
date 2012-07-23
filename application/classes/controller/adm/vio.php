@@ -73,11 +73,9 @@ class Controller_Adm_Vio extends Controller_Base{
             '/stfile/js/bootstrap-timepicker.js',
             '/stfile/js/bootstrap-datepicker.js');
 
-
         $data['id_question'] = $this->request->param('id');
         $data['categories'] = Model::factory('Mquestions')->getCategoryList('admin');
         $data['question'] = Model::factory('Mquestions')->getQuestion($data['id_question']);
-
         $data['page'] = View::factory('adm/vAdmVioQuestionFix',$data);
         $data['pageFlag'] = ': Добавление вопроса';
         $this->template->content = View::factory('adm/vAdm',$data);
@@ -134,5 +132,37 @@ class Controller_Adm_Vio extends Controller_Base{
         $this->template->content = View::factory('adm/vAdm',$data);
     }
 
+
+    /* Показываем страницу ответов на вопрос */
+    public function action_answers() {
+        $this->template->title = "Ответы";
+        $this->template->styles = array("stfile/js/redactor/css/redactor.css" => "screen",
+            "stfile/css/adm.css" => "screen");
+        $this->template->scripts = array(
+            '/stfile/js/adm.js',
+            '/stfile/js/redactor/redactor.js',
+            '/stfile/js/bootstrap-timepicker.js',
+            '/stfile/js/bootstrap-datepicker.js');
+
+        $data['id_question'] = $this->request->param('id');
+
+        // Если введена не цифра
+        if(preg_match("/[^0-9]/",$data['id_question'])) {
+            // Преобразовываем в цифру и переадресовываем
+            $real_id = preg_replace("/[^0-9]/","",$data['id_question']);
+            $this->request->redirect('/adm/vio/answers/'.$real_id);
+        }
+        $data['question'] = Model::factory('Mquestions')->getQuestion($data['id_question']);
+
+        // Если вопроса по даному id не найдено то переадресовываем на пустую страницу
+        if(empty($data['question']->id_question) && !empty($data['id_question'])) {
+            $this->request->redirect('/adm/vio/answers');
+        }
+
+        $data['page'] = View::factory('adm/vAdmVioAnswers',$data);
+        $data['pageFlag'] = ':  Ответы';
+        $this->template->content = View::factory('adm/vAdm',$data);
+
+    }
 
 }

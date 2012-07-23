@@ -22,7 +22,7 @@ class Model_OrmViOanswer extends ORM{
         'questions' => array( /* Алиас по которому можно будет вытягивать записи со связаной таблицы */
             'model' => 'ormvioquestion', /* Удаленная модель ОРМ */
             'foreign_key' => 'answer_id', /* Внешний ключ промежуточной таблицы */
-            'through' => 'questions_answers', /* Имя промежуточной таблицы */
+            'through' => 'vio_questions_answers', /* Имя промежуточной таблицы */
             'far_key' => 'question_id')
     );
 
