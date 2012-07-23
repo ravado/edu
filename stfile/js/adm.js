@@ -1253,6 +1253,7 @@ $('#ulAdmMenu ul').each(function(index) {
         }
 
     });
+
 // =============================== Нажатие на кнопку добавления нового ответа ======================================= //
     $("#btnAddAnswer").click(function() {
         var transfer_data, icon_load, answers_table, is_best_html, is_best_answer, additional = '', tbody;
@@ -1305,6 +1306,63 @@ $('#ulAdmMenu ul').each(function(index) {
         });
     });
 // ------------------------------- Нажатие на кнопку добавления нового ответа --------------------------------------- //
+
+
+// ============================= Нажатие на кнопку удаления выбранных ответов ======================================= //
+    $("#delCheckedAnswers").click(function(){
+        var checked_answers = $('.answerId:checked');
+        if(checked_answers.length > 0) {
+            var id_answers = {id:[]}, icon_load;
+            icon_load = $('.delAnswers.iconLoading');
+            checked_answers.each(function(index){
+                id_answers.id.push($(this).val());
+                $(this).closest('tr').addClass('toDel');
+            });
+            icon_load.show(); // Показываем иконку загрузки
+            $.ajax({type:"POST", async:true, data: id_answers, url: "/adm/ahid/delAnswers", dataType:"json",
+                success:function(data){
+                    if(data.status == 'ok') {
+                        hints('success','Ответы удалены');
+                        $(".toDel").fadeOut(300, function() {
+                            $(this).remove();
+                        });
+                    } else {
+                        $(".toDel").removeClass('toDel');
+                        hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
+                        console.log(data.message);
+                    }
+                    icon_load.hide(); // Прячем иконку статуса выполнения
+                },
+                error:function(){
+                    $(".toDel").removeClass('toDel');
+                    console.log('error in ajax query, when delete answers :(');
+                    icon_load.hide(); // Прячем иконку статуса выполнения
+                }
+            });
+        } else {
+            hints('info','Для начала отметьте ответы которые хотите удалить!')
+        }
+    });
+// ----------------------------- Нажатие на кнопку удаления выбранных ответов --------------------------------------- //
+
+// ================================= Нажатие на кнопку удаления одного ответа ======================================= //
+    $(".delAnswer").live('click',function() {
+       $(this).closest('tr').find('.answerId').attr('checked','checked');
+        $("#delCheckedAnswers").click();
+    });
+// --------------------------------- Нажатие на кнопку удаления одного ответа --------------------------------------- //
+
+// ===================================== Нажатие на кнопку отметить все ============================================= //
+    $("#checkAll").click(function() {
+        $('.answerId').attr('checked','checked');
+    });
+// ------------------------------------- Нажатие на кнопку отметить все --------------------------------------------- //
+
+// ===================================== Нажатие на кнопку снять отметки ============================================ //
+    $("#uncheckAll").click(function() {
+        $('.answerId').removeAttr('checked');
+    });
+// ------------------------------------- Нажатие на кнопку снять отметки -------------------------------------------- //
 
 // ------------------------------------------------------------------------------------------------------------------ //
 // ---------------------------------------------- Список ответов ---------------------------------------------------- //

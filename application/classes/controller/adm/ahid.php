@@ -715,6 +715,46 @@ class Controller_Adm_Ahid extends Controller{
     }
 
 
+    // Удаление ответов
+    public function action_delAnswers() {
+        if(!empty($_POST)) {
+            try {
+                // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                $id_answers = $_POST['id'];
+                $result['message'] = 'everithing is ok';
+                $result['status'] = 'ok';
+
+                // Удаляем вопрос и все с ним связанное
+                foreach($id_answers as $id_answer) {
+                    $answer = ORM::factory('ormvioanswer',$id_answer);
+                    $question = $answer->question->find();
+                    if($answer->is_best == 1) {
+                        $question->is_closed = 0;
+                    }
+//                    $favorites = $question->favorites->find_all();
+
+                    // Удаляем связи с промежуточных таблиц
+                    $answer->remove('question', null);
+
+                    // Удаляем ответ
+                    $answer->delete();
+                }
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
 // -------------------------------------------- Вопросы и ответы ---------------------------------------------------- //
 
 

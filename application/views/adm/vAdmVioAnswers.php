@@ -52,7 +52,8 @@
 </div>
 <a id="checkAll"> <i class="icon-check"></i> отметить все </a> <small>/</small>
 <a id="uncheckAll"> <i class="icon-share"></i> снять все </a> <small>/</small>
-<a id="delChecked"> <i class="icon-trash"></i> удалить отмеченные </a>
+<a id="delCheckedAnswers"> <i class="icon-trash"></i> удалить отмеченные </a>
+<span class="iconLoading delAnswers"><img src="/stfile/img/1loading.gif" alt="loading"></span>
 <table class="table questionsList" id="tblAnswerList">
     <thead>
         <tr>
@@ -73,7 +74,7 @@
     <tbody>
     <? foreach($question->answers->order_by('is_best','desc')->find_all() as $answer): ?>
     <tr>
-        <td><input type="checkbox" class="questionId" value="<?=$answer->id_answer; ?>"></td>
+        <td><input type="checkbox" class="answerId" value="<?=$answer->id_answer; ?>"></td>
         <td>
             <? if($answer->is_best) echo '<span data-original-title="Лучший ответ" class="isBest tips icon24 icon24-done checked"></span>'; ?>
             <p><?=$answer->text; ?></p>
