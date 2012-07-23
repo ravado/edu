@@ -536,7 +536,7 @@ $(document).ready(function(){
     });
 
     // При загрузке страницы снимем все галочки, а то некоторые (не будем показывать на ФФ) их сохраняют при перезагрузке
-    $(":checkbox").removeAttr("checked");
+//    $(":checkbox").removeAttr("checked");
 
     $("#addNewCategory").click(function(){
         var str = $("#txtCategory").val().toLowerCase(), rand;

@@ -823,5 +823,12 @@ class Model_Mquestions extends Model_Database{
         return $categories;
     }
 
+
+    // Выборка одного вопроса по id
+    function getQuestion($id) {
+        $id = (int)strip_tags($id);
+        $question = ORM::factory('ormvioquestion',$id);
+        return $question;
+    }
 }
 

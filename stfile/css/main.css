@@ -558,10 +558,6 @@ fieldset:focus{
 .extraNav {
 
 }
-.extraNav a{
-    text-decoration: none;
-    border-bottom: 1px dashed #08C;
-}
 .extraNav a:hover{
     text-decoration: none;
     border-bottom: 1px dashed #005580;
@@ -630,10 +626,14 @@ fieldset:focus{
 /* блочек с одной подкатегорией в списке доступных подкатегорий для вопроса */
 .subcatItem {
     float: left;
-    width: 180px;
+    width: 215px;
 }
+.subcatItem label{
+    color: #333;
+}
+
 .innerTabPane {
-    width: 575px;
+    width: 655px;
     float:right;
 }
 

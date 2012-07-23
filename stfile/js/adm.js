@@ -766,7 +766,7 @@ $('#ulAdmMenu ul').each(function(index) {
     //Редактор для вопросов в админке
     REDACTOR_QUESTION = $("#question").redactor({ imageUpload: '/news/nhid/loadimages'});
     try {
-        $(".dropdown-timepicker").timepicker({showMeridian:false,defaultTime:'current',showSeconds:true});
+        $(".dropdown-timepicker").timepicker({showMeridian:false,defaultTime:$(this).val(),showSeconds:false});
         $("#date").datepicker({format:'dd-mm-yyyy'});
     } catch (e) {
         console.log('timepicker или datepicker не подключен');
@@ -854,20 +854,20 @@ $('#ulAdmMenu ul').each(function(index) {
                             curr_check = $("#id"+data.subcategories[i].id_subcategory);
                             curr_check.click();
                         }
-
-                        // Затем открвыаем форму для показа пользователю-админу
-                        $(".hiddenQuestion").slideDown(300);
+                        $(".fixQuestion").removeClass('disabled');
 
                     // Если же что то пошло не так выводим сообщение и пишем в логи что не так
                     } else {
-                        hints('error','Что то пошло не так (можно посмотреть логи)');
+                        hints('error','Нет вопроса с таким идентификатором');
                         console.log(data.message);
+                        $(".fixQuestion").addClass('disabled');
                     }
                     item_loading.hide(); // Скрываем блок с анимацией загрузки
                 },
                 error:function(){
                     item_loading.hide(); // Скрываем блок с анимацией загрузки
                     console.log('error in ajax query, when get question by id :(');
+                    $(".fixQuestion").addClass('disabled');
                 }
             });
         } else {
@@ -877,50 +877,44 @@ $('#ulAdmMenu ul').each(function(index) {
     });
 // ------------------------------ Нажатие на кнопку поиска вопроса по id -------------------------------------------- //
 
-// ============================== Нажатие на кнопку отмены изменения вопроса ======================================== //
-    $(".cancelQuestionFix").click(function() {
-        $(".hiddenQuestion").slideUp(300);
-        $("#qustionId").val('').focus();
-        $("#hQustionId").val('');
-    });
-// ------------------------------ Нажатие на кнопку отмены изменения вопроса ---------------------------------------- //
-
 // =================================== Нажатие на кнопку Изменения вопроса  ========================================= //
     $(".fixQuestion").click(function() {
-        if(($("#title").val() == '') || ($(".label-tags").length == 0)) {
-            hints('info','Вы не сможете обновить вопрос если поле заголовка будет пустым, или не будет выбрана как минимум одна категория !');
-        } else {
-            // Переписываем текст с редактора в текстареа для дальнейшей серриализации данных формы
-            $("#question").val(REDACTOR_QUESTION.getCodeTextarea());
+        if(!$(this).hasClass('disabled')) {
+            if(($("#title").val() == '') || ($(".label-tags").length == 0)) {
+                hints('info','Вы не сможете обновить вопрос если поле заголовка будет пустым, или не будет выбрана как минимум одна категория !');
+            } else {
+                // Переписываем текст с редактора в текстареа для дальнейшей серриализации данных формы
+                $("#question").val(REDACTOR_QUESTION.getCodeTextarea());
 
-            var form_data = $("#frmAddQuestion").serialize();
-            $.ajax({type:"POST", async:true, data: form_data, url: "/adm/ahid/updateQuestion", dataType:"json",
-                success:function(data){
-                    if(data.status == 'ok') {
-                        hints('success','Вопрос был обновлен');
-                        var appended = '';
-                        for( var i = 0; i< data.count; i++ ) {
-                            appended += '' +
-                                '<div class="subcatItem">' +
-                                '<label class="checkbox">' +
-                                '<input type="checkbox" value="' + data.subcategories[i].title + '" id="id' + data.subcategories[i].id_subcategory + '" name="tags[]">' +
-                                data.subcategories[i].title + '</label>' +
-                                '</div>';
+                var form_data = $("#frmAddQuestion").serialize();
+                $.ajax({type:"POST", async:true, data: form_data, url: "/adm/ahid/updateQuestion", dataType:"json",
+                    success:function(data){
+                        if(data.status == 'ok') {
+                            hints('success','Вопрос был обновлен');
+                            var appended = '';
+                            for( var i = 0; i< data.count; i++ ) {
+                                appended += '' +
+                                    '<div class="subcatItem">' +
+                                    '<label class="checkbox">' +
+                                    '<input type="checkbox" value="' + data.subcategories[i].title + '" id="id' + data.subcategories[i].id_subcategory + '" name="tags[]">' +
+                                    data.subcategories[i].title + '</label>' +
+                                    '</div>';
+                            }
+                            $(".tab-pane#0").find(".innerTabPane").append(appended);
+                            clearAddQuestionForm();
+                            $(".hiddenQuestion").slideUp(300);
+                            $("#qustionId").val('').focus();
+
+                        } else {
+                            hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
+                            console.log(data.message);
                         }
-                        $(".tab-pane#0").find(".innerTabPane").append(appended);
-                        clearAddQuestionForm();
-                        $(".hiddenQuestion").slideUp(300);
-                        $("#qustionId").val('').focus();
-
-                    } else {
-                        hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
-                        console.log(data.message);
+                    },
+                    error:function(){
+                        console.log('error in ajax query, when add answer :(');
                     }
-                },
-                error:function(){
-                    console.log('error in ajax query, when add answer :(');
-                }
-            });
+                });
+            }
         }
     });
 // ----------------------------------- Нажатие на кнопку Изменения вопроса ------------------------------------------ //

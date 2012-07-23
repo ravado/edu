@@ -67,14 +67,17 @@ class Controller_Adm_Vio extends Controller_Base{
         $this->template->title = "Править вопрос";
         $this->template->styles = array("stfile/js/redactor/css/redactor.css" => "screen",
             "stfile/css/adm.css" => "screen");
-
         $this->template->scripts = array(
             '/stfile/js/adm.js',
             '/stfile/js/redactor/redactor.js',
             '/stfile/js/bootstrap-timepicker.js',
             '/stfile/js/bootstrap-datepicker.js');
 
+
+        $data['id_question'] = $this->request->param('id');
         $data['categories'] = Model::factory('Mquestions')->getCategoryList('admin');
+        $data['question'] = Model::factory('Mquestions')->getQuestion($data['id_question']);
+
         $data['page'] = View::factory('adm/vAdmVioQuestionFix',$data);
         $data['pageFlag'] = ': Добавление вопроса';
         $this->template->content = View::factory('adm/vAdm',$data);
@@ -95,7 +98,8 @@ class Controller_Adm_Vio extends Controller_Base{
         $this->template->content = View::factory('adm/vAdm',$data);
     }
 
-    /* Показываем страницу вопросов */
+
+    /* Показываем страницу всех вопросов */
     public function action_questions() {
         $this->template->title = "Вопросы";
         $this->template->styles = array("stfile/js/redactor/css/redactor.css" => "screen",

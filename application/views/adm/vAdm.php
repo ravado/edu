@@ -19,12 +19,10 @@
             <li><a href="/adm/news/del">Удалить новость</a></li>
             <li><a href="/adm/news/fix">Править новость</a></li>
             <li class="nav-header">Вопросы и ответы</li>
-            <li><a href="/adm/vio/questions">Вопросы</a></li>
+            <li><a href="/adm/vio/questions">Список вопросов</a></li>
             <li><a href="/adm/vio/addquestion">Добавить вопрос</a></li>
-            <li><a href="/adm/vio/fixquestion">Править вопрос</a></li>
-            <li><a href="/adm/vio/delquestion">Удалить вопрос</a></li>
             <li><a href="/adm/vio/category">Категории</a></li>
-            <li><a href="/adm/vio/delanswer">Удалить комментарии</a></li>
+<!--            <li><a href="/adm/vio/delanswer">Удалить комментарии</a></li>-->
             <li class="nav-header">Тесты</li>
             <li><a href="/adm/tests/create">Создание Тестов</a></li>
             <li><a href="/adm/tests/del">Удаление Тестов</a></li>

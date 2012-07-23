@@ -1,4 +1,4 @@
-<div id="categoryAdd" class="span3 alert">
+<div id="categoryAdd" class="span3 grayBlock">
     <div class="page-header">
         <h4>Добавление категорий.</h4>
     </div>
@@ -19,19 +19,11 @@
     <span class="iconLoading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
 </div>
 
-<div class="pull-right span6">
+<div class="pull-right span6 grayBlock">
     <div class="page-header">
         <h4>Список категорий.</h4>
     </div>
     <table class="table" id="tblCategoriesList">
-        <thead>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </thead>
         <? foreach($categories as $category) :?>
         <tbody class="tbCategory" id="catId<?=$category->id_category;?>">
             <tr>
@@ -51,7 +43,7 @@
             <? $counter = 0; $k = 0; $count = $category->subcategories->count_all();
             foreach($category->subcategories->find_all() as $subcategory): ?>
                 <td><input type="checkbox" class="subCatCheckbox" value="<?=$subcategory->id_subcategory;?>"></td>
-                <td><span class="catTitle"><?=$subcategory->title;?></span>
+                <td><span class="catTitle"><a href="/adm/vio/questions?subcat=<?=$subcategory->id_subcategory;?>"><?=$subcategory->title;?></a></span>
                     <a class="changeCategory pull-right "><i class="icon-pencil"></i></a>
                     <div class="hide dvChangeCat">
                         <input type="text" class="catTitle" placeholder="Название" value="<?=$subcategory->title;?>">

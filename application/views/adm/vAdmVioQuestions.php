@@ -57,22 +57,34 @@
         </tr>
     </thead>
     <tbody>
-    <? foreach($questions as $question): ?>
+    <? if(count($questions->as_array()) == 0): ?>
         <tr>
-            <td><input type="checkbox" class="questionId" value="<?=$question->id_question; ?>"></td>
-            <td><a class="<? if($question->is_closed) echo 'qClosed'; ?>" href="<?=$question->id_question;?>"><?=$question->title; ?></a>
-                <span class="spnTags">
-                    <? foreach($question->subcategories->find_all() as $subcategory): ?>
-                    <a href="?<?= $ext_limit .$ext_orderby. '&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
-                    <? endforeach; ?>
-                </span>
-            </td>
-            <td><a class="delQuestion"><i class="icon-trash"></i></a></td>
-            <td class="rating"><?=$question->rating; ?></td>
-            <td class="answers"><a><?=$question->answers->count_all(); ?></a></td>
-            <td class="time"><?= date('H:i y/m/d',strtotime($question->public_date)); ?></td>
+            <td></td>
+            <td>Нет запрошеных вопросов</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
-    <? endforeach; ?>
+    <? else: ?>
+        <? foreach($questions as $question): ?>
+
+            <tr>
+                <td><input type="checkbox" class="questionId" value="<?=$question->id_question; ?>"></td>
+                <td><a class="<? if($question->is_closed) echo 'qClosed'; ?>" href="/adm/vio/fixquestion/<?=$question->id_question;?>"><?=$question->title; ?></a>
+                    <span class="spnTags">
+                        <? foreach($question->subcategories->find_all() as $subcategory): ?>
+                        <a href="?<?= $ext_limit .$ext_orderby. '&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
+                        <? endforeach; ?>
+                    </span>
+                </td>
+                <td><a class="delQuestion"><i class="icon-trash"></i></a></td>
+                <td class="rating"><?=$question->rating; ?></td>
+                <td class="answers"><a><?=$question->answers->count_all(); ?></a></td>
+                <td class="time"><?= date('H:i y/m/d',strtotime($question->public_date)); ?></td>
+            </tr>
+        <? endforeach; ?>
+    <? endif; ?>
     </tbody>
 </table>
 <div class="" style="margin-top: 10px;">

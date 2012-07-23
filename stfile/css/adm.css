@@ -16,7 +16,7 @@
 /*Блок с контроллами управления текущей страницы*/
 #dvAdmPanel{
     margin-bottom: 15px;
-    width: 790px;
+    width: 780px;
     float: right;
 }
 
@@ -244,8 +244,10 @@ label:hover {
 
 /* Делаем ячейки таблицы со списком категорий одинакового размера */
 #tblCategoriesList td:nth-child(2n) {
-
     width: 185px;
+}
+#tblCategoriesList tbody:first-child tr:first-child td {
+    padding-top: 0 !important;
 }
 
 /* Блок с категорией и ее подкатегориями в списке категорий */
@@ -256,7 +258,10 @@ label:hover {
 /* Выделяем строку с категорией */
 .tbCategory tr:first-child{
     font-weight: bolder;
-    background-color: #ddf4ff;
+}
+.tbCategory tr:first-child td{
+    padding-top: 20px;
+    border-top: none !important;
 }
 
 /* при наводе курсора на ячейку таблицы со списком категорий показываем кнопку редактирования */
@@ -293,4 +298,21 @@ label:hover {
 .dvQuestionListTools a.checked:hover {
     color: #ccc;
     border-bottom: none;
+}
+
+a.btnExtra {
+    margin:  0 5px;
+}
+a.btnExtra:hover {
+    border-bottom: 1px dashed #CCC;
+    color: #08C;
+}
+
+#getQuestion {
+    margin-left: 5px;
+}
+
+small.smallie{
+    color: #ccc;
+    font-size: smaller;
 }

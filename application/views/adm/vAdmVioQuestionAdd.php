@@ -1,7 +1,13 @@
 <form action="/questions/askquestion" method="POST" id="frmAddQuestion">
     <!--  Блок с выеждающими дополнительными инструментами  -->
     <div class="extraConfig">
-        <div class="extraNav"><a class="btnExtra">Дополнительные настройки</a></div>
+        <div class="extraHeader">
+            <a href="/adm/vio/questions" ><i class="icon-list-alt"></i> перейти к списку вопросов</a>
+            <div class="extraNav pull-right">
+                <a class="btnExtra"><i class="icon-cog"></i> Дополнительные настройки</a>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
         <div class="extraContent alert">
             <span class="toolItem"><label>Рейтинг<input type="text" class="span1" value="0"  name="rating"></label></span>
             <span class="toolItem">
@@ -33,7 +39,7 @@
         <h4>Вопрос. <small> краткое название вопроса и полный текст.</small></h4>
     </div>
     <label>Заголовок
-        <input type="text" class="span9" maxlength="100" id="title"  placeholder="не более 100 символов" name="question_title">
+        <input type="text" class="span10" maxlength="100" id="title"  placeholder="не более 100 символов" name="question_title">
     </label>
     <label>Текст вопроса
         <textarea id="question" rows="5" cols="20" name="question_full"></textarea>
