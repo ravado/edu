@@ -688,13 +688,13 @@ class Controller_Adm_Ahid extends Controller{
                 $answer->is_best = $is_best;
                 $answer->public_date = $public_date;
                 $saved = $answer->save();
-                $answer->add('questions',$question);
+                $answer->add('question',$question);
 
                 $result['id_user'] = $saved->user_id;
                 $result['id_answer'] = $saved->id_answer;
                 $result['id_question'] = $id_question;
                 $result['text'] = $saved->text;
-                $result['public_date'] = $saved->public_date;
+                $result['public_date'] = date('H:i y/m/d',strtotime($saved->public_date));
                 $result['username'] = $saved->user->username;
                 $result['rating'] = $saved->rating;
                 $result['is_best'] = $saved->is_best;
@@ -754,6 +754,66 @@ class Controller_Adm_Ahid extends Controller{
 
         echo json_encode($result);
     }
+
+
+    // Редактирование ответа
+    public function action_updateAnswer() {
+        if(!empty($_POST)) {
+            try {
+                // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                $id_answer = $_POST['id_answer'];
+                $rating = $_POST['rating'];
+                $date = $_POST['date'];
+                $time = $_POST['time'];
+                $is_best = $_POST['is_best'];
+                $text = $_POST['answer'];
+                $result['message'] = 'everithing is ok';
+                $result['status'] = 'ok';
+
+                $answer = ORM::factory('ormvioanswer',$id_answer);
+                $question = $answer->question->find();
+                $answer->rating = $rating;
+                $answer->text = $text;
+                $answer->public_date = date('Y-m-d H:i',strtotime($time.$date));
+
+                if($answer->is_best == 1 && $is_best == 0) {
+                    $question->is_closed = 0;
+                    $answer->is_best = 0;
+                } elseif($answer->is_best == 0 && $is_best == 1) {
+                    $bests = $question->answers->where('is_best','=','1')->find_all();
+                    foreach($bests as $best) {
+                        $best->is_best = 0;
+                        $best->save();
+                    }
+                    $question->is_closed = 1;
+                    $answer->is_best = 1;
+                } else {
+                    $question->is_closed = $is_best;
+                    $answer->is_best = $is_best;
+                }
+                $saved_question = $question->save();
+                $saved_answer =$answer->save();
+                date('H:i y/m/d',strtotime($question->public_date));
+                $result['id_answer'] = $saved_answer->id_answer;
+                $result['rating'] = $saved_answer->rating;
+                $result['is_best'] = $saved_answer->is_best;
+                $result['time'] = date('H:i d/m/y',strtotime($saved_answer->public_date));
+                $result['text'] = $saved_answer->text;
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
 
 // -------------------------------------------- Вопросы и ответы ---------------------------------------------------- //
 

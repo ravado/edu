@@ -2,7 +2,8 @@
  * Скрипты админки
  */
 
-var redactorPre, redactorFull, REDACTOR_TSTQUESTION, REDACTOR_TSTVARIANTS, REDACTOR_QUESTION;
+var redactorPre, redactorFull, REDACTOR_TSTQUESTION, REDACTOR_TSTVARIANTS,
+    REDACTOR_FIRST, REDACTOR_SECOND;
 // Проверка наличия новости по ID в качестве параметра передаем jQuery обьект в который будет вводиться айдишник
 function checkNewsbyID (jQueryObj) {
     var exist;
@@ -28,7 +29,7 @@ function clearAddQuestionForm() {
     $("input[name=rating]").val('0');
     $(".dropdown-timepicker").val($(".current_time").val());
     $("#date").val($(".current_date").val());
-    REDACTOR_QUESTION.setCodeEditor('<p><br></p>');
+    REDACTOR_FIRST.setCodeEditor('<p><br></p>');
 }
 
 function clearAddCategoryForm() {
@@ -37,6 +38,19 @@ function clearAddCategoryForm() {
     curr_form.find($("#newCatLabel")).val('');
     curr_form.find($(".parentCategory option")).removeAttr('selected');
     curr_form.find($(".parentCategory option[value='none']")).attr('selected','selected');
+}
+
+// Очистка формы добавления/обновления ответов
+function clearAddAnswerForm() {
+    $("#rating").val('0');
+    $("#time").val($(".current_time").val());
+    $("#date").val($(".current_date").val());
+    $("#isBestAnswer").val('0');
+    $("#btnSetBest").removeClass('active');
+    $("#hAnswerId").val('0');
+    REDACTOR_FIRST.setCodeEditor('<p><br></p>');
+    REDACTOR_FIRST.setCodeTextarea('<p><br></p>');
+
 }
 
 var currUsername = null;
@@ -73,6 +87,10 @@ function createNewTest(trigger_btn) {
 }
 
 $(document).ready(function() {
+
+    // Инициализация двух редакторов (больше на одной странице пока не нужно)
+    REDACTOR_FIRST =$(".redactorFirst").redactor({ imageUpload: '/news/nhid/loadimages' });
+    REDACTOR_SECOND =$(".redactorSecond").redactor({ imageUpload: '/news/nhid/loadimages' });
 
     //Удаление теста по иду
     $("#btnTstDel").click(function() {
@@ -763,8 +781,7 @@ $('#ulAdmMenu ul').each(function(index) {
 //    REDACTOR_TSTQUESTION = $('#tstQuestions').redactor({ imageUpload: '/news/nhid/loadimages' });
 //    REDACTOR_TSTVARIANTS = $("#tstVariants").redactor({ imageUpload: '/news/nhid/loadimages'});
 
-    //Редактор для вопросов в админке
-    REDACTOR_QUESTION = $("#question").redactor({ imageUpload: '/news/nhid/loadimages'});
+
     try {
         $(".dropdown-timepicker").timepicker({showMeridian:false,defaultTime:$(this).val(),showSeconds:false});
         $("#date").datepicker({format:'dd-mm-yyyy'});
@@ -786,7 +803,7 @@ $('#ulAdmMenu ul').each(function(index) {
             hints('info','Для создания вопроса необходимао как минимуму ввести его заголовок, и выбрать одну категорию!');
         } else {
             // Переписываем текст с редактора в текстареа для дальнейшей серриализации данных формы
-            $("#question").val(REDACTOR_QUESTION.getCodeTextarea());
+            $("#question").val(REDACTOR_FIRST.getCodeTextarea());
             var form_data = $("#frmAddQuestion").serialize();
             $.ajax({type:"POST", async:true, data: form_data, url: "/adm/ahid/addQuestion", dataType:"json",
                 success:function(data){
@@ -845,7 +862,7 @@ $('#ulAdmMenu ul').each(function(index) {
                         item_rating.val(data.rating);
                         item_date.val(data.date);
                         item_time.val(data.time);
-                        REDACTOR_QUESTION.setCodeEditor(data.full);
+                        REDACTOR_FIRST.setCodeEditor(data.full);
                         if (data.is_closed == 0) { item_status.is_not_closed.attr('checked','checked'); } else
                         if (data.is_closed == 1) { item_status.is_closed.attr('checked','checked'); }
 
@@ -884,7 +901,7 @@ $('#ulAdmMenu ul').each(function(index) {
                 hints('info','Вы не сможете обновить вопрос если поле заголовка будет пустым, или не будет выбрана как минимум одна категория !');
             } else {
                 // Переписываем текст с редактора в текстареа для дальнейшей серриализации данных формы
-                $("#question").val(REDACTOR_QUESTION.getCodeTextarea());
+                $("#question").val(REDACTOR_FIRST.getCodeTextarea());
 
                 var form_data = $("#frmAddQuestion").serialize();
                 $.ajax({type:"POST", async:true, data: form_data, url: "/adm/ahid/updateQuestion", dataType:"json",
@@ -1253,11 +1270,14 @@ $('#ulAdmMenu ul').each(function(index) {
         }
 
     });
-
+$(".btnCancel").click(function(){
+    clearAddAnswerForm()
+    $(".editing").removeClass('blue-block').removeClass('transperent-block').removeClass('editing');
+});
 // =============================== Нажатие на кнопку добавления нового ответа ======================================= //
     $("#btnAddAnswer").click(function() {
         var transfer_data, icon_load, answers_table, is_best_html, is_best_answer, additional = '', tbody;
-        $(".answer_text").val(REDACTOR_QUESTION.getCodeTextarea());
+        $(".answer_text").val(REDACTOR_FIRST.getCodeTextarea());
         is_best_answer = $(".isBest");
         answers_table = $("#tblAnswerList");
         tbody = answers_table.find('tbody');
@@ -1310,6 +1330,7 @@ $('#ulAdmMenu ul').each(function(index) {
 
 // ============================= Нажатие на кнопку удаления выбранных ответов ======================================= //
     $("#delCheckedAnswers").click(function(){
+
         var checked_answers = $('.answerId:checked');
         if(checked_answers.length > 0) {
             var id_answers = {id:[]}, icon_load;
@@ -1344,6 +1365,102 @@ $('#ulAdmMenu ul').each(function(index) {
         }
     });
 // ----------------------------- Нажатие на кнопку удаления выбранных ответов --------------------------------------- //
+
+// ================================== Нажатие на кнопку редактирования ответа ======================================= //
+
+    $(".editAnswer").live('click', function() {
+        var curr = {rating:0,time:null,date:null,id_answer:null,public_date:null,text:""}, closest_tr;
+        closest_tr = $(this).closest('tr');
+        $(".editing").removeClass('blue-block').removeClass('transperent-block').removeClass('editing');
+        closest_tr.addClass('editing');
+        closest_tr.addClass('blue-block');
+        closest_tr.addClass('transperent-block');
+        curr.rating = closest_tr.find('td.rating').text();
+        curr.public_date = closest_tr.find('td.time').text().split(' ');
+        curr.time = curr.public_date[0];
+        curr.date = curr.public_date[1];
+        curr.id_answer = closest_tr.find('.answerId').val();
+        curr.text = closest_tr.find('.answer_text').html();
+
+        $("#hAnswerId").val(curr.id_answer);
+        $("#rating").val(curr.rating);
+        $("#date").val(curr.date);
+        $("#time").val(curr.time);
+        if(closest_tr.find('.isBest').length == 1) {
+            $("#btnSetBest").addClass('active');
+            $("#isBestAnswer").val('1');
+        } else {
+            $("#btnSetBest").removeClass('active');
+            $("#isBestAnswer").val('0');
+        }
+        REDACTOR_FIRST.setCodeEditor(curr.text);
+
+
+        $("#btnAddAnswer").hide();
+        $("#btnUpdateAnswer").show();
+        $("#demo").collapse('show');
+
+    });
+// ---------------------------------- Нажатие на кнопку редактирования ответа --------------------------------------- //
+
+// =============================== Нажатие на кнопку обновления одного ответа ======================================= //
+    $("#btnUpdateAnswer").click(function(){
+        var transfer_data, icon_load = $(".iconLoading.addAnswer"),
+            tr = $(".editing"), curr = {id_answer:null,public_date:null,text:null};
+        curr.id_answer = tr.find('.answerId');
+        curr.text = tr.find('.answer_text');
+        curr.username = tr.find('.username');
+        curr.rating = tr.find('.rating');
+        curr.time = tr.find('.time');
+        $("#question").val(REDACTOR_FIRST.getCodeTextarea());
+        transfer_data = $("#frmAddAnswer").serialize();
+        icon_load.show(); // Показываем иконку загрузки
+        $.ajax({type:"POST", async:true, data: transfer_data, url: "/adm/ahid/updateAnswer", dataType:"json",
+            success:function(data){
+                if(data.status == 'ok') {
+
+                    curr.id_answer.val(data.id_answer);
+                    curr.username.text(data.username);
+                    curr.rating.text(data.rating);
+                    curr.time.text(data.time);
+                    if(data.is_best == 1) {
+                        $(".isBest").remove();
+                        curr.text.html('<span data-original-title="Лучший ответ" class="isBest tips icon24 icon24-done checked"></span><p>'+ data.text + '</p>');
+                    } else {
+                        curr.text.html('<p>'+ data.text + '</p>');
+                    }
+                } else {
+                    hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
+                    console.log(data.message);
+                }
+                $("#demo").collapse('hide');
+                tr.removeClass('editing');
+                tr.animate({opacity:'1'},1000,function() {
+                    tr.removeClass('blue-block');
+                    tr.removeClass('transperent-block');
+                });
+
+                clearAddAnswerForm();
+                icon_load.hide(); // Прячем иконку статуса выполнения
+            },
+            error:function(){
+                tr.removeClass('editing','blue-block');
+                clearAddAnswerForm();
+                console.log('error in ajax query, when delete answers :(');
+                icon_load.hide(); // Прячем иконку статуса выполнения
+            }
+        });
+    });
+// ------------------------------- Нажатие на кнопку обновления одного ответа --------------------------------------- //
+
+// ================================= Нажатие на кнопку добавления одного ответа ===================================== //
+    $("#addAnswer").click(function() {
+        clearAddAnswerForm();
+        $('#btnUpdateAnswer').hide();
+        $("#btnAddAnswer").show();
+        $("#demo").collapse('show');
+    });
+// --------------------------------- Нажатие на кнопку добавления одного ответа ------------------------------------- //
 
 // ================================= Нажатие на кнопку удаления одного ответа ======================================= //
     $(".delAnswer").live('click',function() {
