@@ -6,39 +6,34 @@
     if(!is_null($subcat)) { $ext_subcat = '&subcat=' .$subcat; } else {$ext_subcat = '';}
     if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status = '';}
 ?>
-<div class="dvQuestionListTools">
-    <div class="pull-left" style="margin-top: 10px; height: 30px;">
-        <span class="toolDelQuestions pull-left">
-            <a id="checkAll"> <i class="icon-check"></i> отметить все </a> <small>/</small>
-            <a id="uncheckAll"> <i class="icon-share"></i> снять все </a> <small>/</small>
-            <a id="delChecked"> <i class="icon-trash"></i> удалить отмеченные </a>
-        </span>
-        <span class="toolKindList pull-left">
-            <a class="<? if($status == 'all' || $status == null) echo 'checked'; ?>" href="?status=all"> <i class="icon-list-alt"></i> все</a> <small>/</small>
-            <a class="<? if($status == 'opened') echo 'checked'; ?>" href="?status=opened">  открытые</a> <small>/</small>
-            <a class="<? if($status == 'closed') echo 'checked'; ?>" href="?status=closed">  закрытые</a>
-
-        </span><span class="iconLoading pull-left"><img src="/stfile/img/1loading.gif" alt="loading"></span>
-    </div>
-    <div class="btn-group pull-right">
-        <button class="btn btn-small">количество записей</button>
-        <button class="btn dropdown-toggle btn-small" data-toggle="dropdown"><span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li>
-                <a href="?<?=$ext_subcat .$ext_orderby .'&limit=10';  ?>">по 10 записей</a>
-            </li>
-            <li>
-                <? if($count >= 20) echo '<a href="?' .$ext_subcat .$ext_orderby .'&limit=20' .'">по 20 записей</a>'?>
-            </li>
-            <li>
-                <? if($count >= 50) echo '<a href="?' .$ext_subcat .$ext_orderby .'&limit=50' .'">по 50 записей</a>'?>
-            </li>
-            <li class="divider"></li>
-            <li><a href="?limit=<?=$count;?>">все записи</a></li>
-        </ul>
-    </div>
-    <div style="clear: both;"></div>
-</div>
+    <menu class="tools-menu">
+        <li><a id="checkAll"> <i class="icon-check"></i> отметить все </a> <small>/</small></li>
+        <li><a id="uncheckAll"> <i class="icon-share"></i> снять все </a> <small>/</small></li>
+        <li><a id="delChecked"> <i class="icon-trash"></i> удалить отмеченные </a></li>
+        <li class="space"><a class="<? if($status == 'all' || $status == null) echo 'checked'; ?>" href="?status=all"> <i class="icon-list-alt"></i> все</a> <small>/</small></li>
+        <li><a class="<? if($status == 'opened') echo 'checked'; ?>" href="?status=opened">  открытые</a> <small>/</small></li>
+        <li><a class="<? if($status == 'closed') echo 'checked'; ?>" href="?status=closed">  закрытые</a></li>
+        <li><span class="iconLoading pull-left"><img src="/stfile/img/1loading.gif" alt="loading"></span></li>
+        <li class="right">
+            <div class="btn-group">
+                <button class="btn btn-small">количество записей</button>
+                <button class="btn dropdown-toggle btn-small" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="?<?=$ext_subcat .$ext_orderby .'&limit=10';  ?>">по 10 записей</a>
+                    </li>
+                    <li>
+                        <? if($count >= 20) echo '<a href="?' .$ext_subcat .$ext_orderby .'&limit=20' .'">по 20 записей</a>'?>
+                    </li>
+                    <li>
+                        <? if($count >= 50) echo '<a href="?' .$ext_subcat .$ext_orderby .'&limit=50' .'">по 50 записей</a>'?>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="?limit=<?=$count;?>">все записи</a></li>
+                </ul>
+            </div>
+        </li>
+    </menu>
 <table class="table  questionsList ">
     <thead>
         <tr>

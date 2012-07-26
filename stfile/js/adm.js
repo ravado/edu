@@ -919,7 +919,6 @@ $('#ulAdmMenu ul').each(function(index) {
                             }
                             $(".tab-pane#0").find(".innerTabPane").append(appended);
                             clearAddQuestionForm();
-                            $(".hiddenQuestion").slideUp(300);
                             $("#qustionId").val('').focus();
 
                         } else {
@@ -1276,54 +1275,58 @@ $(".btnCancel").click(function(){
 });
 // =============================== Нажатие на кнопку добавления нового ответа ======================================= //
     $("#btnAddAnswer").click(function() {
-        var transfer_data, icon_load, answers_table, is_best_html, is_best_answer, additional = '', tbody;
-        $(".answer_text").val(REDACTOR_FIRST.getCodeTextarea());
-        is_best_answer = $(".isBest");
-        answers_table = $("#tblAnswerList");
-        tbody = answers_table.find('tbody');
-        transfer_data = $("#frmAddAnswer").serialize();
-        icon_load = $('.addAnswer.iconLoading');
-        icon_load.show(); // Показываем иконку загрузки
-        $.ajax({type:"POST", async:true, data: transfer_data, url: "/adm/ahid/addAnswer", dataType:"json",
-            success:function(data){
-                if(data.status == 'ok') {
-                    hints('success','Ответ добавлен');
-                    if(data.is_best == 1) {
-                        is_best_html = '<span data-original-title="Лучший ответ" class="isBest tips icon24 icon24-done checked"></span>';
-                        is_best_answer.remove();
-                    } else {
-                        is_best_html = '';
-                    }
-                    additional = '<tr class="hide newAnswer light-green-block">' +
-                        '<td><input type="checkbox" class="questionId" value="' + data.id_question + '"></td>' +
-                        '<td>' + is_best_html + '<p>' + data.text + '</p></td>' +
-                        '<td><a class="delQuestion"><i class="icon-pencil"></i></a><a class="delQuestion"><i class="icon-trash"></i></a></td>' +
-                        '<td class="username"><a>' + data.username + '</a></td>' +
-                        '<td class="rating">' + data.rating + '</td>' +
-                        '<td class="time">' + data.public_date + '</td>' +
-                        '</tr>';
+        if($("#hQustionId").val().length > 0) {
+            var transfer_data, icon_load, answers_table, is_best_html, is_best_answer, additional = '', tbody;
+            $(".answer_text").val(REDACTOR_FIRST.getCodeTextarea());
+            is_best_answer = $(".isBest");
+            answers_table = $("#tblAnswerList");
+            tbody = answers_table.find('tbody');
+            transfer_data = $("#frmAddAnswer").serialize();
+            icon_load = $('.addAnswer.iconLoading');
+            icon_load.show(); // Показываем иконку загрузки
+            $.ajax({type:"POST", async:true, data: transfer_data, url: "/adm/ahid/addAnswer", dataType:"json",
+                success:function(data){
+                    if(data.status == 'ok') {
+                        hints('success','Ответ добавлен');
+                        if(data.is_best == 1) {
+                            is_best_html = '<span data-original-title="Лучший ответ" class="isBest tips icon24 icon24-done checked"></span>';
+                            is_best_answer.remove();
+                        } else {
+                            is_best_html = '';
+                        }
+                        additional = '<tr class="hide newAnswer light-green-block">' +
+                            '<td><input type="checkbox" class="questionId" value="' + data.id_question + '"></td>' +
+                            '<td>' + is_best_html + '<p>' + data.text + '</p></td>' +
+                            '<td><a class="delQuestion"><i class="icon-pencil"></i></a><a class="delQuestion"><i class="icon-trash"></i></a></td>' +
+                            '<td class="username"><a>' + data.username + '</a></td>' +
+                            '<td class="rating">' + data.rating + '</td>' +
+                            '<td class="time">' + data.public_date + '</td>' +
+                            '</tr>';
 
-                    if(data.is_best == 1) {
-                        tbody.prepend(additional);
-                    } else {
-                        tbody.append(additional);
-                        $('body,html').animate({scrollTop: answers_table.height()}, 600);
-                    }
+                        if(data.is_best == 1) {
+                            tbody.prepend(additional);
+                        } else {
+                            tbody.append(additional);
+                            $('body,html').animate({scrollTop: answers_table.height()}, 600);
+                        }
 
-                    $(".newAnswer").fadeIn(1000, function(){
-                        $(".newAnswer").removeClass('light-green-block','newAnswer','hide');
-                    });
-                } else {
-                    hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
-                    console.log(data.message);
+                        $(".newAnswer").fadeIn(1000, function(){
+                            $(".newAnswer").removeClass('light-green-block','newAnswer','hide');
+                        });
+                    } else {
+                        hints('error','Что то пошло не так <small>( просмотрите логи )</small>');
+                        console.log(data.message);
+                    }
+                    icon_load.hide(); // Прячем иконку статуса выполнения
+                },
+                error:function(){
+                    console.log('error in ajax query, when delete questions :(');
+                    icon_load.hide(); // Прячем иконку статуса выполнения
                 }
-                icon_load.hide(); // Прячем иконку статуса выполнения
-            },
-            error:function(){
-                console.log('error in ajax query, when delete questions :(');
-                icon_load.hide(); // Прячем иконку статуса выполнения
-            }
-        });
+            });
+        } else {
+            $("#qustionId").focus();
+        }
     });
 // ------------------------------- Нажатие на кнопку добавления нового ответа --------------------------------------- //
 

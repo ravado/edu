@@ -12,30 +12,25 @@
     <form action="/questions/askquestion" method="POST" id="frmAddQuestion">
         <input type="hidden" name="id_question" id="hQuestionId" value="<?=$question->id_question;?>">
 
-        <!--  Блок с выеждающими дополнительными инструментами  -->
-        <div class="extraConfig">
-
-            <!--     Хедер екстра меню       -->
-            <div class="extraHeader">
-                <div class="pull-left">
-                    <div class="input-prepend pull-left">
-                        <span class="add-on">id</span>
-                        <input type="text" id="qustionId" class=" unmargin span1 pull-left" value="<?=$question->id_question;?>">
-                    </div>
-                    <input type="button" class="btn unmargin" value="найти" id="getQuestion"><span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>
-                        <a href="/adm/vio/addquestion" ><i class="icon-pencil"></i> создать новый</a> <small class="smallie"> / </small>
-                        <a href="/adm/vio/questions" ><i class="icon-list-alt"></i> перейти к списку вопросов</a>
+        <menu class="tools-menu">
+            <li>
+                <div class="input-prepend pull-left">
+                    <span class="add-on">id</span>
+                    <input type="text" id="qustionId" class=" unmargin span1 pull-left" value="<?=$question->id_question;?>">
                 </div>
+                <input type="button" class="btn unmargin" value="найти" id="getQuestion">
+            </li>
+            <li></li>
+            <li class="space"><a href="/adm/vio/addquestion" ><i class="icon-pencil"></i> создать новый</a> <small class="smallie"> / </small></li>
+            <li><a href="/adm/vio/questions" ><i class="icon-list-alt"></i> перейти к списку вопросов</a></li>
+            <li><span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span></li>
+            <li class="right"><a class="btnExtra" data-target="#extraContent" data-toggle="collapse"><i class="icon-cog"></i> Дополнительные настройки</a></li>
 
-
-                <div class="extraNav pull-right">
-                    <a class="btnExtra"><i class="icon-cog"></i> Дополнительные настройки</a>
-                </div>
-                <div style="clear: both;"></div>
-            </div>
+        </menu>
 
             <!--     Контент екстра меню       -->
-            <div class="extraContent alert">
+            <div id="extraContent" class="collapse">
+                 <div class="alert">
                 <span class="toolItem">
                     <label>Рейтинг
                         <input type="text" class="span1" value="<?=$question->rating;?>" id="rating"  name="rating">
@@ -61,10 +56,10 @@
                         <input type="radio" class="is_closed qstatus" name="is_closed" value="1" <? if($question->is_closed) echo 'checked="checked"'; ?>>
                         Закрыт
                     </label>
-                </span>
-                <div style="clear: both;"></div>
+                </span><div style="clear: both;"></div>
+                 </div>
+
             </div>
-        </div>
 
 
         <div class="page-header">
@@ -74,7 +69,7 @@
             <input type="text" class="span10" id="title" maxlength="100"  placeholder="не более 100 символов" name="question_title" value="<?=$question->title;?>">
         </label>
         <label>Текст вопроса
-            <textarea id="question" rows="5" cols="20" name="question_full"><?=$question->full; ?></textarea>
+            <textarea id="question" class="redactorFirst" rows="5" cols="20" name="question_full"><?=$question->full; ?></textarea>
         </label>
 
         <div class="page-header">

@@ -42,7 +42,7 @@
         <input type="text" class="span10" maxlength="100" id="title"  placeholder="не более 100 символов" name="question_title">
     </label>
     <label>Текст вопроса
-        <textarea id="question" rows="5" cols="20" name="question_full"></textarea>
+        <textarea id="question" class="redactorFirst" rows="5" cols="20" name="question_full"></textarea>
     </label>
 
     <div class="page-header">

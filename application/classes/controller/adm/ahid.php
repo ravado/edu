@@ -689,7 +689,8 @@ class Controller_Adm_Ahid extends Controller{
                 $answer->public_date = $public_date;
                 $saved = $answer->save();
                 $answer->add('question',$question);
-
+                $question->answers_count = ($question->answers_count + 1);
+                $question->save();
                 $result['id_user'] = $saved->user_id;
                 $result['id_answer'] = $saved->id_answer;
                 $result['id_question'] = $id_question;
@@ -739,7 +740,7 @@ class Controller_Adm_Ahid extends Controller{
                     // Удаляем ответ
                     $answer->delete();
                 }
-
+                $question->answers_count = ($question->answers_count - 1);
                 // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
             } catch(Exception $e) {
                 $result['message'] = 'Some error - '.$e;

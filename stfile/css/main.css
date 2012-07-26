@@ -809,23 +809,28 @@ a:hover {
 /*  Меню горизонтальное  */
 menu.tools-menu {
     height: 20px;
-    padding: 5px;
+    padding: 5px 0;
+    margin-bottom: 15px;
 }
 menu.tools-menu small{
     color: #cccccc;
     font-size: smaller;
 }
-menu.tools-menu li{
+menu.tools-menu > li{
     list-style: none;
     float: left;
     margin-left: 3px;
 }
-menu.tools-menu li.space{
+menu.tools-menu > li.space{
     margin-left: 20px;
 }
-menu.tools-menu li.right{
+menu.tools-menu > li.right{
     float: right;
 }
+menu.tools-menu > li .checked{
+    color: #ccc;
+}
+
 
 
 
