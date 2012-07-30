@@ -9,7 +9,7 @@
         </li>
         <li class="active">Все тесты</li>
     </ul>
-    <div class="tstSidebar hide">
+    <div class="tstSidebar ">
 
         <div class="widgetBlock tstSbCategory">
             <div class="widgetTitle">Категории</div>

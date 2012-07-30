@@ -617,6 +617,19 @@ $(document).ready(function(){
     });
 //-------------------------------------------------------------------//
 
+
+
+
+    $("#vioSearchInput").focusin(function() {
+        $(this).closest('fieldset').addClass('active');
+        $(this).closest('fieldset').find('.btnFind').addClass('active');
+        $(this).closest('fieldset').find('.btnAsk').addClass('active');
+    });
+    $("#vioSearchInput").focusout(function() {
+        $(this).closest('fieldset').removeClass('active');
+        $(this).closest('fieldset').find('.btnFind').removeClass('active');
+        $(this).closest('fieldset').find('.btnAsk').removeClass('active');
+    });
 });
 
 //*****************************************************конец ready****************************************************//

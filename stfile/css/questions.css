@@ -102,27 +102,27 @@
         }
 
         /*Кнопка задания вопроса*/
-        .btnAsk
-        {
-            background: #6cbb6b;
-            background-image: -moz-linear-gradient(#95d788, #6cbb6b);
-            background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #6cbb6b),color-stop(1, #95d788));
-            -moz-border-radius: 3px 50px 50px 3px;
-            border-radius: 3px 50px 50px 3px;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #7eba7c #578e57 #447d43;
-            -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
-            -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
-            box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
-            height: 26px;
-            margin: 0 0 0 10px;
-            width: 100px;
-            cursor: pointer;
-            font: bold 14px Arial, Helvetica;
-            color: #23441e;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.5);
-        }
+        /*.btnAsk*/
+        /*{*/
+            /*background: #6cbb6b;*/
+            /*background-image: -moz-linear-gradient(#95d788, #6cbb6b);*/
+            /*background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #6cbb6b),color-stop(1, #95d788));*/
+            /*-moz-border-radius: 3px 50px 50px 3px;*/
+            /*border-radius: 3px 50px 50px 3px;*/
+            /*border-width: 1px;*/
+            /*border-style: solid;*/
+            /*border-color: #7eba7c #578e57 #447d43;*/
+            /*-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;*/
+            /*-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;*/
+            /*box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;*/
+            /*height: 26px;*/
+            /*margin: 0 0 0 10px;*/
+            /*width: 100px;*/
+            /*cursor: pointer;*/
+            /*font: bold 14px Arial, Helvetica;*/
+            /*color: #23441e;*/
+            /*text-shadow: 0 1px 0 rgba(255,255,255,0.5);*/
+        /*}*/
 
         /*Форма поиска вопросов и задания новых*/
         .frmQuestion {

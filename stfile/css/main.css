@@ -528,7 +528,7 @@ fieldset:focus{
 
 /*суперглавный класс для анмарджина*/
 .unmargin {
-    margin: 0;
+    margin: 0 !important;
 }
 
 /* блок с списком категорий для вопроса */
@@ -647,7 +647,7 @@ fieldset:focus{
 
 /* span0 которого нет в бутстрапе */
 .span0 {
-    width: 20px;
+    width: 10px;
     float: none !important;
 }
 
@@ -717,6 +717,7 @@ td.rating {
 }
 td.answers {
     font-size: smaller;
+    color: #888;
     text-align: center !important;
 }
 td.username {
@@ -728,14 +729,29 @@ td.username {
 .questionsList {
     margin-left: 0 !important;
 }
+.questionsList a{
+    border: none !important;
+}
 .questionsList td{
     vertical-align: middle !important;
+}
+.questionsList th{
+    padding-top: 5px !important;
 }
 .questionsList thead tr:hover{
     background-color: #ffffff;
 }
 .questionsList tr:hover{
     background-color: #f6f6f6;
+}
+.questionsList tbody tr:first-child td{
+    border-top: none;
+}
+.questionsList tbody tr:first-child{
+    border-top: 1px dotted #ddd;
+}
+.questionsList tbody tr:last-child{
+    border-bottom: 1px dotted #ddd;
 }
 
 /* Иконка удаления вопроса */
@@ -831,9 +847,162 @@ menu.tools-menu > li .checked{
     color: #ccc;
 }
 
+/*  ================================================================================================================  */
+/*  ================================================================================================================  */
+/*  =================================== ВиО Пользовательская часть =================================================  */
+/*  ================================================================================================================  */
+/*  ================================================================================================================  */
+
+/* Основной блок */
+.content-block {
+    width: 100%;
+    margin-bottom: 15px;
+}
+.content-block a{
+    border-bottom: 1px solid #CAE6F8;
+}
+.content-block header{
+    border-radius: 2px 2px 0 0;
+    background: #e8f4fc;
+    border: 1px solid #cae6f8;
+    min-height: 20px;
+    padding: 5px 5px;
+    margin: 0;
+
+}
+.content-block footer{
+    border-radius: 0 0 2px 2px;
+    background: #f6f6f6;
+    border-left: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+    border-right: 1px solid #DDD;
+    min-height: 18px;
+    padding: 5px 5px;
+    margin: 0;
+    font-size: 12px;
+    vertical-align: middle;
+
+}
+
+.content-block header h4{
+    color: #1b86ca;
+}
+.content-block .content{
+    padding: 5px;
+    border-left: 1px solid #DDD;
+    border-right: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+}
+
+/* Области меню и контента */
+#vio_menu {
+    float: left;
+    width: 200px;
+}
+#vio_content {
+    float: right;
+    width: 780px;
+}
+
+/* Блок с категориями и подкатегориями */
+.catBlock {
+    margin-bottom: 5px;
+}
+.catTitle {
+    font-weight: bolder;
+    font-size: 12px;
+}
+.catTitle a {
+    color: #6f6f6f;
+    border-bottom: 1px solid #eee;
+}
+.subcatBlock {
+    margin-left: 5px;
+    font-size: 11px;
+}
+.subcatBlock a {
+    color: #888;
+    border-bottom: 1px solid #eee;
+    margin-right: 3px;
+}
 
 
 
+/* Поле поиска на главной ВиО */
+#vioSearchBar {
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+#vioSearchBar fieldset{
+    height: 30px;
+    border: 5px solid #FAFAFA;
+}
+#vioSearchBar fieldset.active{
+    background-color:#E8F4FC;
+    border: 5px solid #E8F4FC;
+}
+#vioSearchBar input {
+    margin: 0 ;
+    padding: 5px;
+    border-radius: 0;
+}
+#vioSearchBar input:first-child {
+    border-radius: 2px 0 0 2px;
+}
+#vioSearchBar input:last-child {
+    border-radius: 0 2px 2px 0;
+}
+#vioSearchBar .btnAsk, #vioSearchBar .btnFind{
+    background: #bbb;
+    padding: 5px 10px;
+    margin-left: -5px;
+    border: 1px solid #d9d9d9;
+    box-shadow: none;
+    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(242,242,242,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(242,242,242,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(242,242,242,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(242,242,242,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(242,242,242,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(242,242,242,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2f2f2',GradientType=0 ); /* IE6-9 */
+}
+#vioSearchBar .btnAsk:hover , #vioSearchBar .btnFind:hover {
+    color: #fff;
+    border-color: #59B5FC #45A3E7 #3294D5;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 1px 0 rgba(23, 51, 78, 0.03), 0 0 4px rgba(0, 57, 102, 0.2);
+    background: -moz-linear-gradient(top,  rgba(102,189,255,1) 0%, rgba(13,158,255,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(102,189,255,1)), color-stop(100%,rgba(13,158,255,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(102,189,255,1) 0%,rgba(13,158,255,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(102,189,255,1) 0%,rgba(13,158,255,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(102,189,255,1) 0%,rgba(13,158,255,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(102,189,255,1) 0%,rgba(13,158,255,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66bdff', endColorstr='#0d9eff',GradientType=0 ); /* IE6-9 */
+}
+#vioSearchBar .btnAsk {
+}
+
+#vioSearchBar .search-input {
+    border: 1px solid #d9d9d9;
+    width: 620px;
+}
+
+#vioSearchBar .btnFind.active, #vioSearchBar .btnAsk.active {
+    color: #fff;
+    border-color: #3294D5;
+    background: -moz-linear-gradient(top,  rgba(76,177,255,1) 0%, rgba(23,147,229,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(76,177,255,1)), color-stop(100%,rgba(23,147,229,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(76,177,255,1) 0%,rgba(23,147,229,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(76,177,255,1) 0%,rgba(23,147,229,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(76,177,255,1) 0%,rgba(23,147,229,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(76,177,255,1) 0%,rgba(23,147,229,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4cb1ff', endColorstr='#1793e5',GradientType=0 ); /* IE6-9 */
+
+}
+#vioSearchBar .search-input:focus {
+    border-color: #59B5FC #45A3E7 #3294D5;
+    box-shadow: none;
+}
 
 /*  ================================================================================================================  */
 /*  ================================================================================================================  */

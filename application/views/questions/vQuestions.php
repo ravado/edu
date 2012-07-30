@@ -9,152 +9,159 @@
             </form>
         </div>
     </div>
-
-    <!-- Блок меню слева   -->
-    <div class="dvMenu">
-        <div class="dvUser shadowBlock">
-            <h4 class="lenta">Профиль</h4>
-            <form action="" name="frmUserAuth">
-                <a href="/" class="btnColor">Авторизироваться</a>
-            </form>
-        </div>
-        <div class="dvCategory shadowBlock">
-            <h4 class="lenta">Категории</h4>
-
-            <div class="catMenu">
-            <table>
-
-                <?php
-                foreach ($categories as $k=>$v){
-                    echo '<tr><th class="catLinks">' .$categories[$k]['ctitle'] .'</th></tr>';
-                    echo '<td>';
-                    foreach($categories[$k][0] as $key => $val) {
-                        if ($key == 5) {break;}
-                        echo '<a href="/questions/category/' .$categories[$k][0][$key]['id_subcategory'] .'" class="greenCat">'
-                            .$categories[$k][0][$key]['stitle'] .'</a>';
-                    }
-                    echo '</td></tr>';
-                }
-                ?>
-
-            </table>
+    <section id="vio_menu">
+        <div class="pull-left   content-block">
+            <header><h4>Профиль</h4></header>
+            <div class="content pagination-centered">
+                Вы не <a>Авторизированы</a>
             </div>
+
         </div>
-        <a class="btn btn-success" href="questions/category">Все категории <i class='icon-chevron-right icon-white'></i></a>
-    </div>
+        <div class="pull-left   content-block">
+            <header><h4>Категории</h4></header>
+            <div class="content">
+                <div class="catBlock">
+                    <div class="catTitle">
+                        <a href="">Категория</a>
+                    </div>
+                    <div class="subcatBlock">
+                        <a href="" >подкатегория</a>
+                        <a href="">подкария</a>
+                        <a href="" >подкатеоря</a>
+                        <a href="">подкатегория</a>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+                <div class="catBlock">
+                    <div class="catTitle">
+                        <a href="">Категория</a>
+                    </div>
+                    <div class="subcatBlock">
+                        <a href="" >подкатегория</a>
+                        <a href="">подкария</a>
+                        <a href="" >подкатеоря</a>
+                        <a href="">подкатегория</a>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+                <div class="catBlock">
+                    <div class="catTitle">
+                        <a href="">Категория</a>
+                    </div>
+                    <div class="subcatBlock">
+                        <a href="" >подкатегория</a>
+                        <a href="">подкария</a>
+                        <a href="" >подкатеоря</a>
+                        <a href="">подкатегория</a>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <a class="pull-right">Все категории</a>
+            </footer>
+        </div>
+    </section>
+    <section id="vio_content">
 
-    <!--  Блок вопросов  -->
-    <div class="dvQuestions">
-
-        <!--    Блок с поиском    -->
-        <div class="dvSearch">
-            <form action="/questions/ask" class="frmQuestion" name="frmQuestion" method="POST" onsubmit="$('[name=btnSearch]').click(); return false;">
-                <input type="text" name="question" maxlength="300" id="search" placeholder="Введите свой вопрос" required>
-                <input type="button" name="btnSearch" value="Найти" class="btn btn-large btn-success">
-                <input type="button" name="btnAsk" value="Спросить" onclick="form.submit()" class="btn btn-large btn-success">
+        <div>
+            <form action="" id="vioSearchBar">
+                <fieldset class="">
+                    <input type="text" class="search-input" id="vioSearchInput" placeholder="Введите свой вопрос">
+                    <input type="button" class="btnFind " value="Найти">
+                    <input type="button" class="btnAsk " value="Спросить">
+                </fieldset>
             </form>
         </div>
+        <div class=" content-block">
+            <header><h4>Самые популярные вопросы</h4></header>
+            <div class="content">
+                <table class="table  questionsList">
+                    <thead>
+                    <tr>
+                        <th class="span0"></th>
+                        <th></th>
+                        <th class="span0">
+                            <span data-original-title="Рейтинг" class="tips icon24 icon24-graph"></span>
+                        </th>
+                        <th class="span0">
+                            <span data-original-title="Количество ответов" class="tips icon24 icon24-lamp-on"></span>
+                        </th>
+                        <th class="span0 ">
+                            <span data-original-title="Дата добавления" class="tips icon24 icon24-clock centered"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <? foreach($populars as $popular) : ?>
+                    <tr>
+                        <td><a class="delQuestion"><i class="icon-star"></i></a></td>
+                        <td>
+                            <a class="" href="/adm/vio/fixquestion/<?=$popular->id_question;?>"><?=$popular->title; ?></a>
+                                <span class="spnTags">
+                                <? foreach($popular->subcategories->find_all() as $subcategory): ?>
+                                    <a href="?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
+                                    <? endforeach; ?>
+                                </span>
+                        </td>
+                        <td class="rating"><?=$popular->rating; ?></td>
+                        <td class="answers"><?=$popular->answers_count; ?></a></td>
+                        <td class="time"><?= date('y/m/d',strtotime($popular->public_date)); ?></td>
+                    </tr>
+                        <? endforeach; ?>
+                    </tbody>
+                </table>
 
-        <div id="searchResult" ></div>
-        <!--   Блок с топом вопросов     -->
-        <div class="dvTop shadowBlock">
-            <table cellspacing="0" width="100%">
-                <tr class="lenta">
-                    <th colspan="2" class="lenta">Самые популярные</th>
-                    <th align="center" class="icons "><img src="/stfile/img/questions/user-icon.png"></th>
-                    <th align="center" class="icons "><img src="/stfile/img/questions/comment-icon.png"></th>
-                    <th align="center" class="icons "><img src="/stfile/img/questions/clock-icon.png"></th>
-                </tr>
+            </div>
+            <footer>
+                <a class="pull-right">Перейти ко всем вопросам</a>
+            </footer>
+        </div>
+        <div class=" content-block">
+            <header><h4>Новые вопросы</h4></header>
+            <div class="content">
+                <table class="table  questionsList ">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th class="span0">
+                            <span data-original-title="Рейтинг" class="tips icon24 icon24-graph"></span>
+                        </th>
+                        <th class="span0">
+                            <span data-original-title="Количество ответов" class="tips icon24 icon24-lamp-on"></span>
+                        </th>
+                        <th class="span0 ">
+                            <span data-original-title="Дата добавления" class="tips icon24 icon24-clock centered"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <? foreach($lasts as $last) : ?>
+                    <tr>
+                        <td><a class="delQuestion"><i class="icon-star"></i></a></td>
+                        <td>
+                            <a class="" href="/adm/vio/fixquestion/<?=$last->id_question;?>"><?=$last->title; ?></a>
+                                <span class="spnTags">
+                                <? foreach($last->subcategories->find_all() as $subcategory): ?>
+                                    <a href="?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
+                                    <? endforeach; ?>
+                                </span>
+                        </td>
+                        <td class="rating"><?=$last->rating; ?></td>
+                        <td class="answers"><?=$last->answers_count; ?></a></td>
+                        <td class="time"><?= date('H:i',strtotime($last->public_date)); ?></td>
+                    </tr>
+                    <? endforeach; ?>
+                    </tbody>
+                </table>
 
-                <?php
-                if(!empty($result)) {
-
-                    // Вывод популярных вопросов :)
-                    $popular = $result['popular'];
-
-
-                    foreach($popular as $k=>$v){
-
-                        if(!empty($popular[$k]['id_qfavorite'])) {
-                            $favorite = 'favoriteChecked';
-                        } else {
-                            $favorite = '';
-                        }
-
-                        echo '<tr class="border">'
-                            .'<td class="tdFavorite-icon">
-                                    <span class="favorite ' .$favorite .'"></span>
-                                    <input type="hidden" value="' .$popular[$k]['id_question'] .'" name="hQuestionId" />
-                                </td>'
-                            .'<td><a href="questions/question/'. $popular[$k]['id_question'] .'"> '.$popular[$k]['title'] .'</a>'
-                            .'<span class="spnTags">';
-                        foreach($popular[$k][0] as $key=>$val) {
-                            echo '<a href="questions/category/' .$popular[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$popular[$k][0][$key]['stitle'] .'</a>';
-                        }
-                        echo '</span></td>'
-                            .'<td class="username"><a href="">' .$popular[$k]['username'] .'</a></td>'
-                            .'<td class="answers">'.$popular[$k]['answers_count'].'</td>'
-                            .'<td class="time">' .date('d/m/y',strtotime($popular[$k]['public_date'])) .'</td></tr>';
-
-                    }
-
-
-                }
-
-
-                ?>
-
-            </table>
+            </div>
+            <footer>
+                <a class="pull-right">Перейти ко всем вопросам</a>
+            </footer>
         </div>
 
-        <!--   Блок с последними задаными вопросами     -->
-        <div class="dvLastQuestions shadowBlock">
-            <table cellspacing="0px" width="100%">
-
-                <tr class="lenta">
-                    <th colspan="2" class="lenta">Новые</th>
-                    <th align="center" class="icons "><img src="../../../stfile/img/questions/user-icon.png"></th>
-                    <th align="center" class="icons "><img src="../../../stfile/img/questions/comment-icon.png"></th>
-                    <th align="center" class="icons "><img src="../../../stfile/img/questions/clock-icon.png"></th>
-                </tr>
-
-                <?php
-                if(!empty($result)) {
-
-                    // Вывод последних добавленных вопросов :)
-                    $last = $result['last'];
-                    foreach($last as $k=>$v){
-
-                        if(!empty($last[$k]['id_qfavorite'])) {
-                            $favorite = 'favoriteChecked';
-                        } else {
-                            $favorite = '';
-                        }
-
-                        echo '<tr class="border">'
-                            .'<td class="tdFavorite-icon">
-                                    <span class="favorite ' .$favorite .'"></span>
-                                    <input type="hidden" value="' .$last[$k]['id_question'] .'" name="hQuestionId" />
-                                </td>'
-                            .'<td><a href="questions/question/'. $last[$k]['id_question'] .'"> '.$last[$k]['title'] .'</a>'
-                            .'<span class="spnTags">';
-                        foreach($last[$k][0] as $key=>$val) {
-                            echo '<a href="questions/category/' .$last[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$last[$k][0][$key]['stitle'] .'</a>';
-                        }
-                        echo '</td>'
-                            .'<td class="username"><a href="">' .$last[$k]['username'] .'</a></td>'
-                            .'<td class="answers">'.$last[$k]['answers_count'].'</td>'
-                            .'<td class="time">' .date('G:i',strtotime($last[$k]['public_date'])) .'</td></tr>';
-
-                    }
+    </section>
 
 
-                }
-                ?>
-            </table>
-
-
-        </div>
-        <a class="btn-success btn" id="btnAllQuestions" href="questions/all/any">Все вопросы <i class='icon-chevron-right icon-white'></i></a>
-    </div>
-</div>

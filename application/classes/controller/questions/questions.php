@@ -22,8 +22,12 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['userAuth'] = FALSE;
         }
 
-        $data['result'] = Model::factory('Mquestions')->mainQA($data);
-        $data['categories'] = Model::factory('Mquestions')->getAllCategories('some');
+        $result['popular'] = Model::factory('Mquestions')->getQuestionsList(1, 5, 'rating', null, 'opened');
+        $result['last'] = Model::factory('Mquestions')->getQuestionsList(1, 15, 'date', null, 'opened');
+        $data['populars'] = $result['popular']['questions'];
+        $data['lasts'] = $result['last']['questions'];
+//        $data['result'] = Model::factory('Mquestions')->mainQA($data);
+//        $data['categories'] = Model::factory('Mquestions')->getAllCategories('some');
         $this->template->content = View::factory('questions/vQuestions',$data);
 	}
 
