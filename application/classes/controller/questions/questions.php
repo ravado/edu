@@ -11,7 +11,6 @@ class Controller_Questions_Questions extends Controller_Base {
 		$this->template->title = "Вопросы и Ответы";
         $this->template->styles = array("stfile/css/questions.css" => "screen");
         $this->template->scripts = array("stfile/js/questions.js");
-        $data['user_id'] = -1;
         /*Проверяем статус пользователя (Авторизирован или нет)*/
         $auth = Auth::instance();
         if($auth->logged_in()){
@@ -31,8 +30,6 @@ class Controller_Questions_Questions extends Controller_Base {
         $result['last'] = Model::factory('Mquestions')->getQuestionsList(1, 15, 'date', null, 'opened');
         $data['populars'] = $result['popular']['questions'];
         $data['lasts'] = $result['last']['questions'];
-//        $data['result'] = Model::factory('Mquestions')->mainQA($data);
-//        $data['categories'] = Model::factory('Mquestions')->getAllCategories('some');
         $this->template->content = View::factory('questions/vQuestions',$data);
 	}
 

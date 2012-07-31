@@ -23,17 +23,17 @@
                     <div class="profile-info">
                         <ul class="unstyled">
                             <li><strong><?=$username ?></strong></li>
-                            <li><a>Избранное:</a> <?=$favorites->count();?></li>
+                            <li><a>Избранное:</a> <span class="favorite-count"><?=$favorites->count();?></span></li>
                             <li><a>Вопросов:</a> <?=$user_questions->count(); ?></li>
-                            <li><a>Ответов:</a> <?=$user_answers->count(); ?></li>
+                            <li><a >Ответов:</a> <?=$user_answers->count(); ?></li>
                         </ul>
                     </div>
                     <div class="popular-tags">
                         <div>Популярное:</div>
                         <div class="subcatBlock">
-                        <? foreach($popular_tags as $popular_tag): ?>
+                        <? if($popular_tags) foreach($popular_tags as $popular_tag): ?>
                             <a href="<?=$popular_tag->id_subcategory;?>"><?=$popular_tag->title;?></a>
-                        <? endforeach; ?>
+                        <? endforeach; else echo 'Вы пока еще не отвечали на вопросы.';?>
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
             </footer>
             <? else: ?>
             <div class="content pagination-centered">
-                Вы не <a>Авторизированы</a>
+                Вы не <a href="/">Авторизированы</a>
             </div>
             <? endif; ?>
         </div>
@@ -105,8 +105,27 @@
                     </thead>
                     <tbody>
                     <? foreach($populars as $popular) : ?>
+                        <?
+                        $is_favorite = '';
+                        $to_favorite = '';
+                        $tip = 'Для добавления вопроса в избранное авторизируйтесь';
+                        if( isset($user_id)) {
+                            $tip = 'Добавить в избранное';
+                            $to_favorite = ' toFavorite';
+                            foreach($favorites as $favorite) {
+                                if($popular->id_question == $favorite->question_id) {
+                                    $is_favorite = ' active';
+                                    $tip = 'Удалить из избранного';
+                                }
+                            }
+                        }?>
                     <tr>
-                        <td class="pull-center span0"><a data-original-title="Добавить в избранное" class="delQuestion tips"><i class="icon-star"></i></a></td>
+                        <td class="pull-center span0">
+                            <input type="hidden" class="hQuestionId" value="<?=$popular->id_question;?>">
+                            <a data-original-title="<?=$tip;?>" class="icon-hovered tips <?=$is_favorite; echo $to_favorite;?>">
+                                <i class="icon-star"></i>
+                            </a>
+                        </td>
                         <td>
                             <a class="" href="/vio/question/<?=$popular->id_question;?>"><?=$popular->title; ?></a>
                                 <span class="spnTags">
@@ -150,8 +169,28 @@
                     </thead>
                     <tbody>
                     <? foreach($lasts as $last) : ?>
+                        <?
+                            $is_favorite = '';
+                            $to_favorite = '';
+                            $tip = 'Для добавления вопроса в избранное авторизируйтесь';
+                            if( isset($user_id)) {
+                                $to_favorite = ' toFavorite';
+                                $tip = 'Добавить в избранное';
+                                foreach($favorites as $favorite) {
+                                    if($last->id_question == $favorite->question_id) {
+                                        $is_favorite = ' active';
+                                        $tip = 'Удалить из избранного';
+                                    }
+                                }
+                            }?>
                     <tr>
-                        <td class="pull-center"><a class="delQuestion"><i class="icon-star"></i></a></td>
+                        <td class="pull-center">
+                            <span class="iconLoading unmargin"><img src="/stfile/img/1loading.gif" alt="loading"></span>
+                            <input type="hidden" class="hQuestionId" value="<?=$last->id_question;?>">
+                            <a class="icon-hovered  <? echo $is_favorite; echo $to_favorite; ?> tips " data-original-title="<?=$tip; ?>">
+                                <i class="icon-star"></i>
+                            </a>
+                        </td>
                         <td>
                             <a href="/vio/question/<?=$last->id_question;?>"><?=$last->title; ?></a>
                                 <span class="spnTags">

@@ -878,7 +878,12 @@ class Model_Mquestions extends Model_Database{
             array_push($most_popular, $k);
             if($counter > 4) { break; } else {$counter++;}
         }
-        $popular = ORM::factory('ormviosubcategory')->where('id_subcategory','IN',$most_popular)->find_all();
+        if(!empty($most_popular)) {
+            $popular = ORM::factory('ormviosubcategory')->where('id_subcategory','IN',$most_popular)->find_all();
+        } else {
+            $popular = false;
+        }
+
         return $popular;
     }
 }

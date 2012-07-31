@@ -1071,7 +1071,19 @@ menu.tools-menu > li .checked{
 }
 
 
-
+/* Иконки которые проявляються при наведении */
+.icon-hovered {
+    opacity: 0.1;
+}
+.icon-hovered:hover {
+    opacity: 1;
+}
+.icon-hovered.active {
+    opacity: 1;
+}
+.icon-hovered.active:hover {
+    opacity: 0.8;
+}
 
 
 /* Блок мини профиля вио */

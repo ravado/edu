@@ -236,4 +236,101 @@ class Controller_Questions_Qhid extends Controller {
         die('{"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
     }
 
+
+
+
+
+    //  Добавление вопроса к Избранному пользователя
+    public function action_addToFavorite() {
+        if(!empty($_POST) && isset($_POST['id_question'])) {
+            try {
+                $auth = Auth::instance();
+                if($auth->logged_in()){
+                    $username = $auth->get_user()->username;
+                    $id_user = $auth->get_user()->id;
+
+                    // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                    $id_question = (int)$_POST['id_question'];
+                    $question_count = ORM::factory('ormvioquestion',$id_question)->count_all();
+                    if($question_count > 0) {
+                        $count = ORM::factory('ormviofavorite')->where('user_id','=',$id_user)->where('question_id','=',$id_question)->count_all();
+                        if($count == 0) {
+                            $favorite = ORM::factory('ormviofavorite');
+                            $favorite->question_id = $id_question;
+                            $favorite->user_id = $id_user;
+                            $favorite->save();
+                        }
+                        $result['count'] = ORM::factory('ormviofavorite')->where('user_id','=',$id_user)->count_all();
+                        $result['message'] = 'Everything is ok';
+                        $result['status'] = 'ok';
+
+                    } else {
+                        $result['message'] = 'this question does not exist';
+                        $result['status'] = 'bad';
+                    }
+                } else {
+                    $result['message'] = 'User is not login';
+                    $result['status'] = 'bad';
+                }
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
+
+    //  Удаление вопроса из избранного пользователя
+    public function action_delFromFavorite() {
+        if(!empty($_POST) && isset($_POST['id_question'])) {
+            try {
+                $auth = Auth::instance();
+                if($auth->logged_in()){
+                    $username = $auth->get_user()->username;
+                    $id_user = $auth->get_user()->id;
+
+                    // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                    $id_question = (int)$_POST['id_question'];
+                    $question_count = ORM::factory('ormvioquestion',$id_question)->count_all();
+                    if($question_count > 0) {
+                        $favorites = ORM::factory('ormviofavorite')->where('question_id','=',$id_question)->where('user_id','=',$id_user)->find_all();
+                        foreach($favorites as $favorite) {
+                            $favorite->delete();
+                        }
+
+                        $result['count'] = ORM::factory('ormviofavorite')->where('user_id','=',$id_user)->count_all();
+                        $result['message'] = 'Everything is ok';
+                        $result['status'] = 'ok';
+                    } else {
+                        $result['message'] = 'this question does not exist';
+                        $result['status'] = 'bad';
+                    }
+                } else {
+                    $result['message'] = 'User is not login';
+                    $result['status'] = 'bad';
+                }
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
 }

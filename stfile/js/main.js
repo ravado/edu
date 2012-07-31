@@ -625,6 +625,7 @@ $(document).ready(function(){
         delay: {show: 600, hide: 10}});
 // ----------------------------------------- Всплывающие подсказочки ------------------------------------------------ //
 
+// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
     $("#vioSearchInput").focusin(function() {
         $(this).closest('fieldset').addClass('active');
         $(this).closest('fieldset').find('.btnFind').addClass('active');
@@ -635,6 +636,75 @@ $(document).ready(function(){
         $(this).closest('fieldset').find('.btnFind').removeClass('active');
         $(this).closest('fieldset').find('.btnAsk').removeClass('active');
     });
+// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
+
+
+// ========================================== Добавление вопроса в избранное ======================================== //
+    $(".toFavorite").click(function() {
+        var curr_question_id, curr_td, icon_load, curr_star, favorites;
+        curr_td = $(this).closest('td');
+        curr_question_id = curr_td.find('.hQuestionId').val();
+        icon_load = curr_td.find('.iconLoading');
+        favorites = $('.profile-info .favorite-count');
+        curr_star = $(this);
+        curr_star.hide();
+        icon_load.show();
+
+        // Если нужно удалить вопрос из избранного
+        if($(this).hasClass('active')) {
+            $.ajax({type:"POST", async:true, data: "id_question=" + curr_question_id, url: "/questions/qhid/delFromFavorite", dataType:"json",
+                success:function(data){
+                    if(data.status == 'ok') {
+                        curr_star.removeClass('active').attr('data-original-title','Добавить в избранное');
+                        favorites.text(data.count);
+                    } else {
+                        hints('error','Что то пошло не так');
+                        console.log(data.message);
+                    }
+                    curr_star.show();
+                    icon_load.hide(); // Прячем иконку статуса выполнения
+                },
+                error:function(){
+                    console.log('error in ajax query, when del from favorite :(');
+                    curr_star.show();
+                    icon_load.hide(); // Прячем иконку статуса выполнения
+                }
+            });
+
+        // Если добавляем вопрос в избранное
+        } else {
+            $.ajax({type:"POST", async:true, data: "id_question=" + curr_question_id, url: "/questions/qhid/addToFavorite", dataType:"json",
+                success:function(data){
+                    if(data.status == 'ok') {
+                        curr_star.addClass('active').attr('data-original-title','Удалить из избранного');
+                        favorites.text(data.count);
+                    } else {
+                        hints('error','Что то пошло не так');
+                        console.log(data.message);
+                    }
+                    curr_star.show();
+                    icon_load.hide(); // Прячем иконку статуса выполнения
+                },
+                error:function(){
+                    console.log('error in ajax query, when add to favorite :(');
+                    curr_star.show();
+                    icon_load.hide(); // Прячем иконку статуса выполнения
+                }
+            });
+        }
+    });
+// ------------------------------------------ Добавление вопроса в избранное ---------------------------------------- //
+
+
+
+// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
+// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
+// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
+// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
+// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
+// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
+// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
+// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
 });
 
 //*****************************************************конец ready****************************************************//
