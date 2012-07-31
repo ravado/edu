@@ -1,253 +1,193 @@
-<div id="dvContent">
-<?php
-    foreach($questions as $question) {
-        echo 'вопрос - ' .$question->title .'<br>';
-        echo 'пользователь - ' .$question->user->username .'<br>';
-        foreach($question->favorites->find_all() as $favorite) {
-            if($user_id == $favorite->user_id) {
-                echo '{favorite}<br>';
-            }
-        }
-        echo '----------------------------------------------<br>';
-        foreach($question->subcategories->find_all() as $subcategory) {
-            echo '-подкатегория - ' .$subcategory->title .'<br>';
-        }
-        echo '----------------------------------------------<br>';
-        foreach($question->answers->find_all() as $answer) {
-            echo  $answer->text .'<br>';
-        }
-        echo '----------------------------------------------<br>';
-
-    }
+<?
+// Создаем дополнительные теги для ссылок
+if(!is_null($curr_page)) { $ext_page = '&page=' .$curr_page; } else {$ext_page = '';}
+if(!is_null($limit)) { $ext_limit = '&limit=' .$limit; } else {$ext_limit = '';}
+if(!is_null($order_by)) { $ext_orderby = '&orderby=' .$order_by; } else {$ext_orderby = '';}
+if(!is_null($subcat)) { $ext_subcat = '&subcat=' .$subcat; } else {$ext_subcat = '';}
+if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status = '';}
 ?>
-
-    <?php
-        $questions = array();
-        $page = 1;
-        $qcount = 0;
-        /*if(!empty($result['questions'])) {
-            $questions = $result['questions'];
-        }*/
-
-        if(!empty($result['qcount'])) {
-            $qcount = $result['qcount'];
-        }
-
-        if(!empty($result['page'])) {
-            $page = $result['page'];
-        }
-
-/*        foreach ($questions as $k=>$v) {
-            print_r($questions[$k]);
-            echo '<br>' .$result['page'] .'<br>';
-        }
-            echo 'count: ' .$qcount;*/
-
-    ?>
-    <div class="spnTitle Page">Вопросы и ответы: все вопросы</div>
-
-    <!--  "Хлебные крошки"  -->
-    <ul class="breadcrumb">
-    <?php
-        if ($qtype == 'closed') {
-            echo '<li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>';
-            echo '<li><a href="/questions/all/any">все вопросы</a><span class="divider">/</span></li>';
-            echo '<li class="active"><a href="#">закрытые</a></li>';
-            $tblTitle = 'Закрытые';
-        } elseif($qtype == 'opened') {
-            echo '<li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>';
-            echo '<li><a href="/questions/all/any">все вопросы</a><span class="divider">/</span></li>';
-            echo '<li class="active"><a href="#">открытые</a></li>';
-            $tblTitle = 'Открытые';
-        } elseif($qtype == 'any') {
-            echo '<li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>';
-            echo '<li class="active"><a href="#">все вопросы</a></li>';
-            $tblTitle = 'Все';
-        } elseif($qtype == 'category') {
-            echo '<li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>';
-            echo '<li><a href="/questions/all/any">все вопросы</a><span class="divider">/</span></li>';
-            echo '<li><a href="/questions/category">все категории</a><span class="divider">/</span></li>';
-            if (!empty($questions)) {
-                echo '<li class="active"><a href="#">' .$questions[0]['stitle'] .'</a></li>';
-                $tblTitle = $questions[0]['stitle'];
-            }
-        }
-    ?>
-    </ul>
-<!--    <div class="tabbable">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#1" data-toggle="tab">Все</a></li>
-            <li><a href="#2" data-toggle="tab">Открытые</a></li>
-            <li><a href="#2" data-toggle="tab">Закрытые</a></li>
-        </ul>
-    </div>-->
-
-    <?php
-        if(empty($questions)) {
-            echo '<br>Нет такой страницы 404';
-            die;
-        }
-    ?>
-
-    <div class="" id="dvAllQuestions">
-        <table class="shadowBlock" cellspacing="0" width="100%">
-            <tr class="lenta">
-                <th class="lenta" colspan="3"><?php echo $tblTitle ?></th>
-                <th align="center" class="icons"><img src="/stfile/img/questions/user-icon.png"></th>
-                <th align="center" class="icons"><img src="/stfile/img/questions/comment-icon.png"></th>
-                <th align="center" class="icons"><img src="/stfile/img/questions/clock-icon.png"></th>
-            </tr>
-            <?php
-                //Выводим короткие записи вопросов
-                foreach($questions as $k => $v) {
-
-                    if(!empty($questions[$k]['id_qfavorite'])) {
-                        $favorite = 'favoriteChecked';
-                    } else {
-                        $favorite = '';
-                    }
-
-                    echo    '<tr>
-                                <td class="tdFavorite-icon">
-                                    <span class="favorite ' .$favorite .'"></span>
-                                    <input type="hidden" value="' .$questions[$k]['id_question'] .'" name="hQuestionId" />
-                                </td>
-                                <td class="tdClosed-icon">';
-                    if($questions[$k]['closed']) {
-                        echo '<span title="Вопрос закрыт" class="closed-mini"></span>';
-                    }
-
-                    echo '</td>
-                                <td>
-                                    <a href="/questions/question/' .$questions[$k]['id_question'] .'">' .$questions[$k]['title'] .'</a>
-                                    <span class="spnTags">';
-
-                    // Вставляем категории
-                    foreach($questions[$k][0] as $key => $val) {
-                        echo '<a href="/questions/category/' .$questions[$k][0][$key]['id_subcategory'] .'" class="greenCat">' .$questions[$k][0][$key]['stitle'] .'</a>';
-                    }
-
-                    echo '</span></td>
-                          <td class="username"><a href="">' .$questions[$k]['username'] .'</a></td>
-                          <td class="answers">' .$questions[$k]['answers_count'] .'</td>
-                          <td class="time">' .date('G:i',strtotime($questions[$k]['public_date'])) .'</td>
-                          </tr>';
-                }
-            ?>
-        </table>
-
-        <!--Блок с пагинацией-->
-        <div class="pagination">
-            <ul>
-            <?php
-                /*$per_page = 'СКОЛЬКО НА СТРАНИЦУ ВЫВОДИТЬ НОВОСТЕЙ (INT)';
-                $qcount = 'СКОЛЬКО ВСЕГО НОВОСТЕЙ (INT)';
-                $curr_page = 'КАКАЯ ТЕКУЩАЯ СТРАНИЦА (INT)';
-                $lnk = 'ССЫЛКА К КОТОРОЙ ПОТОМ БУДЕТ ПРИБАВЛЯТЬСЯ ЧИСЛО (STRING) НАПРИМЕР: /questions/all/closed/page-';
-                $page_count = ceil($qcount/$per_page);
-                if (($curr_page + 4) < $page_count) {
-                    if ($curr_page <= 4) {
-                        $page_end_border = 9;
-                    } else {
-                        $page_end_border = $curr_page + 4;
-                    }
-                } else {
-                    $page_end_border = $page_count;
-                }
-                if ($curr_page > 4) {
-                    if (($page_count - $curr_page) < 5 ) {
-                        $page_start_border = $page_count - 9;
-                    } else {
-                        $page_start_border = $curr_page - 5;
-                    }
-                } else {
-                    $page_start_border = 0;
-                }
-
-                if($page_count > 1) {
-                    if($curr_page > 1) {
-                        $some = $curr_page-1;
-                        echo '<li><a href="'.$lnk .$some .'">«</a></li>';
-                    }
-                    for($i = $page_start_border; $i < $page_end_border; $i++) {
-                        $temp = $i+1;
-                        if($i == $page-1) {
-                            echo '<li class="active"><a href="'.$lnk .$temp .'">' .$temp .'</a></li>';
-                        } else {
-                            echo '<li><a href="'.$lnk .$temp .'">' .$temp .'</a></li>';
-                        }
-                    }
-                    if($curr_page < $page_count) {
-                        $some = $curr_page+1;
-                        echo '<li><a href="'.$lnk .$some .'">»</a></li>';
-                    }
-                }*/
-
-                $per_page = $per_page;
-                $page_count = ceil($qcount/$per_page);
-                $curr_page = $page;
-                if (($curr_page + 4) < $page_count) {
-                    if ($curr_page <= 4) {
-                        $page_end_border = 9;
-                    } else {
-                        $page_end_border = $curr_page + 4;
-                    }
-                } else {
-                    $page_end_border = $page_count;
-                }
-                if ($curr_page > 4) {
-                    if (($page_count - $curr_page) < 5 ) {
-                        $page_start_border = $page_count - 9;
-                    } else {
-                        $page_start_border = $curr_page - 5;
-                    }
-                } else {
-                    $page_start_border = 0;
-                }
-
-                if ($qtype == 'category') {
-                    $lnk = '/questions/category/' .$cat_id .'/';
-                } elseif ($qtype == 'opened') {
-                    $lnk = '/questions/all/opened/';
-                } elseif ($qtype == 'closed') {
-                    $lnk = '/questions/all/closed/';
-                } elseif ($qtype == 'any') {
-                    $lnk = '/questions/all/any/';
-                }
-                if($page_count > 1) {
-                    if($curr_page > 1) {
-                        $some = $curr_page-1;
-                        echo '<li><a href="'.$lnk .$some .'">«</a></li>';
-                    } else {
-                        echo '<li><a>«</a></li>';
-                    }
-                    for($i = $page_start_border; $i < $page_end_border; $i++) {
-                        $temp = $i+1;
-                        if($i == $page-1) {
-                            echo '<li class="active"><a>' .$temp .'</a></li>';
-                        } else {
-                            echo '<li><a href="'.$lnk .$temp .'">' .$temp .'</a></li>';
-                        }
-                    }
-                    if($curr_page < $page_count) {
-                        $some = $curr_page+1;
-                        echo '<li><a href="'.$lnk .$some .'">»</a></li>';
-                    } else {
-                        echo '<li><a>»</a></li>';
-                    }
-                }
-           ?>
-            </ul>
+<div id="dvContent">
+    <div class="spnTitle Page">Вопросы и ответы
+        <div class="search-bar">
+            <form action="/search" method="post" id="frm-search">
+                <fieldset>
+                    <input type="text" placeholder="Поиск" class="search-input" name="search_query">
+                    <input type="submit" value="ss " class="btn-search">
+                </fieldset>
+            </form>
         </div>
     </div>
+    <section id="vio_menu">
+        <div class="pull-left   content-block">
+            <header><h4>Профиль</h4></header>
+            <? if($user_auth): ?>
+            <div class="content">
+                <div class="vio-mini-profile">
+                    <div class="avatar" style="">
+                        <? if($sex): ?><img src="../../../stfile/img/vio/default_male.png" alt="">
+                        <? else: ?><img src="../../../stfile/img/vio/default_female.png" alt="">
+                        <? endif; ?>
+                    </div>
+                    <div class="profile-info">
+                        <ul class="unstyled">
+                            <li><strong><?=$username ?></strong></li>
+                            <li><a>Избранное:</a> <span class="favorite-count"><?=$favorites->count();?></span></li>
+                            <li><a>Вопросов:</a> <?=$user_questions->count(); ?></li>
+                            <li><a >Ответов:</a> <?=$user_answers->count(); ?></li>
+                        </ul>
+                    </div>
+                    <div class="popular-tags">
+                        <div>Популярное:</div>
+                        <div class="subcatBlock">
+                            <? if($popular_tags) foreach($popular_tags as $popular_tag): ?>
+                            <a href="<?=$popular_tag->id_subcategory;?>"><?=$popular_tag->title;?></a>
+                            <? endforeach; else echo 'Вы пока еще не отвечали на вопросы.';?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <a class="pull-right"> Редактировать </a>
+            </footer>
+            <? else: ?>
+            <div class="content pagination-centered">
+                Вы не <a href="/">Авторизированы</a>
+            </div>
+            <? endif; ?>
+        </div>
+        <div class="pull-left   content-block">
+            <header><h4>Категории</h4></header>
+            <div class="content">
+                <? foreach($categories as $category): ?>
+                <div class="catBlock">
+                    <div class="catTitle">
+                        <a href="<?=$category->id_category;?>"><?=$category->title;?></a>
+                    </div>
+                    <div class="subcatBlock">
+                        <? foreach($category->subcategories->find_all() as $k=>$subcategory): ?>
+                        <a href="<?=$subcategory->id_subcategory ?>" ><?=$subcategory->title ?></a>
+                        <? if($k >= 7) break; ?>
+                        <? endforeach; ?>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+                <? endforeach; ?>
+            </div>
+            <footer>
+                <a class="pull-right">Все категории</a>
+            </footer>
+        </div>
+    </section>
 
 
 
+    <section id="vio_content">
 
-    <div class="shadowBlock" id="dvClosedQuestions" style="display: none;">
-        <table cellpadding="0" cellspacing="0">
-        </table>
-    </div>
+        <div>
+            <form action="" id="vioSearchBar">
+                <fieldset class="">
+                    <input type="text" class="search-input" id="vioSearchInput" placeholder="Введите свой вопрос">
+                    <input type="button" class="btnFind " value="Найти">
+                    <input type="button" class="btnAsk " value="Спросить">
+                </fieldset>
+            </form>
+        </div>
+            <menu class="tools-menu unpadding">
+                <li><a href="/questions"> Главная ВиО </a> <small>/</small></li>
+                <li> <small>Все вопросы</small></li>
+                <li class="right">
+                    <div class="btn-group">
+                        <a href="?status=all" class="btn btn-mini <? if($status == 'all' || $status == null) echo 'active'; ?>">Все</a>
+                        <a href="?status=opened" class="btn btn-mini <? if($status == 'opened') echo 'active'; ?>">Открытые</a>
+                        <a href="?status=closed" class="btn btn-mini <? if($status == 'closed') echo 'active'; ?>">Закрытые</a>
+                    </div>
+                </li>
+            </menu>
 
-    </div>
+        <div class=" content-block">
+            <div class="content unpadding">
+                <table class="table  questionsList unmargin">
+                    <thead>
+                    <tr class="light-blue">
+                        <th colspan="2" class="header">
+                            <h4>Все вопросы</h4>
+                        </th>
+                        <th class="span0 ">
+                            <span data-original-title="Пользователь" class="tips icon20 icon20-man centered"></span>
+                        </th>
+                        <th class="span0">
+                            <a  href="?<?=$ext_limit .$ext_subcat. '&orderby=rating' ?>">
+                                <span data-original-title="Сортировать по рейтингу" class="tips icon20 icon20-graph <? if($order_by == 'rating') echo 'checked'; ?>"></span>
+                            </a>
+                        </th>
+                        <th class="span0">
+                            <a href="?<?=$ext_limit .$ext_subcat. '&orderby=answers' ?>">
+                                <span data-original-title="Сортировать по количеству ответов" class="tips icon20 icon20-lamp-on <? if($order_by == 'answers') echo 'checked'; ?>"></span>
+                            </a>
+                        </th>
+                        <th class="span0 ">
+                            <a href="?<?=$ext_limit .$ext_subcat. '&orderby=date' ?>">
+                                <span data-original-title="Сортировать по дате добавления" class="tips icon20 icon20-clock centered <? if($order_by == 'date') echo 'checked'; ?>"></span>
+                            </a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <? foreach($questions as $question) : ?>
+                        <?
+                        $is_favorite = '';
+                        $to_favorite = '';
+                        $tip = 'Для добавления вопроса в избранное авторизируйтесь';
+                        if( isset($user_id)) {
+                            $tip = 'Добавить в избранное';
+                            $to_favorite = ' toFavorite';
+                            foreach($favorites as $favorite) {
+                                if($question->id_question == $favorite->question_id) {
+                                    $is_favorite = ' active';
+                                    $tip = 'Удалить из избранного';
+                                }
+                            }
+                        }?>
+                    <tr>
+                        <td class="pull-center span0">
+                            <input type="hidden" class="hQuestionId" value="<?=$question->id_question;?>">
+                            <a data-original-title="<?=$tip;?>" class="icon-hovered tips <?=$is_favorite; echo $to_favorite;?>">
+                                <i class="icon-star"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="" href="/vio/question/<?=$question->id_question;?>"><?=$question->title; ?></a>
+                                    <span class="spnTags">
+                                    <? foreach($question->subcategories->find_all() as $subcategory): ?>
+                                        <a href="?<?= $ext_limit .$ext_orderby. '&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
+                                        <? endforeach; ?>
+                                    </span>
+                        </td>
+                        <td class="rating"><a><?=$question->user->username; ?></a></td>
+                        <td class="rating"><?=$question->rating; ?></td>
+                        <td class="answers"><?=$question->answers_count; ?></a></td>
+                        <td class="time"><?= date('d/m/y',strtotime($question->public_date)); ?></td>
+                    </tr>
+                        <? endforeach; ?>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <? if($pages > 1) :?>
+        <div class="pagination">
+            <ul>
+                <? $extra_tags = '?' .$ext_limit .$ext_orderby. $ext_subcat; ?>
+
+                <? if($curr_page > 1) echo '<li><a href="'.$extra_tags .'&page=' .($curr_page - 1) .'">«</a></li>'; else echo '<li><a>«</a></li>'?>
+                <? for($i = 0; $i < $pages; $i++): ?>
+                <? if($curr_page == ($i+1)) {
+                    echo '<li class="active"><a>'.$curr_page .'</a></li>';
+                } else if($i >= 0 && $i < $pages) echo '<li><a href="'.$extra_tags .'&page=' .($i+1) .'">' .($i+1) .'</a></li>'; ?>
+                <? endfor; ?>
+                <? if($curr_page < $pages) echo '<li><a href="'.$extra_tags .'&page=' .($curr_page + 1) .'">»</a></li>'; else echo '<li><a>»</a></li>'?>
+            </ul>
+        </div>
+        <? endif; ?>
+    </section>
 </div>

@@ -89,9 +89,6 @@
                         <th colspan="2" class="header">
                             <h4>Популярные вопросы</h4>
                         </th>
-                        <th class="span0 ">
-                            <span data-original-title="Пользователь" class="tips icon20 icon20-man centered"></span>
-                        </th>
                         <th class="span0">
                             <span data-original-title="Рейтинг" class="tips icon20 icon20-graph"></span>
                         </th>
@@ -130,11 +127,10 @@
                             <a class="" href="/vio/question/<?=$popular->id_question;?>"><?=$popular->title; ?></a>
                                 <span class="spnTags">
                                 <? foreach($popular->subcategories->find_all() as $subcategory): ?>
-                                    <a href="?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
+                                    <a href="/questions/all?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
                                     <? endforeach; ?>
                                 </span>
                         </td>
-                        <td class="rating"><a><?=$popular->user->username; ?></a></td>
                         <td class="rating"><?=$popular->rating; ?></td>
                         <td class="answers"><?=$popular->answers_count; ?></a></td>
                         <td class="time"><?= date('d/m/y',strtotime($popular->public_date)); ?></td>
@@ -152,9 +148,6 @@
                     <tr class="light-blue">
                         <th colspan="2" class="header">
                             <h4>Новые вопросы</h4>
-                        </th>
-                        <th class="span0">
-                            <span data-original-title="Пользователь" class="tips icon20 centered icon20-man"></span>
                         </th>
                         <th class="span0">
                             <span data-original-title="Рейтинг" class="tips icon20 icon20-graph"></span>
@@ -195,11 +188,10 @@
                             <a href="/vio/question/<?=$last->id_question;?>"><?=$last->title; ?></a>
                                 <span class="spnTags">
                                 <? foreach($last->subcategories->find_all() as $subcategory): ?>
-                                    <a href="?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
+                                    <a href="/questions/all?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
                                     <? endforeach; ?>
                                 </span>
                         </td>
-                        <td class="rating"><a><?=$last->user->username; ?></a></td>
                         <td class="rating"><?=$last->rating; ?></td>
                         <td class="answers"><?=$last->answers_count; ?></a></td>
                         <td class="time"><?= date('H:i',strtotime($last->public_date)); ?></td>
@@ -210,10 +202,10 @@
             </div>
 
             <footer>
-                <a class="pull-right">Перейти ко всем вопросам</a>
+                <a class="pull-right" href="/questions/all">Перейти ко всем вопросам</a>
             </footer>
         </div>
 
     </section>
-
+</div>
 

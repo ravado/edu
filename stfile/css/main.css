@@ -675,25 +675,25 @@ fieldset:focus{
     background-position: 0 -120px;
 }
 .icon20-clock.checked {
-    background-position: 0 -48px;
+    background-position: 0 -140px;
 }
 .icon20-lamp-on {
     background-position: -80px -120px;
 }
 .icon20-lamp-on.checked {
-    background-position: -192px -48px;
+    background-position: -80px -140px;
 }
 .icon20-graph {
     background-position: -40px -120px;
 }
 .icon20-graph.checked {
-    background-position: -48px -48px;
+    background-position: -40px -140px;
 }
 .icon20-man {
     background-position: -100px -120px;
 }
 .icon20-man.checked {
-    background-position: -48px -48px;
+    background-position: -100px -140px;
 }
 
 /* Иконки размером 24px */
@@ -874,7 +874,6 @@ menu.tools-menu {
 }
 menu.tools-menu small{
     color: #cccccc;
-    font-size: smaller;
 }
 menu.tools-menu > li{
     list-style: none;
@@ -1108,6 +1107,21 @@ menu.tools-menu > li .checked{
 
 
 
+/* Разные ссылочки */
+.lnk-light-gray {
+    color: #BBB;
+}
+.lnk-light-gray:hover {
+    color: #888;
+}
+.lnk-light-gray.bordered {
+    color: #6E6E6E;
+    border-bottom: 1px solid #ddd;
+}
+.lnk-light-gray.bordered:hover {
+    color: #4C4C4C;
+    border-bottom: 1px solid #aaa;
+}
 
 /* Центральное выравнивание текста */
 .pull-center {
