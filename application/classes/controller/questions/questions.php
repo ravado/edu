@@ -15,13 +15,18 @@ class Controller_Questions_Questions extends Controller_Base {
         /*Проверяем статус пользователя (Авторизирован или нет)*/
         $auth = Auth::instance();
         if($auth->logged_in()){
-            $data['userAuth'] = TRUE;
-            $data['userName'] = $auth->get_user()->username;
+            $data['user_auth'] = TRUE;
+            $data['username'] = $auth->get_user()->username;
             $data['user_id'] = $auth->get_user()->id;
+            $data['sex'] = $auth->get_user()->sex;
+            $data['favorites'] = Model::factory('Mquestions')->getFavorites($data['user_id']);
+            $data['popular_tags'] = Model::factory('Mquestions')->getUserPopularTags($data['user_id']);
+            $data['user_questions'] = Model::factory('Mquestions')->getUserQuestions($data['user_id']);
+            $data['user_answers'] = Model::factory('Mquestions')->getUserAnswers($data['user_id']);
         }else{
-            $data['userAuth'] = FALSE;
+            $data['user_auth'] = FALSE;
         }
-
+        $data['categories'] = Model::factory('Mquestions')->getCategoryList('user');
         $result['popular'] = Model::factory('Mquestions')->getQuestionsList(1, 5, 'rating', null, 'opened');
         $result['last'] = Model::factory('Mquestions')->getQuestionsList(1, 15, 'date', null, 'opened');
         $data['populars'] = $result['popular']['questions'];

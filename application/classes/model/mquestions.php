@@ -830,5 +830,56 @@ class Model_Mquestions extends Model_Database{
         $question = ORM::factory('ormvioquestion',$id);
         return $question;
     }
+
+    // Выборка избранных вопросов определенного пользователя
+    function getFavorites($id_user) {
+        $id = (int)$id_user;
+        $favorites = ORM::factory('ormviofavorite')->where('user_id','=',$id)->find_all();
+        return $favorites;
+    }
+
+    // Выборка заданых пользователем вопросов
+    function getUserQuestions($id_user) {
+        $id = (int)$id_user;
+        $questions = ORM::factory('ormvioquestion')->where('user_id','=',$id)->find_all();
+        return $questions;
+    }
+
+    // Выборка заданых пользователем ответов
+    function getUserAnswers($id_user) {
+        $id = (int)$id_user;
+        $answers = ORM::factory('ormvioanswer')->where('user_id','=',$id)->find_all();
+        return $answers;
+    }
+
+    // Выборка самых популярных категорий пользователя
+    function getUserPopularTags($id_user) {
+        $id = (int)$id_user;
+        $answers = ORM::factory('ormvioanswer')->where('user_id','=',$id)->find_all();
+        $subcats_count = array();
+
+        foreach($answers as $answer) {
+            $question = $answer->question->find();
+            $subcategories = $question->subcategories->find_all();
+            foreach($subcategories as $subcategory) {
+                if(array_key_exists($subcategory->id_subcategory, $subcats_count)) {
+                    $subcats_count[$subcategory->id_subcategory] += 1;
+                } else {
+                    $subcats_count[$subcategory->id_subcategory] = 1;
+
+                }
+            }
+        }
+
+        arsort($subcats_count);
+        $most_popular = array();
+        $counter = 0;
+        foreach($subcats_count as $k=>$v) {
+            array_push($most_popular, $k);
+            if($counter > 4) { break; } else {$counter++;}
+        }
+        $popular = ORM::factory('ormviosubcategory')->where('id_subcategory','IN',$most_popular)->find_all();
+        return $popular;
+    }
 }
 

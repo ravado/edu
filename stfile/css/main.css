@@ -3,7 +3,7 @@
  */
 
 /*Белая клетка в качестве фона на всех страницах*/
-html{background: url("../img/bg_white.png");}
+html{background: url("/stfile/img/bg_white.png") !important; }
 
 /*Общий блок, в котором весь сайт*/
 #root{margin: 0 auto;width: 1000px;}
@@ -530,6 +530,9 @@ fieldset:focus{
 .unmargin {
     margin: 0 !important;
 }
+.unpadding {
+    padding: 0 !important;
+}
 
 /* блок с списком категорий для вопроса */
 
@@ -659,12 +662,52 @@ fieldset:focus{
     background-image: url("/stfile/img/sprite.png");
 }
 
+/* блок для иконки размером 20px */
+.icon20 {
+    display: block;
+    height: 20px;
+    width: 20px;
+    background-image: url("/stfile/img/sprite.png");
+}
+
+/* Иконки размером 20px */
+.icon20-clock {
+    background-position: 0 -120px;
+}
+.icon20-clock.checked {
+    background-position: 0 -48px;
+}
+.icon20-lamp-on {
+    background-position: -80px -120px;
+}
+.icon20-lamp-on.checked {
+    background-position: -192px -48px;
+}
+.icon20-graph {
+    background-position: -40px -120px;
+}
+.icon20-graph.checked {
+    background-position: -48px -48px;
+}
+.icon20-man {
+    background-position: -100px -120px;
+}
+.icon20-man.checked {
+    background-position: -48px -48px;
+}
+
 /* Иконки размером 24px */
 .icon24-clock {
     background-position: 0 -24px;
 }
 .icon24-clock.checked {
     background-position: 0 -48px;
+}
+.icon24-star {
+    background-position: -192px -24px;
+}
+.icon24-star.checked {
+    background-position: -192px -48px;
 }
 .icon24-graph {
     background-position: -48px -24px;
@@ -738,25 +781,26 @@ td.username {
 .questionsList th{
     padding-top: 5px !important;
 }
-.questionsList thead tr:hover{
-    background-color: #ffffff;
-}
-.questionsList tr:hover{
+.questionsList tbody tr:hover{
     background-color: #f6f6f6;
+}
+.questionsList thead tr.light-blue {
+    background: #E8F4FC;
+    border-bottom: 1px solid #CAE6F8;
 }
 .questionsList tbody tr:first-child td{
     border-top: none;
 }
 .questionsList tbody tr:first-child{
-    border-top: 1px dotted #ddd;
+    /*border-top: 1px dotted #ddd;*/
 }
 .questionsList tbody tr:last-child{
-    border-bottom: 1px dotted #ddd;
+    /*border-bottom: 1px dotted #ddd;*/
 }
 
 /* Иконка удаления вопроса */
 .delQuestion {
-    opacity: 0.2;
+    opacity: 0.1;
 }
 .delQuestion:hover {
     opacity: 1;
@@ -862,13 +906,17 @@ menu.tools-menu > li .checked{
     border-bottom: 1px solid #CAE6F8;
 }
 .content-block header{
+    position: relative;
     border-radius: 2px 2px 0 0;
     background: #e8f4fc;
     border: 1px solid #cae6f8;
     min-height: 20px;
     padding: 5px 5px;
     margin: 0;
-
+    z-index: 1;
+}
+.content-block .header h4{
+    color: #5e5e5e;
 }
 .content-block footer{
     border-radius: 0 0 2px 2px;
@@ -881,17 +929,29 @@ menu.tools-menu > li .checked{
     margin: 0;
     font-size: 12px;
     vertical-align: middle;
-
+}
+.content-block footer a{
+    color: #6e6e6e;
+    border-bottom: 1px solid #ddd;
+}
+.content-block footer a:hover{
+    color: #4c4c4c;
+    border-bottom: 1px solid #aaa;
 }
 
 .content-block header h4{
     color: #1b86ca;
 }
 .content-block .content{
+    border-radius: 2px 2px 0 0;
+    position: relative;
+    z-index: 0;
     padding: 5px;
+    margin-top: -1px;
     border-left: 1px solid #DDD;
     border-right: 1px solid #DDD;
     border-bottom: 1px solid #DDD;
+    border-top: 1px solid #DDD;
 }
 
 /* Области меню и контента */
@@ -937,6 +997,7 @@ menu.tools-menu > li .checked{
 #vioSearchBar fieldset{
     height: 30px;
     border: 5px solid #FAFAFA;
+    background: #FAFAFA;
 }
 #vioSearchBar fieldset.active{
     background-color:#E8F4FC;
@@ -954,6 +1015,8 @@ menu.tools-menu > li .checked{
     border-radius: 0 2px 2px 0;
 }
 #vioSearchBar .btnAsk, #vioSearchBar .btnFind{
+    color: #5E5E5E;
+    height: 30px;
     background: #bbb;
     padding: 5px 10px;
     margin-left: -5px;
@@ -984,6 +1047,9 @@ menu.tools-menu > li .checked{
 
 #vioSearchBar .search-input {
     border: 1px solid #d9d9d9;
+    padding: 0 4px !important;
+    margin: 0!important;
+    height: 28px !important;
     width: 620px;
 }
 
@@ -1002,6 +1068,55 @@ menu.tools-menu > li .checked{
 #vioSearchBar .search-input:focus {
     border-color: #59B5FC #45A3E7 #3294D5;
     box-shadow: none;
+}
+
+
+
+
+
+/* Блок мини профиля вио */
+.vio-mini-profile {
+    color: #5E5E5E;
+}
+.vio-mini-profile .avatar {
+    float: left;
+    padding: 11px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    cursor: pointer;
+    opacity: 1;
+}
+.vio-mini-profile .avatar:hover {
+    opacity: 0.9;
+
+}
+.vio-mini-profile .profile-info {
+    float: left;
+}
+
+
+
+
+/* Центральное выравнивание текста */
+.pull-center {
+    text-align: center !important;
+}
+
+
+.pull-right {
+    float: right !important;
+}
+.pull-left {
+    float: left !important;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+.invisible {
+    visibility: hidden;
 }
 
 /*  ================================================================================================================  */
