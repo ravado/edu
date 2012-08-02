@@ -763,7 +763,7 @@ class Model_Mquestions extends Model_Database{
 
 
     // Получение списка вопросов
-    public function getQuestionsList($page = null, $limit = null, $order_by = null, $by_subcat = null, $status = null) {
+    public function getQuestionsList($page = null, $limit = null, $order_by = null, $by_subcat = null, $status = null, $by_cat = null) {
         // Осуществляем проверочки всякие
         if(is_null($page) || empty($page)) {
             $page = 1;
@@ -775,6 +775,10 @@ class Model_Mquestions extends Model_Database{
         } else {
             $limit = (int)addslashes(strip_tags($limit));
         }
+        if(!is_null($by_cat)) {
+            $by_cat = (int)$by_cat;
+        }
+
         switch($status) {
             case 'all': { $status = '0'; $statement = '>='; break; }
             case 'closed': { $status = '1'; $statement = '='; break; }
@@ -788,20 +792,39 @@ class Model_Mquestions extends Model_Database{
         }
         $offset = ($page - 1) * $limit;
 
-        // Если не нужно искать вопросы по определенной подкатегории
-        if(is_null($by_subcat)) {
-            $count = ORM::factory('ormvioquestion')->where('is_closed',$statement,$status)->count_all();
-            $pages = ceil( $count / $limit);
-            $questions = ORM::factory('ormvioquestion')->where('is_closed',$statement,$status)
-                ->order_by($order_by,'desc')->limit($limit)->offset($offset)->find_all();
+        if(is_null($by_cat)) {
+            // Если не нужно искать вопросы по определенной подкатегории
+            if(is_null($by_subcat)) {
+                $count = ORM::factory('ormvioquestion')->where('is_closed',$statement,$status)->count_all();
+                $pages = ceil( $count / $limit);
+                $questions = ORM::factory('ormvioquestion')->where('is_closed',$statement,$status)
+                    ->order_by($order_by,'desc')->limit($limit)->offset($offset)->find_all();
 
-        // Если нужно выбрать все вопросы которые имеют определенную подкатегорию
+            // Если нужно выбрать все вопросы которые имеют определенную подкатегорию
+            } else {
+                $subcategory = ORM::factory('ormviosubcategory',$by_subcat);
+                $count = $subcategory->questions->where('is_closed',$statement,$status)->limit($limit)
+                    ->offset($offset)->order_by($order_by)->count_all();
+                $pages = ceil( $count / $limit );
+                $questions = $subcategory->questions->where('is_closed',$statement,$status)->limit($limit)
+                    ->offset($offset)->order_by($order_by)->find_all();
+
+            }
         } else {
-            $count = ORM::factory('ormviosubcategory')->where('id_subcategory','=',$by_subcat)->count_all();
+            $category = ORM::factory('ormviocategory',$by_cat);
+            $count = $questions = $category->subcategories->questions->where('is_closed',$statement,$status)->limit($limit)
+                ->offset($offset)->order_by($order_by)->count_all();
             $pages = ceil( $count / $limit );
-            $subcategories = ORM::factory('ormviosubcategory',$by_subcat);
-            $questions = $subcategories->questions->where('is_closed',$statement,$status)->limit($limit)
-                ->offset($offset)->order_by($order_by)->find_all();
+            $subcategories = $category->subcategories->find_all();
+            $subcats[0] = -1;
+            if($category->subcategories->count_all() > 0) {
+                foreach($subcategories as $subcategory) {
+                    array_push($subcats,$subcategory->id_subcategory);
+                }
+            }
+            $count_all = ORM::factory('ormviosubcategory',$subcats)->questions->count_all();
+            echo $count_all;
+            $questions = ORM::factory('ormviosubcategory')->where('id_subcategory','IN',$subcats)->questions->find_all();
 
         }
         $result['questions'] = $questions; // орм модель с вопросами

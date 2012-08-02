@@ -5,7 +5,7 @@ class Controller_Questions_Questions extends Controller_Base {
     public $template = "vBase";
     public $data = array();
 
-    /*Показываем главную страницу ВиО */
+    /* Главная страница ВиО */
 	public function action_index(){
 
 		$this->template->title = "Вопросы и Ответы";
@@ -34,6 +34,7 @@ class Controller_Questions_Questions extends Controller_Base {
 	}
 
 
+    // Страница всех вопросов
     public function action_all() {
         $this->template->title = "Вопросы и Ответы: все вопросы";
         $this->template->styles = array("stfile/css/questions.css" => "screen");
@@ -55,8 +56,7 @@ class Controller_Questions_Questions extends Controller_Base {
         if (isset($_GET['page']) || !empty($_GET['page'])) { $data['curr_page'] = $_GET['page']; }
         else { $data['curr_page'] = 1; }
 
-        if (isset($_GET['limit']) || !empty($_GET['limit'])) { $data['limit'] = $_GET['limit']; }
-        else { $data['limit'] = null; }
+        $data['limit'] = 20;
 
         if (isset($_GET['orderby']) || !empty($_GET['orderby'])) { $data['order_by'] = $_GET['orderby']; }
         else {$data['order_by'] = null; }
@@ -64,17 +64,51 @@ class Controller_Questions_Questions extends Controller_Base {
         if (isset($_GET['subcat']) || !empty($_GET['subcat'])) { $data['subcat'] = $_GET['subcat']; }
         else { $data['subcat'] = null; }
 
+        if (isset($_GET['cat']) || !empty($_GET['cat'])) { $data['cat'] = $_GET['cat']; }
+        else { $data['cat'] = null; }
+
         if (isset($_GET['status']) || !empty($_GET['status'])) { $data['status'] = $_GET['status']; }
         else { $data['status'] = null; }
 
         $data['categories'] = Model::factory('Mquestions')->getCategoryList('user');
-        $result = Model::factory('Mquestions')->getQuestionsList($data['curr_page'],$data['limit'],$data['order_by'],$data['subcat'], $data['status']);
+        $result = Model::factory('Mquestions')->getQuestionsList($data['curr_page'],$data['limit'],$data['order_by'],$data['subcat'], $data['status'], $data['cat']);
         $data['questions'] = $result['questions'];
         $data['pages'] = $result['pages'];
 
         $this->template->content = View::factory('questions/vQuestionAll',$data);
     }
 
+    // Страница с одним вопросом
+    public function action_question() {
+        $this->template->styles = array("stfile/css/questions.css" => "screen");
+        $this->template->scripts = array('stfile/js/questions.js');
+        $id_question = $this->request->param('id');
+        if(!empty($id_question)) {
+            $id_question = (int)$id_question;
+        } else {
+            $this->request->redirect('/questions');
+        }
+        /*Проверяем статус пользователя (Авторизирован или нет)*/
+        $auth = Auth::instance();
+        if($auth->logged_in()){
+            $data['user_auth'] = TRUE;
+            $data['username'] = $auth->get_user()->username;
+            $data['user_id'] = $auth->get_user()->id;
+            $data['sex'] = $auth->get_user()->sex;
+            $data['favorites'] = Model::factory('Mquestions')->getFavorites($data['user_id']);
+            $data['popular_tags'] = Model::factory('Mquestions')->getUserPopularTags($data['user_id']);
+            $data['user_questions'] = Model::factory('Mquestions')->getUserQuestions($data['user_id']);
+            $data['user_answers'] = Model::factory('Mquestions')->getUserAnswers($data['user_id']);
+        }else{
+            $data['user_auth'] = FALSE;
+        }
+
+        $data['categories'] = Model::factory('Mquestions')->getCategoryList('user');
+        $data['question'] = Model::factory('Mquestions')->getQuestion($id_question);
+        $this->template->title = "Вопросы и Ответы: ".$data['question']->title;
+
+        $this->template->content = View::factory('questions/vQuestionOne',$data);
+    }
 
 
     /*Показываем страницу  задания вопроса*/
@@ -158,7 +192,7 @@ class Controller_Questions_Questions extends Controller_Base {
         $this->template->content = View::factory('questions/vQuestionsSearch',$data);
 	}
 
-    public function action_question(){
+    public function action_questiona(){
         $data['question_id'] = $this->request->param('id');
         $data['user_id'] = -1;
 //        $data['idQuestion'] = $questionID;

@@ -10,9 +10,12 @@ class Model_OrmViOvote extends ORM{
         'user' => array( /* Алиас */
             'model' => 'ormuser', /* Удаленная модель ОРМ */
             'foreign_key' => 'user_id'), /* Вторичный ключ текущей таблицы по которому идет связь с удаленной */
-        'qa' => array( /* Алиас */
-            'model' => 'ormvioqa', /* Удаленная модель ОРМ */
-            'foreign_key' => 'qa_id'), /* Вторичный ключ текущей таблицы по которому идет связь с удаленной */
+        'question' => array( /* Алиас */
+            'model' => 'ormvioquestion', /* Удаленная модель ОРМ */
+            'foreign_key' => 'question_id'), /* Вторичный ключ текущей таблицы по которому идет связь с удаленной */
+        'answer' => array( /* Алиас */
+            'model' => 'ormvioanswer', /* Удаленная модель ОРМ */
+            'foreign_key' => 'question_id'), /* Вторичный ключ текущей таблицы по которому идет связь с удаленной */
     );
     // Связь с другой таблицей через id текущей
 //    protected $_has_many = array(

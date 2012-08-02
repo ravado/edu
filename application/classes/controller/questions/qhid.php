@@ -333,4 +333,123 @@ class Controller_Questions_Qhid extends Controller {
 
         echo json_encode($result);
     }
+
+
+
+
+    //  Голосование за вопрос
+    public function action_VoteQuestion() {
+        if(!empty($_POST) && isset($_POST['id_question'])) {
+            try {
+                $auth = Auth::instance();
+                if($auth->logged_in()){
+                    $id_user = $auth->get_user()->id;
+
+                    // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                    $id_question = (int)$_POST['id_question'];
+                    if($_POST['vote'] == 'up' || $_POST['vote'] == 'down') {
+                        $vote_kind = $_POST['vote'];
+
+                        $vote = ORM::factory('ormviovote')->where('user_id','=',$id_user)->where('question_id','=',$id_question)->find();
+                        if($vote->loaded()) {
+                            // Если уже голосовали отрицательно
+                            if($vote->value == '-1') {
+                                // И опять хотят отрицательно
+                                 if($vote_kind == 'down') {
+                                     $result['info'] = 'already voted';
+                                     $result['message'] = 'You already voted like this';
+                                     $result['status'] = 'bad';
+                                 // Передумали и голосуют пложительно
+                                 } elseif ($vote_kind == 'up') {
+                                     $vote->value = 1;
+                                     $vote->save();
+                                     $question = ORM::factory('ormvioquestion',$id_question);
+                                     $new_rating = ($question->rating + 2);
+                                     $question->rating = $new_rating;
+                                     $question->save();
+                                     $result['rating'] = $new_rating;
+                                     $result['message'] = 'Everything is ok';
+                                     $result['status'] = 'ok';
+                                 }
+                            }
+                            // Если уже голосовали положительно
+                            elseif($vote->value == '1') {
+                                // И опять хотят положительно
+                                if($vote_kind == 'up') {
+                                    $result['info'] = 'already voted';
+                                    $result['message'] = 'You already voted like this';
+                                    $result['status'] = 'bad';
+                                // Передумали и голосуют отрицательно
+                                } elseif ($vote_kind == 'down') {
+                                    $vote->value = -1;
+                                    $vote->save();
+                                    $question = ORM::factory('ormvioquestion',$id_question);
+                                    $new_rating = ($question->rating - 2);
+                                    $question->rating = $new_rating;
+                                    $question->save();
+                                    $result['rating'] = $new_rating;
+                                    $result['message'] = 'Everything is ok';
+                                    $result['status'] = 'ok';
+                                }
+                            }
+
+                        // Если же даный пользователь ни разу еще не голосовал за этот вопрос
+                        } else {
+                            // Голосуем положительно
+                            if($vote_kind == 'up') {
+                                // Увеличиваем рейтинг вопроса на 1
+                                $question = ORM::factory('ormvioquestion',$id_question);
+                                $question->rating = ($question->rating + 1);
+                                $saved = $question->save();
+                                // Записуем в таблицу голосов что даный пользователь проголосовал за даный вопрос
+                                $vote = ORM::factory('ormviovote');
+                                $vote->user_id = $id_user;
+                                $vote->question_id = $id_question;
+                                $vote->value = 1;
+                                $vote->save();
+                                $new_rating = $saved->rating;
+
+                            // Голосуем отрицательно
+                            } else {
+                                // Уменьшаем рейтинг вопроса на 1
+                                $question = ORM::factory('ormvioquestion', $id_question);
+                                $question->rating = ($question->rating - 1);
+                                $saved = $question->save();
+                                // Записуем в таблицу голосов что даный пользователь проголосовал за даный вопрос
+                                $vote = ORM::factory('ormviovote');
+                                $vote->user_id = $id_user;
+                                $vote->question_id = $id_question;
+                                $vote->value = -1;
+                                $vote->save();
+                                $new_rating = $saved->rating;
+                            }
+                            $result['rating'] = $new_rating;
+                            $result['message'] = 'Everything is ok';
+                            $result['status'] = 'ok';
+                        }
+                    } else {
+                        $result['message'] = 'uncertainty in the voting';
+                        $result['status'] = 'bad';
+                    }
+
+                } else {
+                    $result['info'] = 'not auth';
+                    $result['message'] = 'User is not login';
+                    $result['status'] = 'bad';
+                }
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
 }

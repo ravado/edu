@@ -745,7 +745,18 @@ fieldset:focus{
 .icon24-done.checked {
     background-position: -168px -48px;
 }
-
+.icon24-vote-up {
+    background-position: -48px 0;
+}
+.icon24-vote-up.active {
+    background-position: -72px 0;
+}
+.icon24-vote-down {
+    background-position: -96px 0;
+}
+.icon24-vote-down.active {
+    background-position: -120px 0;
+}
 
 /* Ячейки в таблицах с определенной информацией */
 td.time {
@@ -1122,6 +1133,66 @@ menu.tools-menu > li .checked{
     color: #4C4C4C;
     border-bottom: 1px solid #aaa;
 }
+
+
+/*   === Страница одного вопроса ===   */
+.answer-block{
+    padding: 15px 10px;
+    border-bottom: 1px solid #ddd;
+}
+.answer-block:last-child{
+    padding: 15px 10px;
+    border-bottom: none;
+}
+.answer-block .answer-info{
+    margin-bottom: 5px;
+    color: #888;
+}
+.answer-block .answer-info small{
+    margin-bottom: 5px;
+}
+.answer-block .answer {
+}
+
+.question-text {
+    float: left;
+    width: 80%;
+}
+
+
+/* Блочек с голосованием */
+.vote {
+    width: 50px;
+    float: left;
+}
+.vote .vote-up, .vote .vote-down{
+    border: none;
+    margin: 0 auto;
+    background-color: transparent;
+}
+.vote .vote-up:active {
+    background-position: -168px 0 !important;
+}
+.vote .vote-up:hover {
+    background-position: -72px 0;
+}
+.vote .vote-down:active {
+    background-position: -216px 0 !important;
+}
+.vote .vote-down:hover {
+    background-position: -120px 0;
+}
+
+.vote .current {
+    font-size: 20px;
+    text-align: center;
+    display: block;
+    height: 20px;
+}
+
+
+
+
 
 /* Центральное выравнивание текста */
 .pull-center {

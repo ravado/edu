@@ -40,7 +40,7 @@ if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status =
                         <div>Популярное:</div>
                         <div class="subcatBlock">
                             <? if($popular_tags) foreach($popular_tags as $popular_tag): ?>
-                            <a href="<?=$popular_tag->id_subcategory;?>"><?=$popular_tag->title;?></a>
+                            <a href="/questions/all?subcat=<?=$popular_tag->id_subcategory;?>"><?=$popular_tag->title;?></a>
                             <? endforeach; else echo 'Вы пока еще не отвечали на вопросы.';?>
                         </div>
                     </div>
@@ -61,11 +61,11 @@ if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status =
                 <? foreach($categories as $category): ?>
                 <div class="catBlock">
                     <div class="catTitle">
-                        <a href="<?=$category->id_category;?>"><?=$category->title;?></a>
+                        <a href="/questions/all?cat=<?=$category->id_category;?>"><?=$category->title;?></a>
                     </div>
                     <div class="subcatBlock">
                         <? foreach($category->subcategories->find_all() as $k=>$subcategory): ?>
-                        <a href="<?=$subcategory->id_subcategory ?>" ><?=$subcategory->title ?></a>
+                        <a href="/questions/all?subcat=<?=$subcategory->id_subcategory ?>" ><?=$subcategory->title ?></a>
                         <? if($k >= 7) break; ?>
                         <? endforeach; ?>
                         <div style="clear: both;"></div>
@@ -156,7 +156,7 @@ if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status =
                             </a>
                         </td>
                         <td>
-                            <a class="" href="/vio/question/<?=$question->id_question;?>"><?=$question->title; ?></a>
+                            <a class="" href="/questions/question/<?=$question->id_question;?>"><?=$question->title; ?></a>
                                     <span class="spnTags">
                                     <? foreach($question->subcategories->find_all() as $subcategory): ?>
                                         <a href="?<?= $ext_limit .$ext_orderby. '&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
@@ -175,17 +175,31 @@ if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status =
             </div>
         </div>
         <? if($pages > 1) :?>
-        <div class="pagination">
+        <div class="pagination pagination-centered">
             <ul>
                 <? $extra_tags = '?' .$ext_limit .$ext_orderby. $ext_subcat; ?>
 
-                <? if($curr_page > 1) echo '<li><a href="'.$extra_tags .'&page=' .($curr_page - 1) .'">«</a></li>'; else echo '<li><a>«</a></li>'?>
-                <? for($i = 0; $i < $pages; $i++): ?>
+                <? if($curr_page > 1) echo '<li><a href="'.$extra_tags .'&page=' .($curr_page - 1) .'">«</a></li>';
+                    else echo ''?>
+                <?
+                $start = 0;
+                $end = $pages;
+                if(($curr_page - 4) > 1) {
+                    echo '<li class="active"><a>...</a></li>';
+                    $start = ($curr_page - 5);
+                }
+                if(($curr_page + 4) < $pages) {
+                    $end = ($curr_page + 4);
+                }
+                ?>
+                <? for($i = $start; $i < $end; $i++): ?>
                 <? if($curr_page == ($i+1)) {
                     echo '<li class="active"><a>'.$curr_page .'</a></li>';
                 } else if($i >= 0 && $i < $pages) echo '<li><a href="'.$extra_tags .'&page=' .($i+1) .'">' .($i+1) .'</a></li>'; ?>
                 <? endfor; ?>
-                <? if($curr_page < $pages) echo '<li><a href="'.$extra_tags .'&page=' .($curr_page + 1) .'">»</a></li>'; else echo '<li><a>»</a></li>'?>
+                <? if($curr_page + 4 < ($pages)) echo '<li class="active"><a>...</a></li>'; ?>
+                <? if($curr_page < $pages) echo '<li><a href="'.$extra_tags .'&page=' .($curr_page + 1) .'">»</a></li>'; else echo ''?>
+
             </ul>
         </div>
         <? endif; ?>

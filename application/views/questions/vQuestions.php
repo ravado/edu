@@ -32,7 +32,7 @@
                         <div>Популярное:</div>
                         <div class="subcatBlock">
                         <? if($popular_tags) foreach($popular_tags as $popular_tag): ?>
-                            <a href="<?=$popular_tag->id_subcategory;?>"><?=$popular_tag->title;?></a>
+                            <a href="/questions/all?subcat=<?=$popular_tag->id_subcategory;?>"><?=$popular_tag->title;?></a>
                         <? endforeach; else echo 'Вы пока еще не отвечали на вопросы.';?>
                         </div>
                     </div>
@@ -53,11 +53,11 @@
                 <? foreach($categories as $category): ?>
                 <div class="catBlock">
                     <div class="catTitle">
-                        <a href="<?=$category->id_category;?>"><?=$category->title;?></a>
+                        <a href="/questions/all?cat=<?=$category->id_category;?>"><?=$category->title;?></a>
                     </div>
                     <div class="subcatBlock">
                         <? foreach($category->subcategories->find_all() as $k=>$subcategory): ?>
-                        <a href="<?=$subcategory->id_subcategory ?>" ><?=$subcategory->title ?></a>
+                        <a href="/questions/all?subcat=<?=$subcategory->id_subcategory ?>" ><?=$subcategory->title ?></a>
                         <? if($k >= 7) break; ?>
                         <? endforeach; ?>
                         <div style="clear: both;"></div>
@@ -124,7 +124,7 @@
                             </a>
                         </td>
                         <td>
-                            <a class="" href="/vio/question/<?=$popular->id_question;?>"><?=$popular->title; ?></a>
+                            <a class="" href="/questions/question/<?=$popular->id_question;?>"><?=$popular->title; ?></a>
                                 <span class="spnTags">
                                 <? foreach($popular->subcategories->find_all() as $subcategory): ?>
                                     <a href="/questions/all?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
@@ -177,7 +177,7 @@
                                 }
                             }?>
                     <tr>
-                        <td class="pull-center">
+                        <td class="pull-center span0">
                             <span class="iconLoading unmargin"><img src="/stfile/img/1loading.gif" alt="loading"></span>
                             <input type="hidden" class="hQuestionId" value="<?=$last->id_question;?>">
                             <a class="icon-hovered  <? echo $is_favorite; echo $to_favorite; ?> tips " data-original-title="<?=$tip; ?>">
@@ -185,7 +185,7 @@
                             </a>
                         </td>
                         <td>
-                            <a href="/vio/question/<?=$last->id_question;?>"><?=$last->title; ?></a>
+                            <a href="/questions/question/<?=$last->id_question;?>"><?=$last->title; ?></a>
                                 <span class="spnTags">
                                 <? foreach($last->subcategories->find_all() as $subcategory): ?>
                                     <a href="/questions/all?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>

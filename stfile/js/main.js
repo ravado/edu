@@ -696,9 +696,63 @@ $(document).ready(function(){
 // ------------------------------------------ Добавление вопроса в избранное ---------------------------------------- //
 
 
+// ================================================ Голосование за вопрос =========================================== //
+    $(".vote-up,.vote-down").click(function() {
+        var  button = {this:null, another:''}, rating = null, transfer = {id_question:null, vote:null}, loading;
+        transfer.id_question = $(this).closest('.vote').find('.hQuestionId').val();
+        button.this = $(this);
+        button.another = $(this).closest('.vote').find('button').not($(this));
+        rating = $(this).closest('.vote').find('.current');
+        loading = $(this).closest('.vote').find('.iconLoading');
+        if($(this).hasClass('vote-up')) {
+            transfer.vote = 'up';
+        } else if($(this).hasClass('vote-down')) {
+            transfer.vote = 'down';
+        }
 
-// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
-// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
+        rating.hide();
+        loading.show();
+        // Если еще так не голосовали
+        if(!$(this).hasClass('active')) {
+            $.ajax({type:"POST", async:true, data: transfer, url: "/questions/qhid/voteQuestion", dataType:"json",
+                success:function(data){
+                    if(data.status == 'ok') {
+                        button.this.addClass('active');
+                        button.another.removeClass('active');
+                        rating.text(data.rating);
+
+                    } else {
+                        if(data.info == 'not auth') {
+                            hints('error','Вы не авторизированы');
+                        } else if(data.info == 'already voted') {
+                            hints('error','Вы уже голосовали за этот вопрос');
+                        } else {
+                            hints('Не удалось защитать голос');
+                        }
+                        console.log(data.message);
+                    }
+                    loading.hide();
+                    rating.show();
+                },
+                error:function(){
+                    console.log('error in ajax query, when try to vote :(');
+                    rating.show();
+                    loading.hide();
+                }
+            });
+        } else {
+            hints('info','Вы уже проголосовали так');
+            rating.show();
+            loading.hide();
+        }
+
+
+    });
+// ------------------------------------------------ Голосование за вопрос ------------------------------------------- //
+
+
+
+
 // ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
 // ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
 // ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //

@@ -19,6 +19,9 @@ class Model_OrmViOquestion extends ORM{
         'qa' => array( /* Алиас по которому можно будет вытягивать записи со связаной таблицы */
             'model' => 'ormvioqa', /* Удаленная модель ОРМ */
             'foreign_key' => 'question_id'), /* Внешний ключ удаленной таблицы */
+        'votes' => array( /* Алиас по которому можно будет вытягивать записи со связаной таблицы */
+            'model' => 'ormviovote', /* Удаленная модель ОРМ */
+            'foreign_key' => 'question_id'), /* Внешний ключ удаленной таблицы */
         'subcategories' => array(
             'model' => 'ormviosubcategory',
             'foreign_key' => 'question_id', /* Внешний ключ промежуточной таблицы */
