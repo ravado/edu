@@ -698,55 +698,76 @@ $(document).ready(function(){
 
 // ================================================ Голосование за вопрос =========================================== //
     $(".vote-up,.vote-down").click(function() {
-        var  button = {this:null, another:''}, rating = null, transfer = {id_question:null, vote:null}, loading;
-        transfer.id_question = $(this).closest('.vote').find('.hQuestionId').val();
-        button.this = $(this);
-        button.another = $(this).closest('.vote').find('button').not($(this));
-        rating = $(this).closest('.vote').find('.current');
-        loading = $(this).closest('.vote').find('.iconLoading');
-        if($(this).hasClass('vote-up')) {
-            transfer.vote = 'up';
-        } else if($(this).hasClass('vote-down')) {
-            transfer.vote = 'down';
-        }
+        var transmit = {id_question:null, vote_kind:null, id_answer:null},
+            obj = {btn_this:null, btn_another:null, rating:null, icon:null, current:null},
+            val = {user_auth:0, controller:null};
+        // Запись используемых обьектов
+        obj.btn_this = $(this);
+        obj.btn_another = $(this).closest('.voting').find('.btn-vote').not($(this));
+        obj.current = $(this).closest('.voting').find('.current');
+        obj.icon = $(this).closest('.voting').find('.icon-loading');
+        // Запись используемых значений
+        val.user_auth = $("#hUserAuth").val();
+        // Если голосуем за ответы
 
-        rating.hide();
-        loading.show();
+        if($(this).closest('.content-block').find('.question-block').length == 0) {
+            val.controller = '/questions/qhid/voteAnswer';
+            transmit.id_answer = $(this).closest('.answer-block').find('.hAnswerId').val();
+        // Если за вопросы
+        } else {
+            val.controller = '/questions/qhid/voteQuestion';
+        }
+        // Запись передаваемых на сервер значений
+        transmit.id_question = $(this).closest('.voting').find('.hQuestionId').val();
+        if(obj.btn_this.hasClass('vote-up')) {
+            transmit.vote_kind = 'up';
+        } else if($(this).hasClass('vote-down')) {
+            transmit.vote_kind = 'down';
+        }
         // Если еще так не голосовали
-        if(!$(this).hasClass('active')) {
-            $.ajax({type:"POST", async:true, data: transfer, url: "/questions/qhid/voteQuestion", dataType:"json",
+        if(!$(this).hasClass('active') && val.user_auth) {
+            // Прячем блок с рейтингом и показываем в нем иконку статуса выполнения
+            obj.current.hide();
+            obj.icon.show();
+            $.ajax({type:"POST", async:true, data: transmit, url: val.controller, dataType:"json",
                 success:function(data){
                     if(data.status == 'ok') {
-                        button.this.addClass('active');
-                        button.another.removeClass('active');
-                        rating.text(data.rating);
+                        obj.btn_this.addClass('active');
+                        obj.btn_another.removeClass('active');
+                        obj.current.text(data.rating);
 
                     } else {
                         if(data.info == 'not auth') {
                             hints('error','Вы не авторизированы');
                         } else if(data.info == 'already voted') {
-                            hints('error','Вы уже голосовали за этот вопрос');
+                            if(transmit.id_answer == null) {
+                                hints('error','Вы уже голосовали за этот вопрос');
+                            } else {
+                                hints('error','Вы уже голосовали за этот ответ');
+                            }
+
                         } else {
                             hints('Не удалось защитать голос');
                         }
                         console.log(data.message);
                     }
-                    loading.hide();
-                    rating.show();
+                    obj.icon.hide();
+                    obj.current.show();
                 },
                 error:function(){
                     console.log('error in ajax query, when try to vote :(');
-                    rating.show();
-                    loading.hide();
+                    obj.icon.hide();
+                    obj.current.show();
                 }
             });
-        } else {
+
+        // Если пользователь уже голосовал так
+        } else if(val.user_auth){
             hints('info','Вы уже проголосовали так');
-            rating.show();
-            loading.hide();
+        // Если пользователь не авторизирован
+        } else if(!val.user_auth){
+            hints('info','Вы не авторизированы');
         }
-
-
     });
 // ------------------------------------------------ Голосование за вопрос ------------------------------------------- //
 

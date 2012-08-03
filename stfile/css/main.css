@@ -915,6 +915,7 @@ menu.tools-menu > li .checked{
 .content-block a{
     border-bottom: 1px solid #CAE6F8;
 }
+
 .content-block header{
     position: relative;
     border-radius: 2px 2px 0 0;
@@ -943,6 +944,7 @@ menu.tools-menu > li .checked{
 .content-block footer a{
     color: #6e6e6e;
     border-bottom: 1px solid #ddd;
+    margin: 0 2px;
 }
 .content-block footer a:hover{
     color: #4c4c4c;
@@ -1136,9 +1138,32 @@ menu.tools-menu > li .checked{
 
 
 /*   === Страница одного вопроса ===   */
+.question-block {
+    padding: 15px 10px !important;
+}
+.question-block .question-info {
+    margin-bottom: 5px !important;
+    color: #888 !important;
+}
+.question-block strong {
+    font-weight: bold;
+}
+.question-block .violation > li > a{
+    opacity: 0.2;
+}
+.question-block:hover .violation > li > a{
+    opacity: 1;
+}
+
 .answer-block{
     padding: 15px 10px;
     border-bottom: 1px solid #ddd;
+}
+.answer-block .violation > li > a{
+    opacity: 0.2;
+}
+.answer-block:hover .violation > li > a{
+    opacity: 1;
 }
 .answer-block:last-child{
     padding: 15px 10px;
@@ -1152,45 +1177,66 @@ menu.tools-menu > li .checked{
     margin-bottom: 5px;
 }
 .answer-block .answer {
+    color: #454545;
 }
 
 .question-text {
-    float: left;
-    width: 80%;
+    color: #454545;
+    margin: 15px 0;
 }
-
 
 /* Блочек с голосованием */
-.vote {
-    width: 50px;
+.voting .icon-loading img {
+    height: 15px !important;
+    width: 15px !important;
+}
+.voting .rating {
+    min-width: 20px;
+    max-width: 100px;
+    height: 16px;
+    border: 1px solid #DDD;
+    border-radius: 3px;
     float: left;
-}
-.vote .vote-up, .vote .vote-down{
-    border: none;
-    margin: 0 auto;
-    background-color: transparent;
-}
-.vote .vote-up:active {
-    background-position: -168px 0 !important;
-}
-.vote .vote-up:hover {
-    background-position: -72px 0;
-}
-.vote .vote-down:active {
-    background-position: -216px 0 !important;
-}
-.vote .vote-down:hover {
-    background-position: -120px 0;
-}
-
-.vote .current {
-    font-size: 20px;
+    margin-right: 5px;
     text-align: center;
-    display: block;
-    height: 20px;
+    padding: 2px;
+    line-height: 16px;
+    vertical-align: middle;
+    font-weight: bold;
+    color: #888;
+}
+.voting .vote-up, .voting .vote-down{
+    border-bottom: none;
+    line-height: 21px;
+}
+.voting .vote-up {
+    color: green;
+}
+.voting .vote-down {
+    color: #8b0000;
+}
+
+.voting .vote-up:active {
+    opacity: 1 !important;
+}
+.voting .vote-up:hover {
+    opacity: 0.8;
+}
+.voting .vote-down:active {
+    opacity: 1 !important;
+}
+.voting .vote-down:hover {
+    opacity: 0.8;
+}
+.voting .vote-down.active, .voting .vote-up.active{
+    opacity: 0.8;
 }
 
 
+/*  Пожаловаться на нарушение  */
+.violation > li ul a{
+    border-bottom: none;
+}
 
 
 
