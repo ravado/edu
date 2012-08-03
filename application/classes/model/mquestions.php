@@ -792,6 +792,7 @@ class Model_Mquestions extends Model_Database{
         }
         $offset = ($page - 1) * $limit;
 
+        // Если не ищем по категории
         if(is_null($by_cat)) {
             // Если не нужно искать вопросы по определенной подкатегории
             if(is_null($by_subcat)) {
@@ -810,21 +811,33 @@ class Model_Mquestions extends Model_Database{
                     ->offset($offset)->order_by($order_by)->find_all();
 
             }
+        // Если ищем по категории
         } else {
             $category = ORM::factory('ormviocategory',$by_cat);
-            $count = $questions = $category->subcategories->questions->where('is_closed',$statement,$status)->limit($limit)
-                ->offset($offset)->order_by($order_by)->count_all();
-            $pages = ceil( $count / $limit );
             $subcategories = $category->subcategories->find_all();
+            // Записываем все id подкатегорий
             $subcats[0] = -1;
             if($category->subcategories->count_all() > 0) {
                 foreach($subcategories as $subcategory) {
                     array_push($subcats,$subcategory->id_subcategory);
                 }
             }
-            $count_all = ORM::factory('ormviosubcategory',$subcats)->questions->count_all();
-            echo $count_all;
-            $questions = ORM::factory('ormviosubcategory')->where('id_subcategory','IN',$subcats)->questions->find_all();
+            // Делаем выборку из промежуточной таблицы
+            $questsubs = ORM::factory('ormvioquestsub')->where('subcategory_id','IN',$subcats)->find_all();
+
+            // Записываем все id вопросов
+            $quests[0] = -1;
+            foreach($questsubs as $questsub) {
+                array_push($quests,$questsub->question_id);
+            }
+            $count = ORM::factory('ormvioquestion')->where('id_question','IN',$quests)
+                ->where('is_closed',$statement,$status)->limit($limit)
+                ->offset($offset)->order_by($order_by)->count_all();
+            $questions = ORM::factory('ormvioquestion')->where('id_question','IN',$quests)
+                ->where('is_closed',$statement,$status)->limit($limit)
+                ->offset($offset)->order_by($order_by)->find_all();
+            $pages = ceil( $count / $limit );
+
 
         }
         $result['questions'] = $questions; // орм модель с вопросами
