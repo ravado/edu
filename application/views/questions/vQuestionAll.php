@@ -1,9 +1,10 @@
 <?
 // Создаем дополнительные теги для ссылок
 if(!is_null($curr_page)) { $ext_page = '&page=' .$curr_page; } else {$ext_page = '';}
-if(!is_null($limit)) { $ext_limit = '&limit=' .$limit; } else {$ext_limit = '';}
+$ext_limit = '';
 if(!is_null($order_by)) { $ext_orderby = '&orderby=' .$order_by; } else {$ext_orderby = '';}
 if(!is_null($subcat)) { $ext_subcat = '&subcat=' .$subcat; } else {$ext_subcat = '';}
+if(!is_null($cat)) { $ext_cat = '&cat=' .$cat; } else {$ext_cat = '';}
 if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status = '';}
 ?>
 <div id="dvContent">
@@ -116,17 +117,17 @@ if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status =
                             <span data-original-title="Пользователь" class="tips icon20 icon20-man centered"></span>
                         </th>
                         <th class="span0">
-                            <a  href="?<?=$ext_limit .$ext_subcat. '&orderby=rating' ?>">
+                            <a  href="?<?=$ext_limit .$ext_subcat .$ext_cat .'&orderby=rating' ?>">
                                 <span data-original-title="Сортировать по рейтингу" class="tips icon20 icon20-graph <? if($order_by == 'rating') echo 'checked'; ?>"></span>
                             </a>
                         </th>
                         <th class="span0">
-                            <a href="?<?=$ext_limit .$ext_subcat. '&orderby=answers' ?>">
+                            <a href="?<?=$ext_limit .$ext_subcat .$ext_cat .'&orderby=answers' ?>">
                                 <span data-original-title="Сортировать по количеству ответов" class="tips icon20 icon20-lamp-on <? if($order_by == 'answers') echo 'checked'; ?>"></span>
                             </a>
                         </th>
                         <th class="span0 ">
-                            <a href="?<?=$ext_limit .$ext_subcat. '&orderby=date' ?>">
+                            <a href="?<?=$ext_limit .$ext_subcat .$ext_cat .'&orderby=date' ?>">
                                 <span data-original-title="Сортировать по дате добавления" class="tips icon20 icon20-clock centered <? if($order_by == 'date') echo 'checked'; ?>"></span>
                             </a>
                         </th>
@@ -159,11 +160,11 @@ if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status =
                             <a class="" href="/questions/question/<?=$question->id_question;?>"><?=$question->title; ?></a>
                                     <span class="spnTags">
                                     <? foreach($question->subcategories->find_all() as $subcategory): ?>
-                                        <a href="?<?= $ext_limit .$ext_orderby. '&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
+                                        <a href="?<?='&subcat=' .$subcategory->id_subcategory; ?>" class=""><?=$subcategory->title; ?></a>
                                         <? endforeach; ?>
                                     </span>
                         </td>
-                        <td class="rating"><a><?=$question->user->username; ?></a></td>
+                        <td class="username"><a><?=$question->user->username; ?></a></td>
                         <td class="rating"><?=$question->rating; ?></td>
                         <td class="answers"><?=$question->answers_count; ?></a></td>
                         <td class="time"><?= date('d/m/y',strtotime($question->public_date)); ?></td>
@@ -177,7 +178,7 @@ if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status =
         <? if($pages > 1) :?>
         <div class="pagination pagination-centered">
             <ul>
-                <? $extra_tags = '?' .$ext_limit .$ext_orderby. $ext_subcat; ?>
+                <? $extra_tags = '?' .$ext_limit .$ext_orderby. $ext_subcat .$ext_cat .$ext_status; ?>
 
                 <? if($curr_page > 1) echo '<li><a href="'.$extra_tags .'&page=' .($curr_page - 1) .'">«</a></li>';
                     else echo ''?>

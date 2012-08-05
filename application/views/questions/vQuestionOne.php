@@ -91,8 +91,8 @@
             <li><a href="/questions"><small>/</small> Все вопросы</a></li>
             <li> <small>/ Вопрос</small></li>
         </menu>
-
         <div class="content-block ">
+
             <header>
                 <h4>
                     <?=$question->title;?>
@@ -144,16 +144,55 @@
                 <? foreach($question->subcategories->find_all() as $subcategory): ?>
                 <a href="/questions/all?subcat=<?=$subcategory->id_subcategory;?>"><?=$subcategory->title;?></a>
                 <? endforeach; ?>
-                <a class="pull-right">В избранное</a>
+                <div class="dvToFavorite">
+                    <? if($user_auth): ?>
+                    <?
+                    $active = '';
+                    $tip = 'Добавить в избранное';
+                    $favorite = $question->favorites->where('user_id','=',$user_id)->find();
+                    if($favorite->loaded()) {
+                        $active = 'active';
+                        $tip = 'Удалить из избранного';
+                    }
+                    ?>
+
+                    <span>
+                        <span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span>
+                        <i class="icon icon-star <?=$active;?>"></i>
+                        <a class="toFavorite single <?=$active;?>"><?=$tip?></a>
+                    </span>
+                    <? endif; ?>
+                </div>
             </footer>
         </div>
-        <div style="margin-bottom: 15px;"><button href="" class="btn">Добавить ответ</button></div>
+        <? if($user_auth && !$question->is_closed): ?>
+        <div class="content-block">
+            <button href="" class="btn" id="showAddingAnswer">Добавить ответ</button>
+        </div>
+        <div id="block-add-answer" class="hide">
+            <label for="answerText"> Ваш ответ</label>
+            <textarea rows="5" cols="115" id="answerText"></textarea>
+            <div>
+                <button class="btn btn-primary" id="addAnswer">Добавить ответ</button>
+                <button class="btn" id="canceledAnswer">Отменить</button>
+                <span class="icon-loading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
+            </div>
+        </div>
+        <? elseif(!$user_auth): ?>
+        <div class="content-block">
+            Для того что бы добавлять ответы необходимо <a href="/">Авторизироваться</a>
+        </div>
+        <? elseif($question->is_closed): ?>
+
+        <? endif; ?>
+
         <div class="content-block">
             <header>
                 <h4>Ответы</h4>
             </header>
-            <div class="content">
-                <? foreach($question->answers->find_all() as $answer):?>
+            <div class="content answer-list">
+                <? if($question->answers->count_all() == 0) echo 'На даный момент нет ответов на даный вопрос'; ?>
+                <? foreach($question->answers->order_by('rating','desc')->find_all() as $answer):?>
                  <div class="answer-block">
                     <div class="answer-info">
                         <input type="hidden" class="hAnswerId" value="<?=$answer->id_answer;?>">
@@ -188,7 +227,7 @@
                          <a class="hovered vote-up btn-vote <?=$voted_up;?>">
                              <i class="icon-thumbs-up"></i> хороший ответ
                          </a>
-                         <a class="tips hovered vote-down btn-vote <?=$voted_down;?>">
+                         <a class=" hovered vote-down btn-vote <?=$voted_down;?>">
                              <i class="icon-thumbs-down"></i> плохой ответ
                          </a>
                      </div>

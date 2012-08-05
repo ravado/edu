@@ -8,18 +8,18 @@ class Controller_Questions_Qhid extends Controller {
 	}
 
     /*Добавляем ответ на вопрос в базу*/
-	public function action_addAnswer(){
-        $auth = Auth::instance();
-        if($auth->logged_in()) {
-            $data['username'] = $auth->get_user()->username;
-            $data['questionID'] = $_GET['id_question'];
-            $data['answer_text'] = $_GET['answer_text'];
-            $result = Model::factory('Mquestions')->addAnswer($data);
-
-            echo json_encode($result);
-        }
-
-    }
+//	public function action_addAnswer(){
+//        $auth = Auth::instance();
+//        if($auth->logged_in()) {
+//            $data['username'] = $auth->get_user()->username;
+//            $data['questionID'] = $_GET['id_question'];
+//            $data['answer_text'] = $_GET['answer_text'];
+//            $result = Model::factory('Mquestions')->addAnswer($data);
+//
+//            echo json_encode($result);
+//        }
+//
+//    }
 
 
     public function action_voteUpTest() {
@@ -551,6 +551,60 @@ class Controller_Questions_Qhid extends Controller {
 
                 } else {
                     $result['info'] = 'not auth';
+                    $result['message'] = 'User is not login';
+                    $result['status'] = 'bad';
+                }
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
+    // Добавление ответа на вопрос
+    public function action_addAnswer() {
+        if(!empty($_POST) && isset($_POST['id_question'])) {
+            try {
+                $auth = Auth::instance();
+                if($auth->logged_in()){
+                    $username = $auth->get_user()->username;
+                    $id_user = $auth->get_user()->id;
+
+                    // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                    $id_question = (int)$_POST['id_question'];
+                    $answer_text = addslashes(strip_tags($_POST['text']));
+                    $question = ORM::factory('ormvioquestion',$id_question);
+                    if($question->loaded()) {
+                        $answer = ORM::factory('ormvioanswer');
+                        $answer->user_id = $id_user;
+                        $answer->text = $answer_text;
+                        $answer->question_id = $id_question;
+                        $saved = $answer->save();
+                        $question->answers_count = ($question->answers_count + 1);
+                        $saved = ORM::factory('ormvioanswer',$saved->id_answer);
+                        $result['username'] = $username;
+                        $result['id_user'] = $id_user;
+                        $result['id_answer'] = $saved->id_answer;
+                        $result['answer'] = $saved->text;
+                        $result['public_date'] = date('d-m-Y H:i', strtotime($saved->public_date));
+
+
+                        $result['message'] = 'Everything is ok';
+                        $result['status'] = 'ok';
+                    } else {
+                        $result['message'] = 'this question does not exist';
+                        $result['status'] = 'bad';
+                    }
+                } else {
                     $result['message'] = 'User is not login';
                     $result['status'] = 'bad';
                 }

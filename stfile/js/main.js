@@ -641,12 +641,23 @@ $(document).ready(function(){
 
 // ========================================== Добавление вопроса в избранное ======================================== //
     $(".toFavorite").click(function() {
-        var curr_question_id, curr_td, icon_load, curr_star, favorites;
-        curr_td = $(this).closest('td');
-        curr_question_id = curr_td.find('.hQuestionId').val();
-        icon_load = curr_td.find('.iconLoading');
-        favorites = $('.profile-info .favorite-count');
-        curr_star = $(this);
+        var curr_question_id, curr_td, icon_load, curr_star, favorites, curr_lnk = null;
+        if($(this).hasClass('single')) {
+            curr_td = $(this).closest('.dvToFavorite');
+            icon_load = curr_td.find('.iconLoading');
+            curr_question_id = $('.hQuestionId').val();
+            favorites = $('.profile-info .favorite-count');
+            curr_star = $(this).closest('.dvToFavorite').find('.icon-star');
+            curr_lnk = $(this);
+        } else {
+            curr_td = $(this).closest('td');
+            curr_question_id = curr_td.find('.hQuestionId').val();
+            icon_load = curr_td.find('.iconLoading');
+            favorites = $('.profile-info .favorite-count');
+            curr_star = $(this);
+        }
+
+
         curr_star.hide();
         icon_load.show();
 
@@ -657,6 +668,10 @@ $(document).ready(function(){
                     if(data.status == 'ok') {
                         curr_star.removeClass('active').attr('data-original-title','Добавить в избранное');
                         favorites.text(data.count);
+                        if(curr_lnk != null) {
+                            curr_lnk.html('Добавить в избранное');
+                            curr_lnk.removeClass('active');
+                        }
                     } else {
                         hints('error','Что то пошло не так');
                         console.log(data.message);
@@ -678,6 +693,10 @@ $(document).ready(function(){
                     if(data.status == 'ok') {
                         curr_star.addClass('active').attr('data-original-title','Удалить из избранного');
                         favorites.text(data.count);
+                        if(curr_lnk != null) {
+                            curr_lnk.html('Удалить из избранного');
+                            curr_lnk.addClass('active');
+                        }
                     } else {
                         hints('error','Что то пошло не так');
                         console.log(data.message);
@@ -696,8 +715,8 @@ $(document).ready(function(){
 // ------------------------------------------ Добавление вопроса в избранное ---------------------------------------- //
 
 
-// ================================================ Голосование за вопрос =========================================== //
-    $(".vote-up,.vote-down").click(function() {
+// ====================================== Голосование за вопрос или ответ =========================================== //
+    $(".vote-up,.vote-down").live('click', function() {
         var transmit = {id_question:null, vote_kind:null, id_answer:null},
             obj = {btn_this:null, btn_another:null, rating:null, icon:null, current:null},
             val = {user_auth:0, controller:null};
@@ -769,13 +788,104 @@ $(document).ready(function(){
             hints('info','Вы не авторизированы');
         }
     });
-// ------------------------------------------------ Голосование за вопрос ------------------------------------------- //
+// ----------------------------------- Голосование за вопрос или ответ ---------------------------------------------- //
+
+// ================================== Нажатие на кнопку Добавить ответ ============================================== //
+    $("#showAddingAnswer").click(function() {
+        if(!$(this).hasClass('disabled')) {
+            $("#block-add-answer").slideDown(300, function() {$("#answerText").focus();});
+            $(this).addClass('disabled');
+
+        }
+    });
+// ---------------------------------- Нажатие на кнопку Добавить ответ ---------------------------------------------- //
+
+// ================================ Нажатие на кнопку Отмены добавления вопроса ===================================== //
+    $("#canceledAnswer").click(function() {
+        $("#block-add-answer").slideUp(300);
+        $("#answerText").val('');
+        $("#showAddingAnswer").removeClass('disabled');
+    });
+// -------------------------------- Нажатие на кнопку Отмены добавления вопроса ------------------------------------- //
+
+
+// ================================================ Добавление ответа =============================================== //
+    $("#addAnswer").click(function() {
+        var obj = {icon:null, textarea:null, answer_list:null},
+            val = {text:null, id_question:null},
+            new_answer = {info:null, vote:null, answer:null, all:null};
+
+        if($("#answerText").val() != '') {
+            obj.icon = $("#block-add-answer").find('.icon-loading');
+            obj.textarea = $("#answerText");
+            obj.answer_list = $(".content.answer-list");
+
+            val.text = obj.textarea.val();
+            val.id_question = $(".hQuestionId").val();
+
+            obj.icon.show();
+            $.ajax({type:"POST", async:true, data: val, url: "/questions/qhid/addAnswer", dataType:"json",
+                success:function(data){
+                    if(data.status == 'ok') {
+                        new_answer.info = '<div class="answer-info"> <input type="hidden" class="hAnswerId" value="'+ data.id_answer +'">' +
+                            '<a href="#">' + data.username + '</a> '+ data.public_date +
+                            '<ul class="unstyled pull-right violation">' +
+                                '<li class="dropdown "><a class="dropdown-toggle " data-toggle="dropdown" href="#">Сообщить о нарушении</a>' +
+                                '<ul class="dropdown-menu ">' +
+                                    '<li><a href="#">Ответ не связан с вопросом</a></li>' +
+                                    '<li><a href="#">Спам, вредоносные ссылки</a></li>' +
+                                    '<li><a href="#">Содержание пропагандируещее ненависть</a></li>' +
+                                    '<li><a href="#">Содержание на которое распространяются авторские права</a></li>' +
+                                '</ul></li></ul></div>';
+                        new_answer.answer = '<div class="answer"><p>' + data.answer + '</p></div>';
+                        new_answer.vote = '<div class="voting"><div class="rating">' +
+                                '<span class="current">0</span>' +
+                                '<span class="icon-loading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>' +
+                            '</div>' +
+                            '<a class="hovered vote-up btn-vote "><i class="icon-thumbs-up"></i> хороший ответ</a>' +
+                            '<a class=" hovered vote-down btn-vote"><i class="icon-thumbs-down"></i> плохой ответ</a>' +
+                            '</div>';
+                        new_answer.all = '<div class="answer-block">' + new_answer.info + new_answer.answer + new_answer.vote + '</div>';
+                        $(".answer-block").css('opacity','0.2');
+                        obj.answer_list.append(new_answer.all);
+
+                        $("#canceledAnswer").click();
+                        // Скролим вниз страницы к ответу пользователя
+                        $('body').animate({scrollTop: obj.answer_list.height()}, 800, function() {
+                            $(".answer-block").animate({opacity:1}, 800);
+                        });
+                    } else {
+                        if(data.info == 'empty answer') {
+                            hints('error','Был передан пустой ответ, попробуйте еще раз');
+                        } else if(data.info == 'not auth') {
+                            hints('error','Вы попытальсь добавить ответ не будучи авторизированным в системе, авторизируйтесь');
+                        } else {
+                            hints('error','Не удалось добавить ответ, попробуйте позже');
+                            console.log(data.message);
+                        }
+
+                    }
+
+                    obj.icon.hide(); // Прячем иконку статуса выполнения
+                },
+                error:function(){
+                    console.log('error in ajax query, when add to favorite :(');
+                    obj.icon.hide(); // Прячем иконку статуса выполнения
+                }
+            });
+        } else {
+            hints('info',' Для начала впишите свой ответ.');
+            $("#answerText").focus();
+        }
 
 
 
 
-// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
-// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
+    });
+// ------------------------------------------------ Добавление ответа ----------------------------------------------- //
+
+
+
 // ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
 // ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
 // ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //

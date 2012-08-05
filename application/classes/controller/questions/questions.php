@@ -40,6 +40,7 @@ class Controller_Questions_Questions extends Controller_Base {
         $this->template->styles = array("stfile/css/questions.css" => "screen");
         $this->template->scripts = array('stfile/js/questions.js');
         /*Проверяем статус пользователя (Авторизирован или нет)*/
+
         $auth = Auth::instance();
         if($auth->logged_in()){
             $data['user_auth'] = TRUE;
@@ -103,6 +104,7 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['user_auth'] = FALSE;
         }
 
+        $data['tegories'] = Model::factory('Mquestions')->getSimilarQuestion(1,5);
         $data['categories'] = Model::factory('Mquestions')->getCategoryList('user');
         $data['question'] = Model::factory('Mquestions')->getQuestion($id_question);
         $this->template->title = "Вопросы и Ответы: ".$data['question']->title;

@@ -20,11 +20,11 @@ nav{float: right;padding: 20px 0;}
 
 
 /*Подвал (ссылки на технические страницы)*/
-footer{clear: both;margin-top: 20px;background: #e2e2e2;}
+body > footer{clear: both;margin-top: 20px;background: #e2e2e2;}
 
-    footer div{margin: 0 auto;width: 920px;padding: 25px;font-size: 12px;text-align: center;color: #858485;}
+    body > footer div{margin: 0 auto;width: 920px;padding: 25px;font-size: 12px;text-align: center;color: #858485;}
 
-    footer div a{color: #858485;text-decoration: none;margin: 0 5px;}
+    body > footer div a{color: #858485;text-decoration: none;margin: 0 5px;}
 
 /*Поля ввода с цветным сиянием (по умолчанию выделяет синим)*/
 .inpColor{padding: 5px;border: 1px solid #ccc;outline: none;border-radius: 4px;-webkit-transition: .3s ease-in-out;-moz-transition: .3s ease-in-out;}
@@ -941,6 +941,24 @@ menu.tools-menu > li .checked{
     font-size: 12px;
     vertical-align: middle;
 }
+.content-block footer .dvToFavorite {
+    float: right;
+}
+.content-block footer .dvToFavorite .toFavorite{
+    border-bottom: 1px dashed #ccc;
+}
+.content-block footer .dvToFavorite span:hover .icon-star{
+    opacity: 1;
+}
+.content-block footer .dvToFavorite .icon-star{
+    opacity: 0.2;
+}
+
+.content-block footer .dvToFavorite .icon-star.active{
+    opacity: 1;
+}
+
+
 .content-block footer a{
     color: #6e6e6e;
     border-bottom: 1px solid #ddd;
@@ -1150,6 +1168,7 @@ menu.tools-menu > li .checked{
 }
 .question-block .violation > li > a{
     opacity: 0.2;
+    border-bottom-style: dashed;
 }
 .question-block:hover .violation > li > a{
     opacity: 1;
@@ -1161,6 +1180,7 @@ menu.tools-menu > li .checked{
 }
 .answer-block .violation > li > a{
     opacity: 0.2;
+    border-bottom-style: dashed;
 }
 .answer-block:hover .violation > li > a{
     opacity: 1;
@@ -1178,6 +1198,7 @@ menu.tools-menu > li .checked{
 }
 .answer-block .answer {
     color: #454545;
+    margin: 10px 0;
 }
 
 .question-text {
@@ -1189,6 +1210,9 @@ menu.tools-menu > li .checked{
 .voting .icon-loading img {
     height: 15px !important;
     width: 15px !important;
+}
+.voting .btn-vote {
+    cursor: pointer;
 }
 .voting .rating {
     min-width: 20px;
@@ -1230,6 +1254,19 @@ menu.tools-menu > li .checked{
 }
 .voting .vote-down.active, .voting .vote-up.active{
     opacity: 0.8;
+}
+
+/* Блок для написания ответа на вопрос */
+#block-add-answer {
+    margin: 0 0 15px 0;
+}
+#block-add-answer .icon-loading{
+    margin: 3px;
+}
+
+#block-add-answer #answerText{
+    width: 100%;
+    max-width: 100%;
 }
 
 

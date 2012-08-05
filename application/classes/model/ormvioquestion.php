@@ -16,6 +16,9 @@ class Model_OrmViOquestion extends ORM{
         'favorites' => array( /* Алиас по которому можно будет вытягивать записи со связаной таблицы */
             'model' => 'ormviofavorite', /* Удаленная модель ОРМ */
             'foreign_key' => 'question_id'), /* Внешний ключ удаленной таблицы */
+        'answers' => array(
+            'model' => 'ormvioanswer',
+            'foreign_key' => 'question_id'),
         'qa' => array( /* Алиас по которому можно будет вытягивать записи со связаной таблицы */
             'model' => 'ormvioqa', /* Удаленная модель ОРМ */
             'foreign_key' => 'question_id'), /* Внешний ключ удаленной таблицы */
@@ -28,11 +31,6 @@ class Model_OrmViOquestion extends ORM{
             'through' => 'vio_questions_subcategories', /* Имя промежуточной таблицы */
             'far_key' => 'subcategory_id'
         ),
-        'answers' => array(
-            'model' => 'ormvioanswer',
-            'foreign_key' => 'question_id', /* Внешний ключ промежуточной таблицы */
-            'through' => 'vio_questions_answers', /* Имя промежуточной таблицы */
-            'far_key' => 'answer_id')
     );
 
 }

@@ -808,7 +808,7 @@ class Model_Mquestions extends Model_Database{
                     ->offset($offset)->order_by($order_by)->count_all();
                 $pages = ceil( $count / $limit );
                 $questions = $subcategory->questions->where('is_closed',$statement,$status)->limit($limit)
-                    ->offset($offset)->order_by($order_by)->find_all();
+                    ->offset($offset)->order_by($order_by,'desc')->find_all();
 
             }
         // Если ищем по категории
@@ -835,7 +835,7 @@ class Model_Mquestions extends Model_Database{
                 ->offset($offset)->order_by($order_by)->count_all();
             $questions = ORM::factory('ormvioquestion')->where('id_question','IN',$quests)
                 ->where('is_closed',$statement,$status)->limit($limit)
-                ->offset($offset)->order_by($order_by)->find_all();
+                ->offset($offset)->order_by($order_by,'desc')->find_all();
             $pages = ceil( $count / $limit );
 
 
@@ -895,7 +895,7 @@ class Model_Mquestions extends Model_Database{
         $subcats_count = array();
 
         foreach($answers as $answer) {
-            $question = $answer->question->find();
+            $question = $answer->question;
             $subcategories = $question->subcategories->find_all();
             foreach($subcategories as $subcategory) {
                 if(array_key_exists($subcategory->id_subcategory, $subcats_count)) {
@@ -921,6 +921,24 @@ class Model_Mquestions extends Model_Database{
         }
 
         return $popular;
+    }
+
+
+    // Выборка похожих вопросов
+    function getSimilarQuestion($id_question, $count = 5) {
+        $id_question = (int)$id_question;
+
+        $subcategories = ORM::factory('ormvioquestion')->where('id_question','=','2')->subcategories->as_array();
+
+
+        $questions = ORM::factory('ormvioquestion')
+            ->where('id_question','IN',$subcategories)->count_all();
+
+
+
+
+
+        return $questions;
     }
 }
 
