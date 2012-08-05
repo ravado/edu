@@ -100,6 +100,8 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['popular_tags'] = Model::factory('Mquestions')->getUserPopularTags($data['user_id']);
             $data['user_questions'] = Model::factory('Mquestions')->getUserQuestions($data['user_id']);
             $data['user_answers'] = Model::factory('Mquestions')->getUserAnswers($data['user_id']);
+            $data['impropers_question'] = Model::factory('Mquestions')->getQuestionImpropers();
+            $data['impropers_answer'] = Model::factory('Mquestions')->getAnswerImpropers();
         }else{
             $data['user_auth'] = FALSE;
         }

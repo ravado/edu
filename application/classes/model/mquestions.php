@@ -940,5 +940,42 @@ class Model_Mquestions extends Model_Database{
 
         return $questions;
     }
+
+
+    //  Список типов нарушения для вопроса
+    function getQuestionImpropers() {
+        $impropers = ORM::factory('ormvioimpropertype')->where('type','=','question')->find_all();
+        return $impropers;
+    }
+
+    //  Список типов нарушения для ответа
+    function getAnswerImpropers() {
+        $impropers = ORM::factory('ormvioimpropertype')->where('type','=','answer')->find_all();
+        return $impropers;
+    }
+
+    // Добавление отзыва о нарушении
+    function addImproper($id_improper, $id_item, $id_user, $type) {
+        $id_improper = (int)$id_improper;
+        $id_item = (int)$id_item;
+        $id_user = (int)$id_user;
+        $id_improper = (string)$type;
+        $improper = ORM::factory('ormvioimproper');
+        $improper->impropertype_id = $id_improper;
+        $improper->user_id = $id_user;
+        if($type == 'question') {
+            $improper->question_id = $id_item;
+        } elseif ($type == 'answer') {
+            $improper->answer_id = $id_item;
+        } else {
+            return false;
+        }
+        $saved = $improper->save();
+        if($saved->saved()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 

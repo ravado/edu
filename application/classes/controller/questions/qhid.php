@@ -269,6 +269,7 @@ class Controller_Questions_Qhid extends Controller {
                         $result['status'] = 'bad';
                     }
                 } else {
+                    $result['info'] = 'not auth';
                     $result['message'] = 'User is not login';
                     $result['status'] = 'bad';
                 }
@@ -605,6 +606,48 @@ class Controller_Questions_Qhid extends Controller {
                         $result['status'] = 'bad';
                     }
                 } else {
+                    $result['message'] = 'User is not login';
+                    $result['status'] = 'bad';
+                }
+
+                // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+            } catch(Exception $e) {
+                $result['message'] = 'Some error - '.$e;
+                $result['status'] = 'bad';
+            }
+
+            // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['message'] = 'POST is empty';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
+
+    // Добавление отзыва о неумесном содержании
+    public function action_addImproper() {
+        if(!empty($_POST) && isset($_POST['id_improper']) && isset($_POST['type']) && isset($_POST['id_item'])) {
+            try {
+                $auth = Auth::instance();
+                if($auth->logged_in()){
+                    $id_user = $auth->get_user()->id;
+
+                    // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+                    $id_item = (int)$_POST['id_item'];
+                    $id_improper = (int)$_POST['id_improper'];
+                    $type = (string)$_POST['type'];
+                    $returned = Model::factory('Mquestions')->addImproper($id_improper, $id_item, $id_user, $type);
+                    if($returned) {
+                        $result['message'] = 'Everything is ok';
+                        $result['status'] = 'ok';
+                    } else {
+                        $result['message'] = 'Some error in addImproper';
+                        $result['status'] = 'bad';
+                    }
+                } else {
+                    $result['info'] = 'not auth';
                     $result['message'] = 'User is not login';
                     $result['status'] = 'bad';
                 }

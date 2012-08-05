@@ -101,17 +101,24 @@
             <div class="content question-block">
                 <div class="question-info">
                     <a href="#"><?=$question->user->username;?></a>  <?=$question->public_date;?>
+                    <? if($user_auth): ?>
                     <ul class="unstyled pull-right violation">
                         <li class="dropdown ">
+                            <input type="hidden" value="<?=$question->id_question?>" class="hItemId">
+                            <span class="icon-loading hide"><img alt="loading" src="/stfile/img/1loading.gif"></span>
                             <a class="dropdown-toggle " data-toggle="dropdown" href="#">Сообщить о нарушении</a>
                             <ul class="dropdown-menu ">
-                                <li><a href="#">Спам, вредоносные ссылки</a></li>
-                                <li><a href="#">Содержание пропагандируещее ненависть</a></li>
-                                <li><a href="#">Содержание на которое распространяются авторские права</a></li>
+                                <? foreach($impropers_question as $improper): ?>
+                                <li>
+                                    <input type="hidden" class="hImproperId" value="<?=$improper->id_impropertype;?>">
+                                    <a class="question improper"><?=$improper->title;?></a>
+
+                                </li>
+                                <? endforeach; ?>
                             </ul>
                         </li>
-
                     </ul>
+                    <? endif; ?>
                 </div>
                 <div class="question-text">
                     <?=$question->full;?>
@@ -161,6 +168,11 @@
                         <i class="icon icon-star <?=$active;?>"></i>
                         <a class="toFavorite single <?=$active;?>"><?=$tip?></a>
                     </span>
+                    <? else: ?>
+                    <span>
+                        <i class="icon icon-star"></i>
+                        <a class="single tips" data-original-title="Для добавления вопроса в избранное авторизируйтесь">Добавить в избранное</a>
+                    </span>
                     <? endif; ?>
                 </div>
             </footer>
@@ -197,18 +209,22 @@
                     <div class="answer-info">
                         <input type="hidden" class="hAnswerId" value="<?=$answer->id_answer;?>">
                         <a href="#"><?=$answer->user->username;?></a>  <?=$answer->public_date;?>
+                        <? if($user_auth): ?>
                         <ul class="unstyled pull-right violation">
                             <li class="dropdown ">
+                                <input type="hidden" value="<?=$answer->id_answer?>" class="hItemId">
                                 <a class="dropdown-toggle " data-toggle="dropdown" href="#">Сообщить о нарушении</a>
                                 <ul class="dropdown-menu ">
-                                    <li><a href="#">Ответ не связан с вопросом</a></li>
-                                    <li><a href="#">Спам, вредоносные ссылки</a></li>
-                                    <li><a href="#">Содержание пропагандируещее ненависть</a></li>
-                                    <li><a href="#">Содержание на которое распространяются авторские права</a></li>
+                                    <? foreach($impropers_answer as $improper): ?>
+                                    <li>
+                                        <input type="hidden" class="hImproperId" value="<?=$improper->id_impropertype;?>">
+                                        <a class="answer improper"><?=$improper->title;?></a>
+                                    </li>
+                                    <? endforeach; ?>
                                 </ul>
                             </li>
-
                         </ul>
+                        <? endif; ?>
                     </div>
                     <div class="answer"><?=$answer->text;?></div>
                      <div class="voting">

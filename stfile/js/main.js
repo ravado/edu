@@ -697,10 +697,14 @@ $(document).ready(function(){
                             curr_lnk.html('Удалить из избранного');
                             curr_lnk.addClass('active');
                         }
+                    } else if(data.info == 'not auth') {
+                        hints('info','Вы не авторизированы');
+                        console.log(data.message);
                     } else {
                         hints('error','Что то пошло не так');
                         console.log(data.message);
                     }
+
                     curr_star.show();
                     icon_load.hide(); // Прячем иконку статуса выполнения
                 },
@@ -884,10 +888,50 @@ $(document).ready(function(){
     });
 // ------------------------------------------------ Добавление ответа ----------------------------------------------- //
 
+// ==================================== Отправка жалобы на вопрос или ответ ========================================= //
+    $(".improper").live('click',function() {
+        var val = {id_improper:null, type:null, id_item:null},
+            obj = {icon:null, li:null};
+        obj.icon = $(this).closest('.dropdown').find('.icon-loading');
+        obj.li = $(this).closest('.dropdown');
+
+        // Если жалоба на вопрос
+        if($(this).hasClass('question')) {
+            val.type = 'question';
+        // Если жалоба на ответ
+        } else if($(this).hasClass('answer')) {
+            val.type = 'answer';
+        }
+        val.id_item = obj.li.find('.hItemId').val();
+        val.id_improper = $(this).closest('li').find('.hImproperId').val();
+
+        obj.icon.show();
+        $.ajax({type:"POST", async:true, data: val, url: "/questions/qhid/addImproper", dataType:"json",
+            success:function(data){
+                if(data.status == 'ok') {
+                    obj.li.html('Отзыв отправлен.');
+                } else if(data.info == 'not auth') {
+                    hints('info','Вы не авторизированы');
+                    console.log(data.message);
+                } else {
+                    hints('error','Что то пошло не так');
+                    console.log(data.message);
+                }
+
+                obj.icon.hide();
+            },
+            error:function(){
+                console.log('error in ajax query, when add to favorite :(');
+                obj.icon.hide();
+            }
+        });
+
+    });
+// ---------------------------------- Отправка жалобы на вопрос или ответ ------------------------------------------- //
 
 
-// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
-// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
+
+
 // ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
 // ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
 });
