@@ -814,7 +814,7 @@ $(document).ready(function(){
 
 
 // ================================================ Добавление ответа =============================================== //
-    $("#addAnswer").click(function() {
+    $("#addAnswer").live('click', function() {
         var obj = {icon:null, textarea:null, answer_list:null},
             val = {text:null, id_question:null},
             new_answer = {info:null, vote:null, answer:null, all:null};
@@ -851,7 +851,13 @@ $(document).ready(function(){
                             '</div>';
                         new_answer.all = '<div class="answer-block">' + new_answer.info + new_answer.answer + new_answer.vote + '</div>';
                         $(".answer-block").css('opacity','0.2');
-                        obj.answer_list.append(new_answer.all);
+
+                        if($(".answer-block").length > 0) {
+                            obj.answer_list.append(new_answer.all);
+                        } else {
+                            obj.answer_list.html(new_answer.all);
+                        }
+
 
                         $("#canceledAnswer").click();
                         // Скролим вниз страницы к ответу пользователя
@@ -929,11 +935,93 @@ $(document).ready(function(){
     });
 // ---------------------------------- Отправка жалобы на вопрос или ответ ------------------------------------------- //
 
+// ============================================= Выбор лучшего ответа =============================================== //
+    $(".check-as-best").live('click',function() {
+        var obj = {answer_block:null, check_as_best:null, best_answer:null, answers_block:null},
+            val = {id_answer:null};
+
+        obj.answer_block = $(this).closest('.answer-block');
+        obj.check_as_best = $('.check-as-best');
+        obj.best_answer = $('.best-answer');
+        obj.answers_block = obj.answer_block.closest('.content-block');
+
+        val.id_answer = obj.answer_block.find('.hAnswerId').val();
+
+        $.ajax({type:"POST", async:true, data: val, url: "/questions/qhid/checkAsBest", dataType:"json",
+            success:function(data){
+                if(data.status == 'ok') {
+                    var new_block = {info:'',answer:'',voting:'', all:''};
+                    obj.check_as_best.remove();
+                    obj.best_answer.remove();
+                    obj.answer_block.remove();
+
+                    new_block.info = '<div class="answer-info">' +
+                        '<input type="hidden" class="hAnswerId" value="' + data.id_answer + '">' +
+                        '<span class="best-icon"></span>' +
+                        '<a href="#">' + data.username + '</a> ' + data.public_date +
+                        '<ul class="unstyled pull-right violation">' +
+                        '<li class="dropdown ">' +
+                        '<input type="hidden" value="' + data.id_answer + '" class="hItemId">' +
+                        '<a class="dropdown-toggle " data-toggle="dropdown" href="#">Сообщить о нарушении</a>' +
+                        '<ul class="dropdown-menu ">';
+
+                    for(var i = 0; i < data.improper.count; i++) {
+                        new_block.info += '<li><input type="hidden" class="hImproperId" value="' + data.improper[i]['id'] + '">' +
+                            '<a class="answer improper">' + data.improper[i]['title'] + '</a></li>';
+                    }
+                    new_block.info += '</ul></li></ul><div style="clear:both;"></div></div>';
+
+                    new_block.answer += '<div class="answer">' + data.text + '</div>';
+                    new_block.voting += '<div class="voting">' +
+                        '<div class="rating">' +
+                        '<span class="current">' + data.rating + '</span>' +
+                        '<span class="icon-loading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>' +
+                        '</div>' +
+                        '<a class="hovered vote-up btn-vote ' + data.voted_up + '">' +
+                        '<i class="icon-thumbs-up"></i> хороший ответ</a>' +
+                        ' <a class=" hovered vote-down btn-vote ' + data.voted_down + '">' +
+                        '<i class="icon-thumbs-down"></i> плохой ответ</a>' +
+                        '</div>';
+
+                    new_block.all += '<div class="content-block best-answer hide">' +
+                        '<header><h4>Лучший ответ</h4></header><div class="content"><div class="answer-block">' +
+                        new_block.info + new_block.answer + new_block.voting + '</div></div></div>';
+
+                    obj.answers_block.before(new_block.all);
+                    $(".best-answer").fadeIn(800);
+
+                } else if(data.info == 'not auth') {
+                    hints('info','Вы не авторизированы');
+                    console.log(data.message);
+                } else if(data.info == 'question is not from this user') {
+                    hints('info','Не вы автор вопроса, выбирать лучшие ответы может только автор вопроса');
+                    console.log(data.message);
+                } else if(data.info == 'unrelated answer') {
+                    hints('info','Ответ который вы хотите выбрать в качестве лучшего не принадлежит никакому вопросу');
+                    console.log(data.message);
+                } else if(data.info == 'answer this user') {
+                    hints('info','Вы не можете выбрать лучшим ответом свой ответ на свой же вопрос');
+                    console.log(data.message);
+                } else {
+                    hints('error','Что то пошло не так');
+                    console.log(data.message);
+                }
+
+            },
+            error:function(){
+                console.log('error in ajax query, when сheck as best :(');
+            }
+        });
+    });
+// --------------------------------------------- Выбор лучшего ответа ----------------------------------------------- //
 
 
-
-// ======================== Получение / Потеря фокуса ввода для строки поиска ВиО =================================== //
-// ------------------------ Получение / Потеря фокуса ввода для строки поиска ВиО ----------------------------------- //
+// ============================================= Выбор лучшего ответа =============================================== //
+// --------------------------------------------- Выбор лучшего ответа ----------------------------------------------- //
+// ============================================= Выбор лучшего ответа =============================================== //
+// --------------------------------------------- Выбор лучшего ответа ----------------------------------------------- //
+// ============================================= Выбор лучшего ответа =============================================== //
+// --------------------------------------------- Выбор лучшего ответа ----------------------------------------------- //
 });
 
 //*****************************************************конец ready****************************************************//

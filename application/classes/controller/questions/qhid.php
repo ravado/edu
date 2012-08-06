@@ -101,18 +101,18 @@ class Controller_Questions_Qhid extends Controller {
         }
     }
 
-    public function action_checkAsBest() {
-        $auth = Auth::instance();
-        if($auth->logged_in()) {
-            $data['user_id'] = $auth->get_user()->id;
-            $data['answer_id'] = $_POST['answer_id'];
-            $data['question_id'] = $_POST['question_id'];
-            $result = Model::factory('Mquestions')->checkAsBest($data);
-            echo json_encode($result);
-        } else {
-            echo json_encode('not auth');
-        }
-    }
+//    public function action_checkAsBest() {
+//        $auth = Auth::instance();
+//        if($auth->logged_in()) {
+//            $data['user_id'] = $auth->get_user()->id;
+//            $data['answer_id'] = $_POST['answer_id'];
+//            $data['question_id'] = $_POST['question_id'];
+//            $result = Model::factory('Mquestions')->checkAsBest($data);
+//            echo json_encode($result);
+//        } else {
+//            echo json_encode('not auth');
+//        }
+//    }
 
     public function action_upload() {
         // HTTP headers for no cache etc
@@ -591,6 +591,7 @@ class Controller_Questions_Qhid extends Controller {
                         $answer->question_id = $id_question;
                         $saved = $answer->save();
                         $question->answers_count = ($question->answers_count + 1);
+                        $question->save();
                         $saved = ORM::factory('ormvioanswer',$saved->id_answer);
                         $result['username'] = $username;
                         $result['id_user'] = $id_user;
@@ -666,4 +667,54 @@ class Controller_Questions_Qhid extends Controller {
 
         echo json_encode($result);
     }
+
+    // Выбор лучшего ответа
+    public function action_checkAsBest() {
+        // Выбираем типы нарушений для ответов
+        $impropers = ORM::factory('ormvioimpropertype')->where('type','=','answer')->find_all();
+        $count = 0;
+        foreach($impropers as $improper) {
+            $result['improper'][$count]['title'] = $improper->title;
+            $result['improper'][$count]['id'] = $improper->id_impropertype;
+            ++$count;
+        }
+        $result['improper']['count'] = $count;
+        if(!empty($_POST) && isset($_POST['id_answer'])) {
+            $id_answer = (int)$_POST['id_answer'];
+            $returned = Model::factory('Mquestions')->checkAsBest($id_answer);
+            if($returned['status'] == 'ok') {
+                $result['info'] = $returned['info'];
+                $result['message'] = $returned['message'];
+                $result['status'] = $returned['status'];
+                $result['text'] = $returned['saved_answer']->text;
+                $result['rating'] = $returned['saved_answer']->rating;
+                $result['id_answer'] = $returned['saved_answer']->id_answer;
+                $result['public_date'] = date('d-m-Y H:i', strtotime($returned['saved_answer']->public_date));
+                $result['username'] = $returned['saved_answer']->user->username;
+
+                // Проверяем голосовал ли текущий пользователь за ответ
+                $result['voted_up'] = '';
+                $result['voted_down'] = '';
+                $auth = Auth::instance();
+                if($auth->logged_in()) {
+                    $votes = $returned['saved_answer']->votes->where('user_id','=',$auth->get_user()->id)->find();
+                    if($votes->value == -1) {
+                        $result['voted_down'] = 'active';
+                    } elseif($votes->value == 1) {
+                        $result['voted_up'] = 'active';
+                    }
+                }
+            }
+
+        // Если  POST пришел пустым возвращаем сообщение об этом
+        } else {
+            $result['info'] = 'post is empty';
+            $result['message'] = 'Массив со значениями пришел пустой';
+            $result['status'] = 'bad';
+        }
+
+        echo json_encode($result);
+    }
+
+
 }

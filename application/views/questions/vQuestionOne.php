@@ -100,7 +100,7 @@
             </header>
             <div class="content question-block">
                 <div class="question-info">
-                    <a href="#"><?=$question->user->username;?></a>  <?=$question->public_date;?>
+                    <a href="#"><?=$question->user->username;?></a> <?=date('d-m-Y H:i', strtotime($question->public_date));?>
                     <? if($user_auth): ?>
                     <ul class="unstyled pull-right violation">
                         <li class="dropdown ">
@@ -177,7 +177,7 @@
                 </div>
             </footer>
         </div>
-        <? if($user_auth && !$question->is_closed): ?>
+        <? if($user_auth && !$question->is_closed && $user_id != $question->user_id): ?>
         <div class="content-block">
             <button href="" class="btn" id="showAddingAnswer">Добавить ответ</button>
         </div>
@@ -190,13 +190,91 @@
                 <span class="icon-loading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
             </div>
         </div>
-        <? elseif(!$user_auth): ?>
+        <? elseif(!$user_auth && !$question->is_closed): ?>
         <div class="content-block">
             Для того что бы добавлять ответы необходимо <a href="/">Авторизироваться</a>
         </div>
         <? elseif($question->is_closed): ?>
 
         <? endif; ?>
+
+
+
+
+
+
+
+
+
+
+        <? if($question->is_closed): ?>
+            <? $best = $question->answers->where('is_best','=','1')->find(); ?>
+        <div class="content-block best-answer">
+            <header>
+                <h4>Лучший ответ</h4>
+            </header>
+            <div class="content">
+                <div class="answer-block">
+                    <div class="answer-info">
+                        <input type="hidden" class="hAnswerId" value="<?=$best->id_answer;?>">
+                        <span class="best-icon"></span>
+                        <a href="#"><?=$best->user->username;?></a> <?=date('d-m-Y H:i', strtotime($best->public_date));?>
+                        <? if($user_auth) :?>
+                        <ul class="unstyled pull-right violation">
+                        <li class="dropdown ">
+                            <input type="hidden" value="<?=$best->id_answer?>" class="hItemId">
+                            <a class="dropdown-toggle " data-toggle="dropdown" href="#">Сообщить о нарушении</a>
+                            <ul class="dropdown-menu ">
+                                <? foreach($impropers_answer as $improper): ?>
+                                <li>
+                                    <input type="hidden" class="hImproperId" value="<?=$improper->id_impropertype;?>">
+                                    <a class="answer improper"><?=$improper->title;?></a>
+                                </li>
+                                <? endforeach; ?>
+                            </ul>
+                        </li>
+                    </ul>
+                            <?endif;?>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <div class="answer"><?=$best->text;?></div>
+                    <div class="voting">
+                        <?
+                        $voted_up = '';
+                        $voted_down = '';
+                        if($user_auth) {
+                            if($best->votes->where('user_id','=',$user_id)->where('value','=','1')->count_all() > 0 ) $voted_up = 'active';
+                            elseif($best->votes->where('user_id','=',$user_id)->where('value','=','-1')->count_all() > 0) $voted_down = 'active';
+                        }
+                        ?>
+                        <div class="rating">
+                            <span class="current"><?=$best->rating;?></span>
+                            <span class="icon-loading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>
+                        </div>
+                        <a class="hovered vote-up btn-vote <?=$voted_up?>">
+                            <i class="icon-thumbs-up"></i> хороший ответ
+                        </a>
+                        <a class=" hovered vote-down btn-vote <?=$voted_down?>">
+                            <i class="icon-thumbs-down"></i> плохой ответ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <? endif; ?>
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="content-block">
             <header>
@@ -205,10 +283,11 @@
             <div class="content answer-list">
                 <? if($question->answers->count_all() == 0) echo 'На даный момент нет ответов на даный вопрос'; ?>
                 <? foreach($question->answers->order_by('rating','desc')->find_all() as $answer):?>
+                <? if(!$answer->is_best): ?>
                  <div class="answer-block">
                     <div class="answer-info">
                         <input type="hidden" class="hAnswerId" value="<?=$answer->id_answer;?>">
-                        <a href="#"><?=$answer->user->username;?></a>  <?=$answer->public_date;?>
+                        <a href="#"><?=$answer->user->username;?></a>  <?=date('d-m-Y H:i', strtotime($answer->public_date));?>
                         <? if($user_auth): ?>
                         <ul class="unstyled pull-right violation">
                             <li class="dropdown ">
@@ -224,6 +303,9 @@
                                 </ul>
                             </li>
                         </ul>
+                            <? if($user_id == $question->user->id && !$question->is_closed) :?>
+                        <a class="hovered check-as-best pull-right"> Это лучший ответ</a>
+                            <? endif; ?>
                         <? endif; ?>
                     </div>
                     <div class="answer"><?=$answer->text;?></div>
@@ -246,13 +328,14 @@
                          <a class=" hovered vote-down btn-vote <?=$voted_down;?>">
                              <i class="icon-thumbs-down"></i> плохой ответ
                          </a>
+
                      </div>
 
                  </div>
+                     <?endif;?>
                 <? endforeach; ?>
             </div>
         </div>
-
         <div class="content-block">
             <header>
                 <h4>Похожие вопросы <small>вопросы на которые вы можете знать ответ</small></h4>

@@ -421,16 +421,16 @@ class Model_Mquestions extends Model_Database{
         }
     }
 
-    public function checkAsBest($data) {
-        if (!empty($data)) {
-            DB::update('answers')->set(array('best' => '1' ))->
-                where('id_answer','=',DB::expr($data['answer_id']))->execute();
-            DB::update('questions')->set(array('closed' => '1'))->where('id_question','=',DB::expr($data['question_id']))->execute();
-            return 'checked';
-        } else {
-            return 'empty data';
-        }
-    }
+//    public function checkAsBest($data) {
+//        if (!empty($data)) {
+//            DB::update('answers')->set(array('best' => '1' ))->
+//                where('id_answer','=',DB::expr($data['answer_id']))->execute();
+//            DB::update('questions')->set(array('closed' => '1'))->where('id_question','=',DB::expr($data['question_id']))->execute();
+//            return 'checked';
+//        } else {
+//            return 'empty data';
+//        }
+//    }
 
     public function getAllCategories($data) {
 
@@ -977,5 +977,90 @@ class Model_Mquestions extends Model_Database{
             return false;
         }
     }
+
+
+
+    function checkAsBest($id_answer) {
+        $id_answer = (int)$id_answer;
+        try {
+            $auth = Auth::instance();
+            if($auth->logged_in()){
+               $id_user = $auth->get_user()->id;
+
+                // Переганяем все необходимые данные с поста в более удобочитаемые переменные
+               $answer = ORM::factory('ormvioanswer',$id_answer);
+                // Если была найдена запись
+                if($answer->loaded()) {
+                    $question = $answer->question;
+
+                    // Если ответ имеет связаный вопрос
+                    if($question->loaded()) {
+                        // Проверяем что этот пользователь создал вопрос
+                        if($question->user_id == $id_user) {
+                            // Проверяем что бы ответ который выбираеться лучшим
+                            // не был ответом того пользователя который создал вопрос
+                            if($answer->user_id != $id_user) {
+                                $bests = $question->answers->where('is_best','=','1')->find_all();
+                                // Если уже есть ответы с меткой 'лучший' убираем ее
+                                foreach($bests as $best) {
+                                    $best->is_best = 0;
+                                    $best->save();
+                                }
+                                // А выбраный вопрос отмечаем как лучший
+                                $answer->is_best = 1;
+                                $saved_answer = $answer->save();
+
+                                // И вопрос отмечаем как закрытый
+                                $question->is_closed = 1;
+                                $question->save();
+
+                                $result['saved_answer'] = $saved_answer;
+                                $result['info'] = 'everything is ok';
+                                $result['message'] = 'Ответ успешно отмечен как лучший';
+                                $result['status'] = 'ok';
+
+                            // Если ответ того самого человека который задал вопрос
+                            } else {
+                                $result['info'] = 'answer this user';
+                                $result['message'] = 'Ответ который выбираеться в качестве лучшего это ответ того самого пользователя который задал вопрос';
+                                $result['status'] = 'bad';
+                            }
+                        // Не этот пользователь создал вопрос значит и не ему выбирать кто лучше
+                        } else {
+                            $result['info'] = 'question is not from this user';
+                            $result['message'] = 'Не этот пользователь задал вопрос, так что не ему выбирать лучший ответ';
+                            $result['status'] = 'bad';
+                        }
+                    // Если этот ответ не связан ни с каким вопросом
+                    } else {
+                        $result['info'] = 'unrelated answer';
+                        $result['message'] = 'Ответ который выбираеться в качестве лучшего не связан ни с каким вопросом';
+                        $result['status'] = 'bad';
+                    }
+                // Если в базе данных не существует ответа с присланым идентификатором
+                } else {
+                    $result['info'] = 'answer does not exist';
+                    $result['message'] = 'Такого ответа не существует';
+                    $result['status'] = 'bad';
+                }
+            // Если пользователь не залогинен
+            } else {
+                $result['info'] = 'not auth';
+                $result['message'] = 'Пользовательне авторизирован в системе';
+                $result['status'] = 'bad';
+            }
+
+        // Если в ходе выполнения возникла непредсказуемая ошибка акуратненько ее обрабатываем
+        } catch(Exception $e) {
+            $result['info'] = 'try catch triggered';
+            $result['message'] = 'Some error - '.$e;
+            $result['status'] = 'bad';
+        }
+
+        return $result;
+    }
+
+
+
 }
 
