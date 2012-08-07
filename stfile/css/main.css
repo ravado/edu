@@ -927,6 +927,7 @@ menu.tools-menu > li .checked{
 .content-block .similar-questions li{
     margin-top: 5px;
 }
+
 .content-block header{
     position: relative;
     border-radius: 2px 2px 0 0;
@@ -937,6 +938,7 @@ menu.tools-menu > li .checked{
     margin: 0;
     z-index: 1;
 }
+
 .content-block .header h4{
     color: #5e5e5e;
 }
@@ -1224,11 +1226,25 @@ menu.tools-menu > li .checked{
     color: #454545;
     margin: 10px 0;
 }
+.answer-block:hover {
+    opacity: 1 !important;
+}
 
 .answer-block .best-icon {
     float: left;
     margin-top: -6px;
 }
+
+.answer-block.not-good-answer {
+    opacity: 0.7;
+}
+.answer-block.bad-answer {
+    opacity: 0.5;
+}
+.answer-block.very-bad-answer {
+    opacity: 0.2;
+}
+
 
 .question-text {
     color: #454545;

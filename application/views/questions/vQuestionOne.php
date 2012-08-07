@@ -285,7 +285,22 @@
                 <? if($question->answers->count_all() == 0) echo 'На даный момент нет ответов на даный вопрос'; ?>
                 <? foreach($question->answers->order_by('rating','desc')->find_all() as $answer):?>
                 <? if(!$answer->is_best): ?>
-                 <div class="answer-block">
+                    <? switch($answer->rating){
+                        case ($answer->rating <= -2 && $answer->rating >= -5): {
+                            $opacity = 'not-good-answer';
+                            break;
+                        }
+                        case ($answer->rating <= -6 && $answer->rating >= -10): {
+                            $opacity = 'bad-answer';
+                            break;
+                        }
+                        case ($answer->rating <= -11): {
+                            $opacity = 'very-bad-answer';
+                            break;
+                        }
+                        default: $opacity = '';
+                    } ?>
+                 <div class="answer-block <?=$opacity?>">
                     <div class="answer-info">
                         <input type="hidden" class="hAnswerId" value="<?=$answer->id_answer;?>">
                         <a href="#"><?=$answer->user->username;?></a>  <?=date('d-m-Y H:i', strtotime($answer->public_date));?>
