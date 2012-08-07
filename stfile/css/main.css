@@ -921,6 +921,12 @@ menu.tools-menu > li .checked{
     box-shadow:         0px 0px 10px rgba(50, 50, 50, 0.15);
     margin: 20px 0;
 }
+.content-block .similar-questions{
+    padding: 5px;
+}
+.content-block .similar-questions li{
+    margin-top: 5px;
+}
 .content-block header{
     position: relative;
     border-radius: 2px 2px 0 0;

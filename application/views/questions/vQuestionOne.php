@@ -26,8 +26,8 @@
                         <ul class="unstyled">
                             <li><strong><?=$username ?></strong></li>
                             <li><a>Избранное:</a> <span class="favorite-count"><?=$favorites->count();?></span></li>
-                            <li><a>Вопросов:</a> <?=$user_questions->count(); ?></li>
-                            <li><a >Ответов:</a> <?=$user_answers->count(); ?></li>
+                            <li><a>Вопросов:</a> <span class="question-count"><?=$user_questions->count(); ?></span></li>
+                            <li><a >Ответов:</a> <span class="answer-count"><?=$user_answers->count(); ?></span></li>
                         </ul>
                     </div>
                     <div class="popular-tags">
@@ -88,10 +88,11 @@
 
         <menu class="tools-menu unpadding">
             <li><a href="/questions"> Главная ВиО </a></li>
-            <li><a href="/questions"><small>/</small> Все вопросы</a></li>
+            <li><a href="/questions/all"><small>/</small> Все вопросы</a></li>
             <li> <small>/ Вопрос</small></li>
         </menu>
         <div class="content-block ">
+
 
             <header>
                 <h4>
@@ -336,22 +337,32 @@
                 <? endforeach; ?>
             </div>
         </div>
+        <? if(isset($similars) || isset($randoms)): ?>
         <div class="content-block">
             <header>
+                <? if(isset($similars)):?>
                 <h4>Похожие вопросы <small>вопросы на которые вы можете знать ответ</small></h4>
+                    <? else: ?>
+                <h4>Случайные вопросы <small>возможно вы смогли бы ответить на эти вопросы</small></h4>
+                <? endif; ?>
             </header>
             <div class="content">
 
 
-            <ul class="unstyled">
-                <li><a class="" href="/questions/question/291">пользовать как КПК, что бы был раб.стол, а не убогие Эрговские иконки...</a></li>
-                <li><a class="" href="/questions/question/291">ergo gps 870 можно ли использовать как КПК, что бы был раб.стол, а не убогие Эрговские иконки...</a></li>
-                <li><a class="" href="/questions/question/291">ergo gps 870а не убогие Эрговские иконки...</a></li>
-                <li><a class="" href="/questions/question/291">ergo ьзовать как КПК, что бы был раб.стол, а не убогие Эрговские иконки...</a></li>
-                <li><a class="" href="/questions/question/291">ergo gps 870 можно ли использовать как КПК, чтб.стол, а не убогие Эрговские иконки...</a></li>
+            <ul class="unstyled similar-questions">
+                <? if(isset($similars)): ?>
+                <? foreach($similars as $similar): ?>
+                <li><a class="" href="/questions/question/<?=$similar->id_question;?>"><?=$similar->title;?></a></li>
+                <? endforeach; ?>
+                <? else: ?>
+                <? foreach($randoms as $random): ?>
+                <li><a class="" href="/questions/question/<?=$random->id_question;?>"><?=$random->title;?></a></li>
+                <? endforeach; ?>
+                <? endif; ?>
             </ul>
             </div>
         </div>
+        <?endif;?>
 
 
 

@@ -106,7 +106,12 @@ class Controller_Questions_Questions extends Controller_Base {
             $data['user_auth'] = FALSE;
         }
 
-        $data['tegories'] = Model::factory('Mquestions')->getSimilarQuestion(1,5);
+        $data['similars'] = Model::factory('Mquestions')->getSimilarQuestion($id_question,5);
+
+        if(!$data['similars']) {
+            unset($data['similars']);
+            $data['randoms'] = Model::factory('Mquestions')->getRandomQuestion(5);
+        }
         $data['categories'] = Model::factory('Mquestions')->getCategoryList('user');
         $data['question'] = Model::factory('Mquestions')->getQuestion($id_question);
         $this->template->title = "Вопросы и Ответы: ".$data['question']->title;

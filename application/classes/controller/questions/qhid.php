@@ -590,6 +590,7 @@ class Controller_Questions_Qhid extends Controller {
                         $answer->text = $answer_text;
                         $answer->question_id = $id_question;
                         $saved = $answer->save();
+                        $result['rating'] = ($question->answers_count + 1);
                         $question->answers_count = ($question->answers_count + 1);
                         $question->save();
                         $saved = ORM::factory('ormvioanswer',$saved->id_answer);

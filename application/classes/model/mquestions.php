@@ -927,20 +927,42 @@ class Model_Mquestions extends Model_Database{
     // Выборка похожих вопросов
     function getSimilarQuestion($id_question, $count = 5) {
         $id_question = (int)$id_question;
+        $question = ORM::factory('ormvioquestion',$id_question);
+        $question_sabcats = array(); // Массив id подкатегорий текущего вопроса
 
-        $subcategories = ORM::factory('ormvioquestion')->where('id_question','=','2')->subcategories->as_array();
+        // Выбираем все подкатегории даного вопроса и их id записываем в массив
+        $subcategories = $question->subcategories->find_all();
+        foreach($subcategories as $subcategory) {
+            array_push($question_sabcats, $subcategory->id_subcategory);
+        }
 
+        // Проверяем была ли хоть одна подкатегория у вопроса
+        if(count($question_sabcats) != 0) {
+            $questions_id = array(); // Массив с id вопросов у которых есть подкатегория идентична подактегориям текущего вопроса
+            $similar_questions = ORM::factory('ormvioquestsub')->where('question_id','!=',$id_question)->where('subcategory_id','IN',$question_sabcats)->limit($count*$count)->find_all();
+            foreach($similar_questions as $similar_question) {
+                // Проверяем что бы не было одинаковых id вопросов и записуем id в массив
+                if(!in_array($similar_question->question_id,$questions_id)) {
+                    array_push($questions_id,$similar_question->question_id);
+                }
+            }
+            // Выборка похожих вопросов
+            $similar_questions = ORM::factory('ormvioquestion')->where('id_question','IN',$questions_id)->limit($count)->find_all();
 
-        $questions = ORM::factory('ormvioquestion')
-            ->where('id_question','IN',$subcategories)->count_all();
+            return $similar_questions;
 
-
-
-
-
-        return $questions;
+        // Если же у вопроса не было ни одной подкатегории
+        } else {
+            return false;
+        }
     }
 
+    //
+    function getRandomQuestion($count) {
+        $count = (int)$count;
+        $randoms = ORM::factory('ormvioquestion')->order_by(DB::expr('RAND()'))->limit($count)->find_all();
+        return $randoms;
+    }
 
     //  Список типов нарушения для вопроса
     function getQuestionImpropers() {
@@ -959,7 +981,7 @@ class Model_Mquestions extends Model_Database{
         $id_improper = (int)$id_improper;
         $id_item = (int)$id_item;
         $id_user = (int)$id_user;
-        $id_improper = (string)$type;
+        $type = (string)$type;
         $improper = ORM::factory('ormvioimproper');
         $improper->impropertype_id = $id_improper;
         $improper->user_id = $id_user;
@@ -980,6 +1002,7 @@ class Model_Mquestions extends Model_Database{
 
 
 
+    // Выбор лучшего ответа
     function checkAsBest($id_answer) {
         $id_answer = (int)$id_answer;
         try {

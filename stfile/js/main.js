@@ -815,7 +815,7 @@ $(document).ready(function(){
 
 // ================================================ Добавление ответа =============================================== //
     $("#addAnswer").live('click', function() {
-        var obj = {icon:null, textarea:null, answer_list:null},
+        var obj = {icon:null, textarea:null, answer_list:null, count_answer:null},
             val = {text:null, id_question:null},
             new_answer = {info:null, vote:null, answer:null, all:null};
 
@@ -823,6 +823,7 @@ $(document).ready(function(){
             obj.icon = $("#block-add-answer").find('.icon-loading');
             obj.textarea = $("#answerText");
             obj.answer_list = $(".content.answer-list");
+            obj.count_answer = $(".profile-info").find('.answer-count');
 
             val.text = obj.textarea.val();
             val.id_question = $(".hQuestionId").val();
@@ -832,21 +833,13 @@ $(document).ready(function(){
                 success:function(data){
                     if(data.status == 'ok') {
                         new_answer.info = '<div class="answer-info"> <input type="hidden" class="hAnswerId" value="'+ data.id_answer +'">' +
-                            '<a href="#">' + data.username + '</a> '+ data.public_date +
-                            '<ul class="unstyled pull-right violation">' +
-                                '<li class="dropdown "><a class="dropdown-toggle " data-toggle="dropdown" href="#">Сообщить о нарушении</a>' +
-                                '<ul class="dropdown-menu ">' +
-                                    '<li><a href="#">Ответ не связан с вопросом</a></li>' +
-                                    '<li><a href="#">Спам, вредоносные ссылки</a></li>' +
-                                    '<li><a href="#">Содержание пропагандируещее ненависть</a></li>' +
-                                    '<li><a href="#">Содержание на которое распространяются авторские права</a></li>' +
-                                '</ul></li></ul></div>';
+                            '<a href="#">' + data.username + '</a> '+ data.public_date + '</div>';
                         new_answer.answer = '<div class="answer"><p>' + data.answer + '</p></div>';
                         new_answer.vote = '<div class="voting"><div class="rating">' +
                                 '<span class="current">0</span>' +
                                 '<span class="icon-loading hide"><img src="/stfile/img/1loading.gif" alt="loading"></span>' +
                             '</div>' +
-                            '<a class="hovered vote-up btn-vote "><i class="icon-thumbs-up"></i> хороший ответ</a>' +
+                            '<a class="hovered vote-up btn-vote "><i class="icon-thumbs-up"></i> хороший ответ</a> ' +
                             '<a class=" hovered vote-down btn-vote"><i class="icon-thumbs-down"></i> плохой ответ</a>' +
                             '</div>';
                         new_answer.all = '<div class="answer-block">' + new_answer.info + new_answer.answer + new_answer.vote + '</div>';
@@ -858,6 +851,7 @@ $(document).ready(function(){
                             obj.answer_list.html(new_answer.all);
                         }
 
+                        obj.count_answer.text(data.rating);
 
                         $("#canceledAnswer").click();
                         // Скролим вниз страницы к ответу пользователя
