@@ -434,29 +434,106 @@ function hints(hintKind, htmlValue){
 }
 
 //--------------------------------------------------------------------------------------------------------------------//
+// Проверка выбрано ли уже максимально допустимое количество подкатегорий для вопроса
 function isTagsComplete() {
-    if ($(".label-tags").length > 4) {
-        $("input[type=checkbox]").not("input:checked").attr("disabled","disabled");
-        $("#txtCategory").attr("disabled","disabled");
-        $("#addNewCategory").attr("disabled","disabled");
+    const css_selector = 'question-tag'; // ксс класс для выборки меток (синеньке с треукольником метки)
+    var added_tags = $("."+css_selector);
+    if (added_tags.length > 4) {
+//        $("input[type=checkbox]").not("input:checked").attr("disabled","disabled");
+//        $("#txtCategory").attr("disabled","disabled");
+//        $("#addNewCategory").attr("disabled","disabled");
         return true;
     } else {
-        $("input[type=checkbox]").removeAttr('disabled');
-        $("#txtCategory").removeAttr('disabled');
-        $("#addNewCategory").removeAttr('disabled');
+//        $("input[type=checkbox]").removeAttr('disabled');
+//        $("#txtCategory").removeAttr('disabled');
+//        $("#addNewCategory").removeAttr('disabled');
         return false;
     }
 }
 
-function isSimilar(string) {
-    var count = false;
-    if (string != '') {
-        $(".label-tags").each(function() {
-            if ($(this).children('p').text() == string) {
-                count = true;
+// Блокирует поля ввода и чекбоксы добавления тегов к вопросу или разблокирует их
+// action = 'block', 'unblock'
+function changeTagging(action) {
+    var obj = {checkboxes:null, input:null, button:null}
+    obj.checkboxes = $(".existing-tag").not('[checked=checked]');
+    obj.input = $("#new-tag-title");
+    obj.button = $("#btn-add-new-tag");
+
+    // Если нужно заблокировать добавление тегов
+    if(action === 'block') {
+        $.each(obj, function(index, element) {
+            element.attr('disabled','disabled');
+        });
+    // Если нужно разблокировать поля для добавления тегов
+    } else if(action === 'unblock') {
+        $.each(obj, function(index, element) {
+            element.removeAttr('disabled');
+        });
+    }
+}
+
+// Добавление тегов к вопросу
+function addNewTag(string) {
+    if(string != '') {
+
+        if(!checkRegex(string,'subcategory') && !isSimilar(string)) {
+            $("#selected-tags").append(
+                "<li class='question-tag'>" +
+                    "<a>" + string + "</a>" +
+                    "<input type='hidden' class='new-tags' name='new-tags[" + Math.random() + "]' value='" + string + "'>" +
+                "</li>");
+            if(isTagsComplete()) changeTagging('block');
+            return true;
+        } else {
+            $("#new-tag-title").val('').focus();
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+// Проверка на соответствие регулярному выражению
+// string = проверяемая строка
+// kind = какой регуляркой проверять
+function checkRegex(string, kind) {
+    var result;
+    if(isset(string) && isset(kind)) {
+        console.log('checkRegex(): string and kind not unset');
+        switch (kind) {
+            case 'subcategory': {
+                console.log('checkRegex(): subcategory check');
+                var reg = /[^a-zA-ZА-Яа-я0-9\s]/;
+                result = reg.test(string);
+                break;
             }
-        })
-    } else {count = true;}
+        }
+    } else {
+        result = false;
+    }
+    console.log('checkRegex(): result is ' + result);
+    return result;
+}
+
+// Аналог php isset()
+function isset(variable) {
+    return (typeof(variable) !== 'undefined');
+}
+
+function isSimilar(string) {
+    var added_tags = $(".question-tag"),
+        count = 0;
+    if (string != '') {
+        added_tags.each(function() {
+            if ($(this).children('a').text() == string) {
+                ++count;
+            }
+        });
+    } else {
+        console.log('when chek isSimilar string was empty');
+        count = 0;
+    }
+    console.log('when check isSimilar count is ' + count);
     return count;
 }
 
@@ -523,7 +600,7 @@ $(document).ready(function(){
 
 //========  Выбор и добавление категорий при создании вопроса ======//
     //Отслеживаем ввод запятой для добавления категории
-    $("#txtCategory").keyup(function(e) {
+    $("#new-tag-title").keyup(function(e) {
         var curr_value = $(this).val();
         if(getRegex($(this),'comma')) {
             console.log('key is comma');
@@ -538,83 +615,78 @@ $(document).ready(function(){
     // При загрузке страницы снимем все галочки, а то некоторые (не будем показывать на ФФ) их сохраняют при перезагрузке
 //    $(":checkbox").removeAttr("checked");
 
-    $("#addNewCategory").click(function(){
-        var str = $("#txtCategory").val().toLowerCase(), rand;
-        var arr;// = str.split(/[,;\s]/);
-        var tempstring;
-        tempstring = str.replace(/[^A-Za-zА-Яа-яЁё0-9\s]/g,',');
-        arr = tempstring.split(',');
-//        alert(arr);
-        var tagsCount = $(".label-tags").length;
-        var i,j;
-        for (i = tagsCount, j = 0; i < 6, j < arr.length; i++, j++) {
-            if (i < 5 ) {
-                if(isSimilar(arr[j])) {
-                    i--;
-//                    alert('is similar');
-                } else {
-                    rand = Math.random();
-                    $(".dvCategoryLabel").append("<div class='label-tags' id='"+rand+"'><p><span>"+arr[j]+
-                        "</span><span class='removeTag'></span></p><input type='hidden' name='tags["+rand+"]' value='"+arr[j]+"'></div>");
-//                    alert(arr[j]);
-                }
+
+
+    // Нажатие на добавленую метку
+    $(".question-tag").live('click',function() {
+        var checked;
+        // Выбираем чекбокс с таким же id как и у нажатой метки
+        checked = $(".existing-tag[data-existing-tag-id=" + $(this).attr('data-tag-id') + "]");
+        // Снимаем метку с чекбокса если таковой есть
+        checked.removeAttr('checked');
+        $(this).remove();
+        if(!isTagsComplete()) {
+            changeTagging('unblock');
+        }
+    });
+
+    // Нажатие на кнопку добавления своей категории
+    $("#btn-add-new-tag").click(function() {
+        var new_tag_input;
+        new_tag_input = $('#new-tag-title');
+        addNewTag(new_tag_input.val());
+        new_tag_input.val('');
+    });
+    // Нажатие на кнопку добавления вопроса
+    $("#add-question").click(function() {
+       if($("#question-title").val() != '') {
+           if($(".question-tag").length > 0) {
+               $("#ask-new-question").submit();
+           } else {
+               hints('info','Выберите хотя юы одну подкатегорию относящуюся к вопросу');
+           }
+       } else {
+           $("#question-title").focus();
+           hints('info','Введите краткое содержание вопроса');
+       }
+    });
+    // Изменение состояния чекбоксов со списком существующих тегов
+    $(".existing-tag").live('change', function(){
+        var tag = {id:null, title:null};
+        tag.id = $(this).attr("data-existing-tag-id");
+        tag.title = $(this).val();
+
+        // Если было превышено количество допустимых меток для вопроса
+        if(isTagsComplete()) {
+            // И мы снимаем отметку с чекбокса
+            if (!$(this).is(":checked")) {
+                // а затем удаляем одну метку из набора
+                $(".question-tag[data-tag-id=" + tag.id + "]").remove();
+            }
+        // Если еще не превышено максимальное количество меток
+        } else {
+            // И мы выбираем одну метку
+            if ($(this).is(":checked")) {
+                // То добавляем в набор ее
+                $("#selected-tags").append("<li class='question-tag' data-tag-id='" + tag.id + "'><a>" + tag.title + "</a></li>");
+            // Если же снимаем отметку то удаляем ее с набора
             } else {
-//                alert('to much!');
-                isTagsComplete();
-                break;
+                $(".question-tag[data-tag-id=" + tag.id + "]").remove();
             }
         }
-        isTagsComplete();
-        $("#txtCategory").val('');
-    });
 
-    // Нажатие на пункт категории
-    $(".dvQuestCategory p").not("input[type=checkbox]").click(function() {
-        var curr_checkbox, curr_div, temp;
-        curr_checkbox = $(this).children('');
-        temp = curr_checkbox.attr("class");
-        curr_div = $(".dvSeparateCategory."+temp);
-        $(this).removeClass("silver").addClass("white");
-        $(".dvQuestCategory p").not($(this)).removeClass("white").addClass("silver");
-        curr_div.css("display","block");
-        $(".dvSeparateCategory").not(curr_div).css("display","none");
-    });
-
-    $("input[type=checkbox]").live('change', function(){
-        if (!$(this).is(":checked")) {
-            var curr_name;
-            curr_name = $(this).attr("id");
-            $(".label-tags#"+curr_name).remove();
-            isTagsComplete();
-
-
+        // Если после всех манипуляций было выбрано максимальное число меток
+        if(isTagsComplete()) {
+            // Блокируем все поля ввода для невозможности добавления меток
+            console.log('need block');
+            changeTagging('block');
+        // Если же есть еще места для меток то разблокируем поля ввода
         } else {
-            $(".dvCategoryLabel").append("<div class='label-tags' id='"+$(this).attr('id')+"'><p><span>"+$(this).parent('').text()+"</span><span class='removeTag'></span></p></div>");
-            isTagsComplete();
+            changeTagging('unblock');
+            console.log('dont need block');
         }
     });
 
-    // Добавление своих категорий
-    $("#btnAskAddCategory").click(function(){
-        var input = $("#dvAddingCategory");
-        if($(this).hasClass("catCollapsed")) {
-            $(this).removeClass("catCollapsed").text("добавить свою");
-            input.hide();
-            $(this).css("background-image","url('../../stfile/img/questions/plus1.png')");
-        } else {
-            $(this).addClass('catCollapsed').text('скрыть');
-            $(this).css("background-image","url('../../stfile/img/questions/minus.png')");
-            input.show();
-        }
-    });
-
-    // При нажатии на лейбл тега удаляем его самого а также снимаем галочку с соответствующего ему чекбокса
-    $(".label-tags p").live('click',function(){
-        var curr_div = $(this).parent('div');
-        $("input#"+curr_div.attr('id')).removeAttr("checked");
-        curr_div.remove();
-        isTagsComplete();
-    });
 //-------------------------------------------------------------------//
 
 
@@ -1010,10 +1082,31 @@ $(document).ready(function(){
 // --------------------------------------------- Выбор лучшего ответа ----------------------------------------------- //
 
 
-// ============================================= Выбор лучшего ответа =============================================== //
-// --------------------------------------------- Выбор лучшего ответа ----------------------------------------------- //
-// ============================================= Выбор лучшего ответа =============================================== //
-// --------------------------------------------- Выбор лучшего ответа ----------------------------------------------- //
+// =========================== Нажатие на кнопку найти в форме поиска вопросов ====================================== //
+    $(".btnFind").click(function() {
+        var obj = {search_input:null, form:null};
+        obj.search_input = $("#vioSearchInput");
+        obj.form = $("#vioSearchBar");
+        if(obj.search_input.val() != '') {
+            obj.form.attr('action','/search');
+            obj.form.submit();
+        } else {
+            hints('info','Введите свой вопрос в строку поиска');
+            obj.search_input.focus();
+        }
+    });
+// --------------------------- Нажатие на кнопку найти в форме поиска вопросов -------------------------------------- //
+
+
+// ========================== Нажатие на кнопку спросить в форме поиска вопросов ==================================== //
+    $(".btnAsk").click(function() {
+        var obj = {search_input:null, form:null};
+        obj.search_input = $("#vioSearchInput");
+        obj.form = $("#vioSearchBar");
+        obj.form.attr('action','/questions/ask');
+        obj.form.submit();
+    });
+// -------------------------- Нажатие на кнопку спросить в форме поиска вопросов ------------------------------------ //
 // ============================================= Выбор лучшего ответа =============================================== //
 // --------------------------------------------- Выбор лучшего ответа ----------------------------------------------- //
 });

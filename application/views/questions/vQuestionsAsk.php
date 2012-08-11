@@ -1,133 +1,132 @@
 <div id="dvContent">
     <div class="spnTitle Page">Задать вопрос</div>
-    <ul class="breadcrumb">
-        <li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>
-        <li class="active"><a href="#">задать вопрос</a></li>
-    </ul>
-    <!--  Блок с информацией по каждому полю справа  -->
-    <div class="dvRightHelp">
-        <div>
-        <p>Не нашли ответа на интересующий Вас вопрос? Так задайте его, при помощи всего трех простых шагов:</p> <br />
-            <ul>
-                <li>Введите заголовок вашего вопроса</li>
-                <li>Распишите его полностью</li>
-                <li>Выберите категории</li>
-            </ul>
+    <section id="vio_menu">
+        <div class="pull-left   content-block">
+            <header><h4>Профиль</h4></header>
+            <? if($user_auth): ?>
+            <div class="content">
+                <div class="vio-mini-profile">
+                    <div class="avatar" style="">
+                        <? if($sex): ?><img src="../../../stfile/img/vio/default_male.png" alt="">
+                        <? else: ?><img src="../../../stfile/img/vio/default_female.png" alt="">
+                        <? endif; ?>
+                    </div>
+                    <div class="profile-info">
+                        <ul class="unstyled">
+                            <li><strong><?=$username ?></strong></li>
+                            <li><a>Избранное:</a> <span class="favorite-count"><?=$favorites->count();?></span></li>
+                            <li><a>Вопросов:</a> <?=$user_questions->count(); ?></li>
+                            <li><a >Ответов:</a> <?=$user_answers->count(); ?></li>
+                        </ul>
+                    </div>
+                    <div class="popular-tags">
+                        <div>Популярное:</div>
+                        <div class="subcatBlock">
+                            <? if($popular_tags) foreach($popular_tags as $popular_tag): ?>
+                            <a href="/questions/all?subcat=<?=$popular_tag->id_subcategory;?>"><?=$popular_tag->title;?></a>
+                            <? endforeach; else echo 'Вы пока еще не отвечали на вопросы.';?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <a class="pull-right"> Редактировать </a>
+            </footer>
+            <? else: ?>
+            <div class="content pagination-centered">
+                Вы не <a href="/">Авторизированы</a>
+            </div>
+            <? endif; ?>
         </div>
-    </div>
-<?php
-//    print_r($categories);
-    ?>
-    <!--  Главный блок с заданием вопроса  -->
-    <div class="dvAsk">
-        <form action="/questions/askquestion" method="POST" id="frmAskQuestion">
-<!--            <h5 class="textGuide"> </h5>-->
-            <div class="alert alert-info">
-                <strong>1 шаг. </strong> Введите краткое содержание вашего вопроса.
-            </div>
-            <input type="text" class="inpColor" maxlength="100" required="required" placeholder="Введите заголовок вопроса (не более 100 символов)" <?php if(!empty($question)){echo ' value="'.$question .'" '; }?> name="questionTitle">
-<!--            <h5 class="textGuide">2 опишите интересующий вас вопрос в полной мере </h5>-->
-            <div class="alert alert-info">
-                <strong>2 шаг. </strong> Опишите интересующий вас вопрос в полной мере.
-            </div>
-            <textarea class="inpColor" placeholder="Введите текст вопроса" name="questionFull"></textarea>
-<!--            <h5 class="textGuide">3 выберите категорию к которому максимально относиться ваш вопрос (от 1 до 5)</h5>-->
-            <div class="alert alert-info">
-                <strong>3 шаг. </strong> Выберите категорию к которому максимально относиться ваш вопрос (от 1 до 5).
-            </div>
-
-<!--            --><?php
-/*            foreach ($categories as $k=>$v){
-                echo '<tr><th class="catLinks">' .$categories[$k]['ctitle'] .'</th></tr>';
-                echo '<td>';
-                foreach($categories[$k][0] as $key => $val) {
-                    if ($key == 5) {break;}
-                    echo '<a href="/questions/category/' .$categories[$k][0][$key]['id_subcategory'] .'" class="greenCat">'
-                        .$categories[$k][0][$key]['stitle'] .'</a>';
-                }
-                echo '</td></tr>';
-            }
-            */?>
-            <!--     Выбор уже существующих категорий       -->
-            <div class="tabbable tabs-left">
-                <!--      Левые табы выбора категории       -->
-                <ul class="nav nav-tabs">
-                    <?php
-                    // Выводим названия категорий
-                    foreach ($categories as $k=>$v){
-                        if($k == 0) {
-                            echo '<li class="active"><a href="#' .$k .'" data-toggle="tab">' .$categories[$k]['ctitle'] .'</a></li>';
-                        } else {
-                            echo '<li><a href="#' .$k .'" data-toggle="tab">' .$categories[$k]['ctitle'] .'</a></li>';
-                        }
-                    }
-                    ?>
-                </ul>
-                <div class="tab-content">
-                    <?php
-                    // Вывод подкатегорий справа от названий категорий
-                    foreach ($categories as $k=>$v){
-                        if($k == 0) {
-                            echo '<div class="tab-pane active" id="' .$k .'"><table>';
-                        } else {
-                            echo '<div class="tab-pane" id="' .$k .'"><table>';
-                        }
-                        $x = 0;
-                        echo '<tr>';
-                        foreach($categories[$k][0] as $key => $val) {
-                            echo '<td><label class="checkbox"><input type="checkbox" value="' .$categories[$k][0][$key]['stitle'] .'" id="id' .$categories[$k][0][$key]['id_subcategory'] .'" name="tags[]">' .$categories[$k][0][$key]['stitle'] .'</label></td>';
-                            $x++;
-                            if($x == 3) {
-                                $x = 0;
-                                echo '</tr><tr>';
-                            }
-//                            echo '<a href="/questions/category/' .$categories[$k][0][$key]['id_subcategory'] .'" class="greenCat">'
-//                                .$categories[$k][0][$key]['stitle'] .'</a>';
-                        }
-                        echo '</table></div>';
-                    }
-                    ?>
-                    <!--<div class="tab-pane active" id="1">
-                        <table>
-                            <tr>
-                                <td>
-                                    <label class="checkbox"><input type="checkbox" value="физика" id="0,33" name="tags[]">физика</label>
-                                </td>
-                                <td>
-                                    <label class="checkbox"><input type="checkbox" value="математика" id="0.22" name="tags[]">математика</label>
-                                </td>
-                            </tr>
-
-                        </table>
+        <div class="pull-left   content-block">
+            <header><h4>Категории</h4></header>
+            <div class="content">
+                <? foreach($categories as $category): ?>
+                <div class="catBlock">
+                    <div class="catTitle">
+                        <a href="/questions/all?cat=<?=$category->id_category;?>"><?=$category->title;?></a>
                     </div>
-                    <div class="tab-pane" id="s">
-
+                    <div class="subcatBlock">
+                        <? foreach($category->subcategories->find_all() as $k=>$subcategory): ?>
+                        <a href="/questions/all?subcat=<?=$subcategory->id_subcategory ?>" ><?=$subcategory->title ?></a>
+                        <? if($k >= 7) break; ?>
+                        <? endforeach; ?>
+                        <div style="clear: both;"></div>
                     </div>
-                    <div class="tab-pane" id="3">
+                </div>
+                <? endforeach; ?>
+            </div>
+            <footer>
+                <a class="pull-right">Все категории</a>
+            </footer>
+        </div>
+    </section>
+    <section id="vio_content">
+        <menu class="tools-menu unpadding">
+            <li><a href="/questions"> Главная ВиО </a> <small>/</small></li>
+            <li> <small>Задать вопрос</small></li>
+        </menu>
+        <div class="page-header">
+            <h4>Создание нового вопроса <small> заголовок обязателен.</small></h4>
+        </div>
 
-                    </div>-->
+        <form action="/questions/ask" method="POST" id="ask-new-question">
+                <div class="control-group">
+                    <label for="question-title"> Заголовок вопроса</label>
+                    <input type="text" name="question_title" id="question-title" value="<?=$question_title;?>" placeholder="Краткое содержание вопроса, до 100 символов" class="span10">
+                </div>
+                <div class="control-group">
+                <label for="question-full"> Текст вопроса</label>
+                <textarea name="question_title" id="question-full" class="span10" placeholder="Детальное описание вопроса"></textarea>
+                    </div>
+            <div class="control-group">
+                <label>Категории</label>
+                <!--  Блок с выбором категорий вопроса  -->
+                <div class="tabbable tabs-left">
+                    <ul class="nav nav-tabs">
+                        <?php $k = true; foreach ($categories as $category): ?>
+                        <li class="<?php if($k) { echo 'active'; $k = false; } ?>">
+                            <a href="#<?php echo $category->id_category; ?>" data-toggle="tab"><?php echo $category->title; ?></a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <div class="tab-content">
+                        <?php $k = true; foreach ($categories as $category): $counter = 0;?>
+                        <div class="tab-pane <?php if($k) { echo 'active'; $k = false; } ?>" id="<? echo $category->id_category; ?>">
+                            <div class="innerTabPane">
+                                <?php foreach($category->subcategories->find_all() as $subcategory): ?>
+                                <div class="dv-tags-item">
+                                    <label class="checkbox">
+                                        <input type="checkbox" class="existing-tag" value="<? echo $subcategory->title ?>" data-existing-tag-id="<? echo $subcategory->id_subcategory ?>" name="tags[]">
+                                        <? echo $subcategory->title; ?>
+                                    </label>
+                                </div>
+                                <? endforeach; ?>
+                            </div>
+                        </div>
+                        <? endforeach; ?>
+                    </div>
+                </div>
+                </div>
+            <!--  Блок с добавлением своих меток-категорий  -->
+            <div id="dvAddingCategory">
+                <div class="control-group">
+                    <label for="new-tag-title">Добавить свою категорию</label>
+                    <input type="text" class="unmargin" id="new-tag-title" placeholder="Введите свою категорию">
+                    <a class="btn" id="btn-add-new-tag"> Добавить</a>
+                    </div>
+                <div class="dvCategoryLabel">
+<!--                    <h6>Выбранные категории:</h6>-->
+                    <ul class="tags" id="selected-tags">
+                    </ul>
+                    <div style="clear: both;"></div>
                 </div>
             </div>
-
-            <div id="dvAskAddCategory">
-                <a id="btnAskAddCategory">добавить свою</a>
-                <div id="dvAddingCategory">
-                    <input type="text" class="inpColor" id="txtCategory" placeholder="Добавляйте через запятую">
-                    <a class="btn" id="addNewCategory">Добавить</a>
-                </div>
+            <div class="form-actions">
+                <a class="btn btn-large btn-primary" id="add-question">Задать вопрос</a>
+                <a href="/questions/all" class="btn btn-large">Перейти к списку вопросов</a>
             </div>
+            </form>
 
-
-            <div class="dvCategoryLabel">
-                <h6>Выбранные категории:</h6>
-            </div>
-
-<!--            <h5 class="textGuide">4 теперь нажмите кнопку "Задать вопрос"</h5><br />-->
-
-            <div class="alert alert-info">
-                Все, практически готово, осталось нажать кнопку "Задать вопрос" и вопрос будет опубликован.
-            </div>
-            <a class="btnColor" id="btnAskFormSubmit" onclick="addQuestion()"> Задать вопрос </a>
-        </form>
-    </div>
+    </section>
 </div>

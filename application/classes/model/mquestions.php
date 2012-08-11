@@ -852,7 +852,7 @@ class Model_Mquestions extends Model_Database{
     public function getCategoryList($kind) {
         if($kind == 'admin') {
             $categories = ORM::factory('ormviocategory')->order_by('id_category','desc')->find_all();
-        } elseif ($kind == 'user') {
+        } else {
             $categories = ORM::factory('ormviocategory')->where('title','!=','usercategory')->find_all();
         }
 

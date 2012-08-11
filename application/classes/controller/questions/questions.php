@@ -9,8 +9,8 @@ class Controller_Questions_Questions extends Controller_Base {
 	public function action_index(){
 
 		$this->template->title = "Вопросы и Ответы";
-        $this->template->styles = array("stfile/css/questions.css" => "screen");
-        $this->template->scripts = array("stfile/js/questions.js");
+//        $this->template->styles = array("stfile/css/questions.css" => "screen");
+//        $this->template->scripts = array("stfile/js/questions.js");
         /*Проверяем статус пользователя (Авторизирован или нет)*/
         $auth = Auth::instance();
         if($auth->logged_in()){
@@ -37,8 +37,8 @@ class Controller_Questions_Questions extends Controller_Base {
     // Страница всех вопросов
     public function action_all() {
         $this->template->title = "Вопросы и Ответы: все вопросы";
-        $this->template->styles = array("stfile/css/questions.css" => "screen");
-        $this->template->scripts = array('stfile/js/questions.js');
+//        $this->template->styles = array("stfile/css/questions.css" => "screen");
+//        $this->template->scripts = array('stfile/js/questions.js');
         /*Проверяем статус пользователя (Авторизирован или нет)*/
 
         $auth = Auth::instance();
@@ -81,8 +81,8 @@ class Controller_Questions_Questions extends Controller_Base {
 
     // Страница с одним вопросом
     public function action_question() {
-        $this->template->styles = array("stfile/css/questions.css" => "screen");
-        $this->template->scripts = array('stfile/js/questions.js');
+//        $this->template->styles = array("stfile/css/questions.css" => "screen");
+//        $this->template->scripts = array('stfile/js/questions.js');
         $id_question = $this->request->param('id');
         if(!empty($id_question)) {
             $id_question = (int)$id_question;
@@ -124,60 +124,49 @@ class Controller_Questions_Questions extends Controller_Base {
 	public function action_ask(){
 
 		$this->template->title = "Задать вопрос";
-        $this->template->styles = array("stfile/css/questions.css" => "screen");
-        $this->template->scripts = array('stfile/js/questions.js');
-
+//        $this->template->styles = array("stfile/css/questions.css" => "screen");
+//        $this->template->scripts = array('stfile/js/questions.js');
+        $auth = Auth::instance();
+        if($auth->logged_in()){
+            $data['user_auth'] = TRUE;
+            $data['username'] = $auth->get_user()->username;
+            $data['user_id'] = $auth->get_user()->id;
+            $data['sex'] = $auth->get_user()->sex;
+            $data['favorites'] = Model::factory('Mquestions')->getFavorites($data['user_id']);
+            $data['popular_tags'] = Model::factory('Mquestions')->getUserPopularTags($data['user_id']);
+            $data['user_questions'] = Model::factory('Mquestions')->getUserQuestions($data['user_id']);
+            $data['user_answers'] = Model::factory('Mquestions')->getUserAnswers($data['user_id']);
+        }else{
+            $data['user_auth'] = FALSE;
+            $this->request->redirect('/');
+        }
+        $data['categories'] = Model::factory('Mquestions')->getCategoryList('user');
         // Проверяем было ли что то передано формой //
-        if (!empty($_POST)) {
-            $data['question'] = $_POST['question'];
-
+        if (isset($_POST['search_query'])) {
+            $data['question_title'] = $_POST['search_query'];
         } else {
             $data['question'] = '';
         }
-        $data['categories'] = Model::factory('Mquestions')->getAllCategories('some');
+
         $this->template->content = View::factory('questions/vQuestionsAsk',$data);
 	}
 
     /*Задаем вопрос*/
     public function action_askquestion(){
-
         $this->template->title = "Задать вопрос";
-
-        //$this->template->styles = array("stfile/css/questions.css" => "screen");
-        //$this->template->scripts = array('stfile/js/questions.js');
 
         // для записи в бд нужен юзернейм так что пока побудет так
         $auth = Auth::instance();
         if($auth->logged_in()) {
             $data['username'] = $auth->get_user()->username;
             $data['id_user'] = $auth->get_user()->id;
+            $data['question_title'];
             // Проверяем было ли что то передано формой //
-            if (!empty($_POST) && ($_POST['questionTitle'] != '')) {
-                $data['questionTitle'] = $_POST['questionTitle'];
-                $data['questionFull'] = $_POST['questionFull'];
-                $data['tags'] = '';
-                $data['cat'] = $_POST['tags'];
-                $temp = $_POST['tags'];
-                foreach($temp as $key=>$v){
-                    if(next($temp)) {
-                        $data['tags'] .=$temp[$key].',';
-                    } else {
-                        $data['tags'] .=$temp[$key];
-                    }
-                }
-
-                // передаем в модель введенный вопрос и результат записываем в переменную
-                $result = Model::factory('Mquestions')->askQuestion($data);
-                if ($result) {
-                    $this->template->content = "Вопрос задан";
-                } else {
-                    $this->template->content = "Вопрос не задан, потому что в модели пошло что то не так";
-                }
-            } else {
-                $this->template->content = "Вопрос не задан потому что не были переданы даные в POST";
+            if (isset($_POST['search_query'])) {
+                $data['question_title'] = $_POST['search_query'];
             }
         } else {
-            $this->template->content = "Для того чтобы задать вопрос Вы должны быть залогинены!";
+
         }
     }
 

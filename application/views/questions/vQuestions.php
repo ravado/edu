@@ -73,9 +73,9 @@
     <section id="vio_content">
 
         <div>
-            <form action="" id="vioSearchBar">
+            <form action="" id="vioSearchBar" method="post">
                 <fieldset class="">
-                    <input type="text" class="search-input" id="vioSearchInput" placeholder="Введите свой вопрос">
+                    <input type="text" name="search_query" class="search-input" id="vioSearchInput" placeholder="Введите свой вопрос">
                     <input type="button" class="btnFind " value="Найти">
                     <input type="button" class="btnAsk " value="Спросить">
                 </fieldset>
