@@ -130,12 +130,12 @@ class Controller_Questions_Questions extends Controller_Base {
         if($auth->logged_in()){
             $data['user_auth'] = TRUE;
             $data['username'] = $auth->get_user()->username;
-            $data['user_id'] = $auth->get_user()->id;
+            $data['id_user'] = $auth->get_user()->id;
             $data['sex'] = $auth->get_user()->sex;
-            $data['favorites'] = Model::factory('Mquestions')->getFavorites($data['user_id']);
-            $data['popular_tags'] = Model::factory('Mquestions')->getUserPopularTags($data['user_id']);
-            $data['user_questions'] = Model::factory('Mquestions')->getUserQuestions($data['user_id']);
-            $data['user_answers'] = Model::factory('Mquestions')->getUserAnswers($data['user_id']);
+            $data['favorites'] = Model::factory('Mquestions')->getFavorites($data['id_user']);
+            $data['popular_tags'] = Model::factory('Mquestions')->getUserPopularTags($data['id_user']);
+            $data['user_questions'] = Model::factory('Mquestions')->getUserQuestions($data['id_user']);
+            $data['user_answers'] = Model::factory('Mquestions')->getUserAnswers($data['id_user']);
         }else{
             $data['user_auth'] = FALSE;
             $this->request->redirect('/');
@@ -145,7 +145,22 @@ class Controller_Questions_Questions extends Controller_Base {
         if (isset($_POST['search_query'])) {
             $data['question_title'] = $_POST['search_query'];
         } else {
-            $data['question'] = '';
+            $data['question_title'] = '';
+        }
+        $data['full'] = '';
+        if (!empty($_POST['question_title']) && $data['user_auth'] && (isset($_POST['tags']) || isset($_POST['new-tags']))) {
+            $question['title'] = $_POST['question_title'];
+            $question['full'] = $_POST['question_full'];
+            $question['tags'] = $_POST['tags'];
+            $question['id_user'] = $data['id_user'];
+
+            $result =  Model::factory('Mquestions')->addQuestion($question);
+            if($result['status'] == 'ok') {
+                $this->request->redirect('/questions/question/' .$result['question']->id_question);
+            } else {
+                $data['some_error'] = true;
+                echo $result['message'];
+            }
         }
 
         $this->template->content = View::factory('questions/vQuestionsAsk',$data);

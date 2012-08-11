@@ -480,7 +480,7 @@ function addNewTag(string) {
             $("#selected-tags").append(
                 "<li class='question-tag'>" +
                     "<a>" + string + "</a>" +
-                    "<input type='hidden' class='new-tags' name='new-tags[" + Math.random() + "]' value='" + string + "'>" +
+                    "<input type='hidden' class='new-tags' name='tags[" + Math.random() + "]' value='" + string + "'>" +
                 "</li>");
             if(isTagsComplete()) changeTagging('block');
             return true;

@@ -1084,6 +1084,113 @@ class Model_Mquestions extends Model_Database{
     }
 
 
+    //Добавление вопроса
+    // $data ассоциативный массив с параметрами
+    // id_user = 1, title = ' Что?', full = 'Когда?', tags = array(), is_closed = 0, rating = 12, time = 12:40, date = 02/10/12
+    function addQuestion($data) {
+        try {
+            if(isset($data['id_user']) && is_numeric($data['id_user'])) {
+                $id_user = $data['id_user'];
+                $user = ORM::factory('ormuser',$id_user);
+                if(count($user) === 0) {
+                    $result['status'] = 'bad';
+                    $result['info'] = 'user not exist in db';
+                    $result['message'] = 'Пользователь с таким id не существует в базе данных';
+                    return $result;
+                }
+            }
+            if(isset($data['title']) && !empty($data['title'])) {
+                $title = addslashes($data['title']);
+            } else {
+                $result['status'] = 'bad';
+                $result['info'] = 'title is empty';
+                $result['message'] = 'Не был передан заголовок вопроса или он оказался пустым';
+                return $result;
+            }
+            $full = '';
+            if(isset($data['full']) && !empty($data['full'])) {
+                $full = addslashes($data['full']);
+            }
+            if(isset($data['tags']) && is_array($data['tags']) && (count($data['tags']) > 0)) {
+                $subcats = $data['tags'];
+            } else {
+                $result['status'] = 'bad';
+                $result['info'] = 'tags not correct';
+                $result['message'] = 'Подкатегории не были переданы либо их количество равно нулю';
+                return $result;
+            }
+            $is_closed = 0;
+            if(isset($data['is_closed']) && is_numeric($data['is_closed'])) {
+                $is_closed = $data['is_closed'];
+            }
+            $rating = 0;
+            if(isset($data['rating']) && is_numeric($data['rating'])) {
+                $rating = $data['rating'];
+            }
+            if(!isset($data['time']) || !isset($data['date'])) {
+                $public_date = false;
+            } else {
+                $time = $_POST['time'];
+                $date = $_POST['date'];
+                // Формируем правильный формат даты
+                $public_date = date('Y-m-d H:i', strtotime($date .$time));
+            }
+
+
+            // Вызываем орм модель и записываем в нее переданные данные
+            $question = ORM::factory('ormvioquestion');
+            $question->user_id = $id_user;
+            $question->title = $title;
+            $question->full = $full;
+            if($public_date) {
+                $question->public_date = $public_date;
+            }
+            $question->rating = $rating;
+            $question->is_closed = $is_closed;
+            $saved_question = $question->save();
+
+            //Выбираем все записи с таблицы подкатегорий для сверки на существование добавленых подкатегорий
+            $subcategories = ORM::factory('ormviosubcategory')->find_all();
+            // Идем по всем подкатегорийм в базе данных
+            foreach($subcategories as $subcategory) {
+                // Идем по всем подкатегориям присланным через аякс запрос
+                foreach($subcats as $key => $value) {
+                    // Если находим совадение, то записываем в таблицу вопросов текущую подкатегорию
+                    if($subcategory->title == $value) {
+                        // Удаляем из присланных категорий те которые нашлись в БД
+                        unset($subcats[$key]);
+                        $question->add('subcategories',$subcategory);
+                    }
+                }
+            }
+
+            $result['subcategories'] = array();
+            $result['count'] = 0;
+            // Оставшиеся новенькие подкатегории записываем в таблицу подкатегорий
+            foreach($subcats as $subcat) {
+                $subcategories = ORM::factory('ormviosubcategory');
+                $subcategories->title = $subcat;
+                $saved = $subcategories->save();
+                $result['subcategories'][$result['count']]['id_subcategory'] = $saved->id_subcategory;
+                $result['subcategories'][$result['count']]['title'] = $saved->title;
+                // И добавляем только что записанную подкатегорию к текущему вопросу
+                $question->add('subcategories',$saved);
+                ++$result['count'];
+            }
+            $result['info'] = 'question added';
+            $result['message'] = 'Вопрос был успешно задан';
+            $result['status'] = 'ok';
+            $result['question'] = $saved_question;
+
+        } catch (Exception $e) {
+            $result['message'] = 'Что то пошло совсем не так - '.$e;
+            $result['info'] = 'try except';
+            $result['status'] = 'bad';
+        }
+
+        return $result;
+    }
+
 
 }
 

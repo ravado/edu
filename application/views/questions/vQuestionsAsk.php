@@ -62,6 +62,12 @@
         </div>
     </section>
     <section id="vio_content">
+        <? if(isset($some_error)):?>
+        <div class="alert alert-error">
+            <strong>Ошибка.</strong> при создании вопроса возникла ошибка, убедитесь что вы <a href="/">авторизированы</a> и попробуйте снова.
+        </div>
+        <? endif;?>
+        <div class="control-group"></div>
         <menu class="tools-menu unpadding">
             <li><a href="/questions"> Главная ВиО </a> <small>/</small></li>
             <li> <small>Задать вопрос</small></li>
@@ -77,7 +83,7 @@
                 </div>
                 <div class="control-group">
                 <label for="question-full"> Текст вопроса</label>
-                <textarea name="question_title" id="question-full" class="span10" placeholder="Детальное описание вопроса"></textarea>
+                <textarea name="question_full" id="question-full" class="span10" placeholder="Детальное описание вопроса"><?=$full;?></textarea>
                     </div>
             <div class="control-group">
                 <label>Категории</label>
