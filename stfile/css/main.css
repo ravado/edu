@@ -555,7 +555,8 @@ fieldset:focus{
     margin-top: 10px;
 }
 .toolItem {
-    float: left;
+    /*float: left;*/
+    display: inline-block;
     margin-right: 10px;
 }
 .extraNav {

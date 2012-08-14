@@ -254,70 +254,35 @@ class Controller_Adm_Ahid extends Controller{
 
     // Добавление нового вопроса
     public function action_addQuestion() {
-        if(!empty($_POST)) {
-            try {
-                // Используем модуль авторизации для того что бы узнать id текущего пользователя
-                $auth = Auth::instance();
-                $user_id = $auth->get_user()->id;
-                $title = $_POST['question_title'];
-                $full = $_POST['question_full'];
-                $subcats = $_POST['tags'];
-                $is_closed = $_POST['is_closed'];
-                $rating = $_POST['rating'];
-                $time = $_POST['time'];
-                $date = $_POST['date'];
-                // Формируем правильный формат даты
-                $public_date = date('Y-m-d H:i', strtotime($date .$time));
-                // Вызываем орм модель и записываем в нее переданные данные
-                $question = ORM::factory('ormvioquestion');
-                $question->user_id = $user_id;
-                $question->title = $title;
-                $question->full = $full;
-                $question->public_date = $public_date;
-                $question->rating = $rating;
-                $question->is_closed = $is_closed;
-                $question->save();
-
-                //Выбираем все записи с таблицы подкатегорий для сверки на существование добавленых подкатегорий
-                $subcategories = ORM::factory('ormviosubcategory')->find_all();
-                // Идем по всем подкатегорийм в базе данных
-                foreach($subcategories as $subcategory) {
-                    // Идем по всем подкатегориям присланным через аякс запрос
-                    foreach($subcats as $key => $value) {
-                        // Если находим совадение, то записываем в таблицу вопросов текущую подкатегорию
-                        if($subcategory->title == $value) {
-                            // Удаляем из присланных категорий те которые нашлись в БД
-                            unset($subcats[$key]);
-                            $question->add('subcategories',$subcategory);
-                        }
-                    }
+            $question['full'] = '';
+            $auth = Auth::instance();
+            if($auth->logged_in()) {
+                $user_auth = true;
+                $id_user = $auth->get_user()->id;
+            } else {
+                $user_auth = false;
+            }
+            if (!empty($_POST['question_title']) && $user_auth && (isset($_POST['tags']) || isset($_POST['new-tags']))) {
+                $question['title'] = $_POST['question_title'];
+                $question['full'] = $_POST['question_full'];
+                $question['tags'] = $_POST['tags'];
+                $question['id_user'] = $id_user;
+                $question['is_closed'] = $_POST['is_closed'];
+                $question['rating'] = $_POST['rating'];
+                $question['time'] = $_POST['time'];
+                $question['date'] = $_POST['date'];
+                $result =  Model::factory('Mquestions')->addQuestion($question);
+                if($result['status'] == 'ok') {
+                    $result['message'] = 'everithing is ok';
+                    $result['status'] = 'ok';
+                } else {
+                    $result['message'] = 'Something went wrong';
+                    $result['status'] = 'bad';
                 }
-
-                $result['subcategories'] = array();
-                $result['count'] = 0;
-                // Оставшиеся новенькие подкатегории записываем в таблицу подкатегорий
-                foreach($subcats as $subcat) {
-                    $subcategories = ORM::factory('ormviosubcategory');
-                    $subcategories->title = $subcat;
-                    $saved = $subcategories->save();
-                    $result['subcategories'][$result['count']]['id_subcategory'] = $saved->id_subcategory;
-                    $result['subcategories'][$result['count']]['title'] = $saved->title;
-                    // И добавляем только что записанную подкатегорию к текущему вопросу
-                    $question->add('subcategories',$saved);
-                    ++$result['count'];
-                }
-                $result['message'] = 'everithing is ok';
-                $result['status'] = 'ok';
-
-            } catch (Exception $e) {
-                $result['message'] = 'Something went wrong - '.$e;
+            } else {
+                $result['message'] = 'POST is empty';
                 $result['status'] = 'bad';
             }
-        } else {
-            $result['message'] = 'POST is empty';
-            $result['status'] = 'bad';
-        }
-
         echo json_encode($result);
     }
 

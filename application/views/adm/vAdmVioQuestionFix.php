@@ -14,13 +14,13 @@
 
         <menu class="tools-menu">
             <li>
-                <div class="input-prepend pull-left">
+                <div class="input-prepend">
                     <span class="add-on">id</span>
-                    <input type="text" id="qustionId" class=" unmargin span1 pull-left" value="<?=$question->id_question;?>">
+                    <input type="text" id="qustionId" class="span1" value="<?=$question->id_question;?>">
                 </div>
-                <input type="button" class="btn unmargin" value="найти" id="getQuestion">
+
             </li>
-            <li></li>
+            <li><input type="button" class="btn unmargin" value="найти" id="getQuestion"></li>
             <li class="space"><a href="/adm/vio/addquestion" ><i class="icon-pencil"></i> создать новый</a> <small class="smallie"> / </small></li>
             <li><a href="/adm/vio/questions" ><i class="icon-list-alt"></i> перейти к списку вопросов</a></li>
             <li><span class="iconLoading"><img src="/stfile/img/1loading.gif" alt="loading"></span></li>
@@ -32,20 +32,19 @@
             <div id="extraContent" class="collapse">
                  <div class="alert">
                 <span class="toolItem">
-                    <label>Рейтинг
+                    <label>Рейтинг</label>
                         <input type="text" class="span1" value="<?=$question->rating;?>" id="rating"  name="rating">
-                    </label>
                 </span>
                 <span class="toolItem">
-                    <label>Время
+                    <label>Время</label>
                         <input name="time" id="time" class="dropdown-timepicker input-small" type="text" value="<?=$time;?>">
                         <input type="hidden" class="current_time" value="<?=$time;?>">
-                    </label></span>
+                    </span>
                 <span class="toolItem">
-                    <label>Дата
+                    <label>Дата</label>
                         <input type="text" name="date" class="span2" value="<?=$date;?>" id="date">
                         <input type="hidden" class="current_date" value="<?=$date;?>">
-                    </label>
+
                 </span>
                 <span class="toolItem"><label>Состояние</label>
                     <label class="radio inline">
@@ -56,7 +55,7 @@
                         <input type="radio" class="is_closed qstatus" name="is_closed" value="1" <? if($question->is_closed) echo 'checked="checked"'; ?>>
                         Закрыт
                     </label>
-                </span><div style="clear: both;"></div>
+                </span>
                  </div>
 
             </div>
@@ -90,38 +89,39 @@
                 <div class="tab-pane <?php if($k) { echo 'active'; $k = false; } ?>" id="<?= $category->id_category; ?>">
                     <div class="innerTabPane">
                         <?php foreach($category->subcategories->find_all() as $subcategory): ?>
-                        <div class="subcatItem">
+                        <div class="dv-tags-item">
                             <label class="checkbox">
-                                <input type="checkbox" <? if(in_array($subcategory->id_subcategory,$subcats)) {echo 'checked="checked"'; } ?> value="<?= $subcategory->title ?>" id="id<?= $subcategory->id_subcategory ?>" name="tags[]">
+                                <input type="checkbox" <? if(in_array($subcategory->id_subcategory,$subcats)) {echo 'checked="checked"'; } ?> class="existing-tag" value="<? echo $subcategory->title ?>" data-existing-tag-id="<? echo $subcategory->id_subcategory ?>" name="tags[]">
                                 <?= $subcategory->title; ?>
                             </label>
                         </div>
                         <? endforeach; ?>
                     </div>
-                    <div style="clear: both;"></div>
                 </div>
                 <? endforeach; ?>
             </div>
         </div>
         <!--  Блок с добавлением своих меток-категорий  -->
         <div id="dvAddingCategory">
-            <label for="txtCategory">Добавить свою категорию</label>
-            <input type="text" class="unmargin" id="txtCategory" placeholder="Добавляйте через запятую">
-            <a class="btn" id="addNewCategory"><i class="icon-plus"></i> Добавить</a>
+            <label for="new-tag-title">Добавить свою категорию</label>
+            <input type="text" class="unmargin" id="new-tag-title" placeholder="Введите свою категорию">
+            <a class="btn" id="btn-add-new-tag"> Добавить</a>
             <div class="dvCategoryLabel">
-                <h6>Выбранные категории:</h6>
+<!--                <h6>Выбранные категории:</h6>-->
+                <ul class="tags" id="selected-tags">
                 <? foreach($question->subcategories->find_all() as $subcat):?>
-                <div class="label-tags" id="id<?=$subcat->id_subcategory?>">
-                    <p>
-                        <span><?=$subcat->title?></span>
-                        <span class="removeTag"></span>
-                    </p>
-                </div>
+                    <li class="question-tag" data-tag-id="<?=$subcat->id_subcategory?>">
+                        <a><?=$subcat->title?></a>
+                    </li>
                 <? endforeach; ?>
+                </ul>
+                <div style="clear: both;"></div>
             </div>
         </div>
 
+        <div class="form-actions">
         <a class="btn btn-large btn-primary fixQuestion <? if(!isset($question->id_question)) { echo 'disabled'; } ?>">Обновить вопрос</a>
+            </div>
     </form>
 </div>
 

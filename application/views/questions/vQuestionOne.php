@@ -107,6 +107,7 @@
                         <li class="dropdown ">
                             <input type="hidden" value="<?=$question->id_question?>" class="hItemId">
                             <span class="icon-loading hide"><img alt="loading" src="/stfile/img/1loading.gif"></span>
+                            <? if($question->user->id != $user_id): ?>
                             <a class="dropdown-toggle " data-toggle="dropdown" href="#">Сообщить о нарушении</a>
                             <ul class="dropdown-menu ">
                                 <? foreach($impropers_question as $improper): ?>
@@ -117,6 +118,7 @@
                                 </li>
                                 <? endforeach; ?>
                             </ul>
+                            <? endif; ?>
                         </li>
                     </ul>
                     <? endif; ?>

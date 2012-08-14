@@ -1177,6 +1177,7 @@ class Model_Mquestions extends Model_Database{
                 $question->add('subcategories',$saved);
                 ++$result['count'];
             }
+
             $result['info'] = 'question added';
             $result['message'] = 'Вопрос был успешно задан';
             $result['status'] = 'ok';
