@@ -75,7 +75,7 @@ if(!is_null($status)) { $ext_status = '&status=' .$status; } else {$ext_status =
                 <? endforeach; ?>
             </div>
             <footer>
-                <a class="pull-right">Все категории</a>
+                <div class="pull-right"><a href="/questions/allcategories">Все категории</a></div>
             </footer>
         </div>
     </section>

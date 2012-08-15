@@ -241,32 +241,23 @@ class Controller_Questions_Questions extends Controller_Base {
         }
     }
 
-    public function action_category () {
-        $this->template->styles = array("stfile/css/questions.css" => "screen");
-        $this->template->scripts = array('stfile/js/questions.js');
-        $data['cat_id'] = $this->request->param('qtype');
-        $data['page'] = (int)$this->request->param('page');
-        $data['per_page'] = 3;
-        $data['user_id'] = -1;
-        /*Проверяем статус пользователя (Авторизирован или нет)*/
+    public function action_allcategories () {
         $auth = Auth::instance();
         if($auth->logged_in()){
-            $data['userAuth'] = TRUE;
-            $data['userName'] = $auth->get_user()->username;
+            $data['user_auth'] = TRUE;
+            $data['username'] = $auth->get_user()->username;
             $data['user_id'] = $auth->get_user()->id;
+            $data['sex'] = $auth->get_user()->sex;
+            $data['favorites'] = Model::factory('Mquestions')->getFavorites($data['user_id']);
+            $data['popular_tags'] = Model::factory('Mquestions')->getUserPopularTags($data['user_id']);
+            $data['user_questions'] = Model::factory('Mquestions')->getUserQuestions($data['user_id']);
+            $data['user_answers'] = Model::factory('Mquestions')->getUserAnswers($data['user_id']);
         }else{
-            $data['userAuth'] = FALSE;
+            $data['user_auth'] = FALSE;
         }
-        if(!empty($data['cat_id'])) {
-            $data['qtype'] = 'category';
-            $data['result'] = Model::factory('Mquestions')->getAllQuestions($data);
-            $this->template->content = View::factory('questions/vQuestionAll',$data);
-        } else {
-            $data['result'] = Model::factory('Mquestions')->getAllCategories('sss');
-            $this->template->title = "ВиО: ";
-            $this->template->content = View::factory('questions/vQuestionCategory',$data);
-        };
-
+        $data['categories'] = Model::factory('Mquestions')->getCategoryList('user');
+        $this->template->title = "ВиО: Список категорий";
+        $this->template->content = View::factory('questions/vQuestionCategory',$data);
     }
 
 

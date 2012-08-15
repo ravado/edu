@@ -912,6 +912,20 @@ a:hover {
 }
 /*   ---------------------------------------------------------------   */
 
+
+/* Блок содержащий список подкатегорий на странице всех категорий ВиО */
+.subcategory-list {
+
+}
+.subcategory-list .subcategory-item {
+    display: inline-block;
+    width: 180px;
+}
+
+.subcategory-list .subcategory-item a{
+    line-height: 20px;
+}
+
 /* Клас для центрирования по горизонтали */
 .centered {
     margin: 0 auto !important;

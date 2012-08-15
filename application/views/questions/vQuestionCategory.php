@@ -1,64 +1,73 @@
 <div id="dvContent">
     <div class="spnTitle Page">Вопросы и ответы: категории</div>
-    <ul class="breadcrumb">
-        <li><a href="/questions">главная ВиО</a><span class="divider">/</span></li>
-        <li class="active"><a href="#">все категории</a></li>
-    </ul>
-    <div class="shadowBlock dvAllCategory">
-        <table cellpadding="0" cellspacing="0">
-    <?php
-/*
-    foreach ($result as $k=>$v) {
-        print_r($result[$k]);
-        echo '<br>';
-    }*/
+    <section id="vio_menu">
+        <div class="pull-left   content-block">
+            <header><h4>Профиль</h4></header>
+            <? if($user_auth): ?>
+            <div class="content">
+                <div class="vio-mini-profile">
+                    <div class="avatar" style="">
+                        <? if($sex): ?><img src="../../../stfile/img/vio/default_male.png" alt="">
+                        <? else: ?><img src="../../../stfile/img/vio/default_female.png" alt="">
+                        <? endif; ?>
+                    </div>
+                    <div class="profile-info">
+                        <ul class="unstyled">
+                            <li><strong><?=$username ?></strong></li>
+                            <li><a>Избранное:</a> <span class="favorite-count"><?=$favorites->count();?></span></li>
+                            <li><a>Вопросов:</a> <?=$user_questions->count(); ?></li>
+                            <li><a >Ответов:</a> <?=$user_answers->count(); ?></li>
+                        </ul>
+                    </div>
+                    <div class="popular-tags">
+                        <div>Популярное:</div>
+                        <div class="subcatBlock">
+                            <? if($popular_tags) foreach($popular_tags as $popular_tag): ?>
+                            <a href="/questions/all?subcat=<?=$popular_tag->id_subcategory;?>"><?=$popular_tag->title;?></a>
+                            <? endforeach; else echo 'Вы пока еще не отвечали на вопросы.';?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <a class="pull-right"> Редактировать </a>
+            </footer>
+            <? else: ?>
+            <div class="content pagination-centered">
+                Вы не <a href="/">Авторизированы</a>
+            </div>
+            <? endif; ?>
+        </div>
+        <div class="pull-left   content-block">
+            <header><h4>Реклама</h4></header>
+            <div class="content">
+                <img src="../../../stfile/img/ad.jpg" alt="реклама" />
+            </div>
+            <footer>
 
-    $some = -1;
-    $count = 0;
-    foreach ($result as $key => $val) {
-        if ($result[$key]['id_category'] == $some) {
-            if ($count == 5) {
-                echo '</tr><tr>';
-                $count = 0;
-            }
-            echo '<td><a href="category/' .$result[$key]['id_subcategory'] .'" class="greenCat">' .$result[$key]['stitle'] .'</td>';
-            $count++;
-
-        } else {
-            $some = $result[$key]['id_category'];
-            $count = 0;
-
-            if($some != -1) {
-                echo '</tr>';
-            }
-            echo '<th class="lenta" colspan="5">' .$result[$key]['ctitle'] .'</th>';
-            echo '<tr>';
-            echo '<td><a href="category/' .$result[$key]['id_subcategory'] .'" class="greenCat">' .$result[$key]['stitle'] .'</td>';
-            $count++;
-
-        }
-    }
-
-
-//    $some = '';
-//    foreach ($result as $key => $val) {
-//        if ($result[$key]['id_question'] == $some) {
-//            echo 'category =>' .$result[$key]['title'];
-//            echo '<br>';
-//
-//        } else {
-//            $some = $result[$key]['id_question'];
-//            echo 'id_question =>' .$result[$key]['id_question'] .'<br>';
-//            echo 'category =>' .$result[$key]['title'];
-//            echo '<br>';
-//        }
-//    }
-
-    ?>
-
-    </table>
-
-    </div>
-
-    </div>
+            </footer>
+        </div>
+    </section>
+    <section id="vio_content">
+        <div class="control-group"></div>
+        <menu class="tools-menu unpadding">
+            <li><a href="/questions"> Главная ВиО </a></li>
+            <li> <small>/ Список категорий</small></li>
+        </menu>
+        <? foreach($categories as $category): ?>
+            <div class="content-block">
+                <header>
+                    <h4><a href="/questions/all?cat=<?= $category->id_category;?>"><?= $category->title;?></a></h4>
+                </header>
+                <div class="subcategory-list content">
+                    <? foreach($category->subcategories->find_all() as $subcategory): ?>
+                    <div class="subcategory-item"><a href="/questions/all?subcat=<?= $subcategory->id_subcategory;?>"><?=$subcategory->title;?></a></div>
+                    <? endforeach; ?>
+                </div>
+                <footer>
+                    <div class="pull-right"><a href="/questions/all?cat=<?=$category->id_category?>">Все вопросы с этими категориями</a></div>
+                </footer>
+            </div>
+        <? endforeach; ?>
+    </section>
 </div>
