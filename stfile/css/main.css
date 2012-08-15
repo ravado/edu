@@ -893,11 +893,11 @@ td.username {
     white-space: nowrap;
 }
 .spnTags a {
-    color: #bbb;
+    color: #85bfdd !important;
     font-size: smaller;
 }
 .spnTags a:hover{
-    color: #888;
+    color: #259edd !important;
     border-bottom: none !important;
     text-decoration: none;
 }
@@ -992,7 +992,12 @@ menu.tools-menu > li .checked{
     margin-bottom: 15px;
 }
 .content-block a{
-    border-bottom: 1px solid #CAE6F8;
+    color: #808080;
+    border-bottom: 1px solid #d6d6d6;
+}
+.content-block a:hover{
+    color: #2f2f2f;
+    border-bottom: 1px solid #d6d6d6;
 }
 .content-block.best-answer {
     -webkit-box-shadow: 0px 0px 10px rgba(50, 50, 50, 0.15);
@@ -1019,7 +1024,7 @@ menu.tools-menu > li .checked{
 }
 
 .content-block .header h4{
-    color: #5e5e5e;
+    color: #1B86CA;
 }
 .content-block footer{
     border-radius: 0 0 2px 2px;
